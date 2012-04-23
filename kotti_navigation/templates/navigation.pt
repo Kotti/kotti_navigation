@@ -14,9 +14,6 @@
 
     <tal:children tal:repeat="child children">
       <ul class="nav nav-pills nav-stacked">
-        +++++++++++++++++++
-        <span tal:content="api.render_view('nav-tree', context=child)" />
-        ++++++++++++++++++++
         <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
       </ul>
     </tal:children>

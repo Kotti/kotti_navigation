@@ -1,5 +1,3 @@
-HELLLO
-
 <li tal:define="item context;
                 active item == request.context and 'active' or ''"
     class="${active}">
