@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="${request.static_url('kotti_navigation:static/style.css')}" type="text/css" />
+
+<div id="navigation-tree">
+  <ul class="nav nav-pills nav-stacked">
+
+    <li tal:condition="include_root"
+        tal:define="active root == request.context and 'active' or ''"
+        class="${active}">
+      <a href="${api.url(root)}"
+         title="${getattr(root, 'description', None)}">
+        ${root.title}
+      </a>
+    </li>
+
+    <tal:children tal:repeat="child children">
+      <ul class="nav nav-pills nav-stacked">
+        +++++++++++++++++++
+        <span tal:content="api.render_view('nav-tree', context=child)" />
+        ++++++++++++++++++++
+        <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
+      </ul>
+    </tal:children>
+
+  </ul>
+</div>

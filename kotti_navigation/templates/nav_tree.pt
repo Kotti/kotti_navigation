@@ -1,0 +1,19 @@
+HELLLO
+
+<li tal:define="item context;
+                active item == request.context and 'active' or ''"
+    class="${active}">
+  <a href="${api.url(item)}"
+     title="${getattr(item, 'description', None)}">
+    ${item.title}
+  </a>
+  <tal:open_tree tal:condition="open_tree(item, request)">
+    <tal:children tal:condition="children">
+      <tal:repeat tal:repeat="child children">
+          <ul class="nav nav-pills nav-stacked">
+            <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
+          </ul>
+      </tal:repeat>
+    </tal:children>
+  </tal:open_tree>
+</li>

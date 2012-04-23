@@ -1,0 +1,15 @@
+#navigation-tree .nav {
+    margin-bottom: 0;
+}
+#navigation-tree ul li ul {
+    padding-left: 10px;
+}
+#navigation-tree ul li ul li ul {
+    padding-left: 20px;
+}
+#navigation-tree ul li ul li ul li ul {
+    padding-left: 30px;
+}
+#navigation-tree ul li ul li ul li ul li ul {
+    padding-left: 40px;
+}
