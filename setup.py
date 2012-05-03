@@ -24,7 +24,7 @@ def read(*rnames):
 long_description = (
     read('README.rst')
     + '\n' +
-    'Change history\n'
+    'HISTORY\n'
     '**************\n'
     + '\n' +
     read('docs', 'HISTORY.txt'))
