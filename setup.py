@@ -17,13 +17,17 @@ tests_require = [
     ]
 
 
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+
 long_description = (
     read('README.rst')
     + '\n' +
     'Change history\n'
     '**************\n'
     + '\n' +
-    read('docs', 'HISTORY.txt')
+    read('docs', 'HISTORY.txt'))
 
 
 setup(name=project,
