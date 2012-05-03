@@ -5,6 +5,7 @@ import sys, os
 version = '0.1'
 project = 'kotti_navigation'
 
+
 tests_require = [
     'WebTest',
     'mock',
@@ -15,13 +16,21 @@ tests_require = [
     'zope.testbrowser',
     ]
 
+
+long_description = (
+    read('README.rst')
+    + '\n' +
+    'Change history\n'
+    '**************\n'
+    + '\n' +
+    read('docs', 'HISTORY.txt')
+
+
 setup(name=project,
       version=version,
-      description="Navigation widget for Kotti",
-      long_description="""\
-This is an extension to the Kotti CMS that renders a navigation in the
-left or right slot.
-""",
+      description="""\
+This is an extension to the Kotti CMS that renders a navigation in the left or right slot.""",
+      long_description=long_description,
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='kotti addon',
       author='Marco Scheidhuber',
