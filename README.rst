@@ -35,3 +35,5 @@ you plan to set up a popup menu::
 
   kotti.configurators = kotti_navigation.kotti_configure
   kotti_navigation.navigation_widget.open_all = false
+
+.. _Find out more about Kotti: http://pypi.python.org/pypi/Kotti
