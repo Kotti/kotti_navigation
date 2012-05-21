@@ -1,8 +1,10 @@
 from pyramid.renderers import render
-from pyramid.threadlocal import get_current_request
 from pyramid.i18n import TranslationStringFactory
 from kotti.resources import get_root
-from kotti.security import has_permission
+from kotti.security import (
+    has_permission,
+    get_user,
+)
 from kotti.util import extract_from_settings
 from kotti.views.slots import (
     RenderRightSlot,
@@ -18,6 +20,7 @@ _ = TranslationStringFactory('kotti_navigation')
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
     'open_all': 'false',
+    'show_hidden_while_logged_in': 'false',
     }
 
 
@@ -41,9 +44,17 @@ def check_true(value):
 
 
 def get_children(context, request):
-    childs = [child for child in context.values()
-                  if child.in_navigation and
-                  has_permission('view', child, request)]
+    settings = navigation_settings()
+    user = get_user(request)
+    show_hidden = check_true(settings['show_hidden_while_logged_in'])
+
+    if show_hidden and user:
+        childs = [child for child in context.values()
+                   if has_permission('view', child, request)]
+    else:
+        childs = [child for child in context.values()
+                   if child.in_navigation and
+                       has_permission('view', child, request)]
     return childs
 
 
@@ -63,6 +74,8 @@ def open_tree(item, request):
             open_tree = True
             break
         if root == context:
+            break
+        if not hasattr(context, '__parent__'):
             break
         context = context.__parent__
     return open_tree

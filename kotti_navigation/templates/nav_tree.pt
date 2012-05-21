@@ -1,6 +1,7 @@
 <li tal:define="item context;
-                active item == request.context and 'active' or ''"
-    class="${active}">
+                active item == request.context and 'active' or '';
+                hidden not item.in_navigation and 'hidden' or ''"
+    class="${active} ${hidden}">
   <a href="${api.url(item)}"
      title="${getattr(item, 'description', None)}">
     ${item.title}

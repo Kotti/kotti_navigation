@@ -1,6 +1,9 @@
 #navigation-tree .nav {
     margin-bottom: 0;
 }
+#navigation-tree .nav li.hidden {
+    border-left: 2px dotted orange;
+}
 #navigation-tree ul li ul {
     padding-left: 10px;
 }

@@ -1,0 +1,4 @@
+Todo's
+======
+
+- Add configuration option to exclude specific content types.

@@ -13,9 +13,9 @@ from kotti_navigation import render_navigation_widget
 
 class NavigationDummyRequest(DummyRequest):
 
-    def __init__(self):
+    def __init__(self, context=None):
         super(NavigationDummyRequest, self).__init__()
-        self.context = None
+        self.context = context
 
     def static_url(self, name):
         return ''
@@ -87,3 +87,33 @@ class TestNavigationWidget(FunctionalTestBase):
         assert u'sub_1' in html
         assert u'content_2' in html
         assert u'sub_2' in html
+
+    def test_show_hidden(self):
+        root = get_root()
+        request = DummyRequest()
+        root[u'content_1'] = Content()
+        root[u'content_2'] = Content()
+        root[u'content_2'].in_navigation = False
+
+        # with standard settings the hidden nav points are hidden
+        html = render_navigation_widget(root, request)
+        assert u'content_1' in html
+        assert u'content_2' not in html
+
+        # if we change the setting, the nav points still hidden
+        get_current_registry().settings['kotti_navigation.navigation_widget.show_hidden_while_logged_in'] = u'true'
+        html = render_navigation_widget(root, request)
+        assert u'content_1' in html
+        assert u'content_2' not in html
+
+        # we have to be logged in to see the navpoint
+        # BUT how is this possible???
+        # from kotti.views.login import login
+        # request.params['submit'] = u'on'
+        # request.params['login'] = u'admin'
+        # request.params['password'] = u'secret'
+        # request.params['HTTP_HOST'] = u'babbelhorst.net'
+        # result = self.login()
+        # html = render_navigation_widget(root, request)
+        # assert u'content_1' in html
+        # assert u'content_2' in html
