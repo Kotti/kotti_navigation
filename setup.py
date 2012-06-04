@@ -24,7 +24,7 @@ def read(*rnames):
 long_description = (
     read('README.rst')
     + '\n' +
-    read('docs', 'HISTORY.txt'))
+    read('docs', 'CHANGES.txt'))
 
 
 setup(name=project,
@@ -32,11 +32,11 @@ setup(name=project,
       description="""\
 This is an extension to the Kotti CMS that renders a navigation in the left or right slot.""",
       long_description=long_description,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[],
       keywords='kotti addon',
       author='Marco Scheidhuber',
-      author_email='marco@jusid.de',
-      url='http://jusid.de',
+      author_email='j23d@jusid.de',
+      url='http://pypi.python.org/pypi/kotti_navigation',
       license='GPL',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
