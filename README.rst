@@ -31,7 +31,7 @@ To exclude the root of the site from the navigation, set the
 
 To open the whole navigation all the time, set the
 ``kotti_navigation.navigation_widget.open_all`` variable. This is useful if
-you plan to set up a popup menu::
+you plan to set up a popup menu via css or javascript::
 
   kotti.configurators = kotti_navigation.kotti_configure
   kotti_navigation.navigation_widget.open_all = false
