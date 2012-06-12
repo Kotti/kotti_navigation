@@ -1,3 +1,5 @@
+from fanstatic import Library
+from fanstatic import Resource
 from pyramid.renderers import render
 from pyramid.i18n import TranslationStringFactory
 from kotti.resources import get_root
@@ -5,6 +7,7 @@ from kotti.security import (
     has_permission,
     get_user,
 )
+from kotti.static import view_needed
 from kotti.util import extract_from_settings
 from kotti.views.slots import (
     RenderRightSlot,
@@ -22,6 +25,10 @@ NAVIGATION_WIDGET_DEFAULTS = {
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
     }
+
+library = Library("kotti_navigation", "static")
+kotti_navigation_css = Resource(library, "style.css")
+view_needed.add(kotti_navigation_css)
 
 
 def kotti_configure(settings):

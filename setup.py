@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
-import sys, os
+import os
 
 
-version = '0.1'
+version = '0.2-dev'
 project = 'kotti_navigation'
 
 
@@ -29,8 +29,7 @@ long_description = (
 
 setup(name=project,
       version=version,
-      description="""\
-This is an extension to the Kotti CMS that renders a navigation in the left or right slot.""",
+      description="""This is an extension to the Kotti CMS that renders a navigation in the left or right slot.""",
       long_description=long_description,
       classifiers=[],
       keywords='kotti addon',
@@ -42,11 +41,12 @@ This is an extension to the Kotti CMS that renders a navigation in the left or r
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'Kotti>=0.6.2',
+          'Kotti>=0.7-dev',
       ],
       tests_require=tests_require,
       entry_points="""
-      # -*- Entry points: -*-
+      [fanstatic.libraries]
+      kotti_navigation = kotti_navigation:library
       """,
       extras_require={
           'testing': tests_require,

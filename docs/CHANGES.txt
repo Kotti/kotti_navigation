@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2
+---
+
+* Move to fanstatic for static resource inclusion
+
 0.1
 -------
 
