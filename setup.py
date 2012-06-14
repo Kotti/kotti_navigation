@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import os
 
 
-version = '0.2-dev'
+version = '0.2dev'
 project = 'kotti_navigation'
 
 
@@ -41,7 +41,7 @@ setup(name=project,
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'Kotti>=0.7-dev',
+          'Kotti>=0.7.0dev',
       ],
       tests_require=tests_require,
       entry_points="""
