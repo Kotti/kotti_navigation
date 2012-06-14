@@ -117,3 +117,17 @@ class TestNavigationWidget(FunctionalTestBase):
         # html = render_navigation_widget(root, request)
         # assert u'content_1' in html
         # assert u'content_2' in html
+
+    def test_exclude_content_types(self):
+        root = get_root()
+        request = DummyRequest()
+        root[u'content_1'] = Content()
+
+        # with no exclude the hidden nav points is shown
+        html = render_navigation_widget(root, request)
+        assert u'content_1' in html
+
+        # if we exclude the content type the nav point disappears
+        get_current_registry().settings['kotti_navigation.navigation_widget.exclude_content_types'] = u'kotti.resources.Content'
+        html = render_navigation_widget(root, request)
+        assert u'content_1' not in html

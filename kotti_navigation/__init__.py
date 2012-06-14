@@ -2,6 +2,7 @@ from fanstatic import Library
 from fanstatic import Resource
 from pyramid.renderers import render
 from pyramid.i18n import TranslationStringFactory
+from kotti import _resolve_dotted
 from kotti.resources import get_root
 from kotti.security import (
     has_permission,
@@ -24,6 +25,7 @@ NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
+    'exclude_content_types': '',
     }
 
 library = Library("kotti_navigation", "static")
@@ -41,6 +43,7 @@ def navigation_settings(name=''):
         prefix += name + '.'  # pragma: no cover
     settings = NAVIGATION_WIDGET_DEFAULTS.copy()
     settings.update(extract_from_settings(prefix))
+    _resolve_dotted(settings, ['exclude_content_types'])
     return settings
 
 
@@ -54,14 +57,17 @@ def get_children(context, request):
     settings = navigation_settings()
     user = get_user(request)
     show_hidden = check_true(settings['show_hidden_while_logged_in'])
+    ex_cts = settings['exclude_content_types']
 
     if show_hidden and user:
         childs = [child for child in context.values()
-                   if has_permission('view', child, request)]
+                   if has_permission('view', child, request) and
+                   child.__class__ not in ex_cts]
     else:
         childs = [child for child in context.values()
-                   if child.in_navigation and
-                       has_permission('view', child, request)]
+                    if child.in_navigation and
+                        has_permission('view', child, request) and
+                        child.__class__ not in ex_cts]
     return childs
 
 
