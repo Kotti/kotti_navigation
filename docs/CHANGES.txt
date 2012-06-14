@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2-dev
+0.2a1
 -------
 
 * Move to fanstatic for static resource inclusion [disko]
