@@ -1,0 +1,6 @@
+Thanks
+======
+
+Thanks to the following people for support, code, patches etc:
+
+  - Andreas Kaiser (disko)
