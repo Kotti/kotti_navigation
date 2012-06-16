@@ -29,7 +29,7 @@ long_description = (
 
 setup(name=project,
       version=version,
-      description="""This is an extension to the Kotti CMS that renders a navigation in the left or right slot.""",
+      description="""Add a configurable navigation to your Kotti site""",
       long_description=long_description,
       classifiers=[],
       keywords='kotti addon',
