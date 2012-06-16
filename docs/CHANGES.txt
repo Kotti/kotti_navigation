@@ -4,7 +4,8 @@ Changelog
 0.2a1
 -------
 
-* Move to fanstatic for static resource inclusion [disko]
+* Move to fanstatic for static resource inclusion. [disko]
+* Added option to exclude content types from the navigation. [j23d]
 
 
 0.1
