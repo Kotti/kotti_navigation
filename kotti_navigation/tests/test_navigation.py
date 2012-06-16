@@ -1,5 +1,4 @@
 from pyramid.threadlocal import get_current_registry
-# from kotti import get_settings
 from kotti.testing import (
     FunctionalTestBase,
     DummyRequest,
@@ -18,7 +17,7 @@ class NavigationDummyRequest(DummyRequest):
         self.context = context
 
     def static_url(self, name):
-        return ''
+        return ''  # pragma: no cover
 
 
 class TestNavigationWidget(FunctionalTestBase):
@@ -40,7 +39,6 @@ class TestNavigationWidget(FunctionalTestBase):
         html = render_navigation_widget(root, request)
         assert u'Welcome to Kotti' in html
         get_current_registry().settings['kotti_navigation.navigation_widget.include_root'] = u'false'
-        # get_settings()['kotti_navigation.navigation_widget.include_root'] = u'false'
         html = render_navigation_widget(root, request)
         assert u'Welcome to Kotti' not in html
 
