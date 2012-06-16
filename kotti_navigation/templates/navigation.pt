@@ -9,12 +9,12 @@
         ${root.title}
       </a>
     </li>
-
-    <tal:children tal:repeat="child children">
-      <ul class="nav nav-pills nav-stacked">
-        <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
-      </ul>
-    </tal:children>
-
   </ul>
+
+  <tal:children tal:repeat="child children">
+    <ul class="nav nav-pills nav-stacked">
+      <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
+    </ul>
+  </tal:children>
+
 </div>

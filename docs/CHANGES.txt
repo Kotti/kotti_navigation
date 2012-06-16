@@ -1,8 +1,10 @@
 Changelog
 =========
 
-0.2a2 (Unreleased
------------------
+0.2a2 (Unreleased)
+------------------
+
+* Fix structure of navigation list. [j23d]
 
 
 0.2a1 (2012-06-16)
