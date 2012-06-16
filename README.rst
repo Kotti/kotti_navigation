@@ -39,7 +39,7 @@ you plan to set up a popup menu via css or javascript::
 
 You can exclude specific content types from the whole navigation
 structure. If you not want to show images in the navigation at all,
-set the ``kotti_navigation.navigation_widget.include_root`` 
+set the ``kotti_navigation.navigation_widget.exclude_content_types`` 
 variable to the following.::
 
     kotti_navigation.navigation_widget.exclude_content_types = 
