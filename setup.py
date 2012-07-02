@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import os
 
 
-version = '0.2a3'
+version = '0.2dev'
 project = 'kotti_navigation'
 
 
