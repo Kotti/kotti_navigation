@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2a3 (Unreleased)
+0.2a3 (2012-07-02)
 ------------------
 
 * Move border from bottom to top for submenu. [j23d]
