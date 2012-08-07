@@ -11,9 +11,7 @@ from kotti.security import (
 from kotti.static import view_needed
 from kotti.util import extract_from_settings
 from kotti.views.slots import (
-    RenderRightSlot,
-    RenderLeftSlot,
-    register,
+    assign_slot,
 )
 
 from logging import getLogger
@@ -100,17 +98,7 @@ def nav_tree(context, request):
             }
 
 
-def include_view(config, name=''):
-    config.add_view(
-        'kotti_navigation.nav_tree',
-        name='nav-tree',
-        permission='view',
-        renderer='kotti_navigation:templates/nav_tree.pt',
-        )
-    config.add_static_view('static-kotti_navigation', 'kotti_navigation:static')
-
-
-def render_navigation_widget(context, request, name=''):
+def navigation_widget(context, request, name=''):
     settings = navigation_settings()
 
     root = get_root()
@@ -120,21 +108,31 @@ def render_navigation_widget(context, request, name=''):
 
     children = get_children(root, request)
 
-    return render(
-        'kotti_navigation:templates/navigation.pt',
-        dict(root=root,
-             children=children,
-             include_root=include_root,
-             current_level=current_level,
-            ),
-        request,
-    )
+    return {'root': root,
+         'children': children,
+         'include_root': include_root,
+         'current_level': current_level,
+        }
 
 
-def include_navigation_widget(config, where=RenderLeftSlot):  # pragma: no cover
+def include_view(config, name=''):
+    config.add_view(
+        'kotti_navigation.nav_tree',
+        name='nav-tree',
+        permission='view',
+        renderer='kotti_navigation:templates/nav_tree.pt',
+        )
+    config.add_view(
+        navigation_widget,
+        name='navigation-widget',
+        renderer='kotti_navigation:templates/navigation.pt')
+    config.add_static_view('static-kotti_navigation', 'kotti_navigation:static')
+
+
+def include_navigation_widget(config, where='left'):  # pragma: no cover
     include_view(config)
-    register(where, None, render_navigation_widget)
+    assign_slot('navigation-widget', where)
 
 
 def include_navigation_widget_right(config):  # pragma: no cover
-    include_navigation_widget(config, RenderRightSlot)
+    include_navigation_widget(config, 'right')

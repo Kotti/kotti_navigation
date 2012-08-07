@@ -4,6 +4,8 @@ Changelog
 0.2 (Unreleased)
 ----------------
 
+* Use assign_slot for slots instead of depricated register slot. [j23d]
+
 
 0.2a3 (2012-07-02)
 ------------------

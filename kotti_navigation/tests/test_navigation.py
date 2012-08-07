@@ -7,7 +7,8 @@ from kotti.resources import (
         get_root,
         Content,
 )
-from kotti_navigation import render_navigation_widget
+from kotti.views.util import render_view
+from kotti_navigation import navigation_widget
 
 
 class NavigationDummyRequest(DummyRequest):
@@ -30,17 +31,17 @@ class TestNavigationWidget(FunctionalTestBase):
 
     def test_render_widget(self):
         root = get_root()
-        html = render_navigation_widget(root, NavigationDummyRequest())
+        html = render_view(root, NavigationDummyRequest(), name='navigation-widget')
         assert '<ul class="nav nav-pills nav-stacked">' in html
 
     def test_include_root(self):
         request = NavigationDummyRequest()
         root = get_root()
-        html = render_navigation_widget(root, request)
-        assert u'Welcome to Kotti' in html
+        result = navigation_widget(root, request)
+        assert result['include_root'] == True
         get_current_registry().settings['kotti_navigation.navigation_widget.include_root'] = u'false'
-        html = render_navigation_widget(root, request)
-        assert u'Welcome to Kotti' not in html
+        result = navigation_widget(root, request)
+        assert result['include_root'] == False
 
     def test_open_tree(self):
         request = NavigationDummyRequest()
@@ -51,28 +52,28 @@ class TestNavigationWidget(FunctionalTestBase):
         root[u'content_2'][u'sub_2'] = Content()
 
         request.context = root
-        html = render_navigation_widget(root, request)
+        html = render_view(root, request, name='navigation-widget')
         assert u'content_1' in html
         assert u'sub_1' not in html
         assert u'content_2' in html
         assert u'sub_2' not in html
 
         request.context = root[u'content_1']
-        html = render_navigation_widget(root[u'content_1'], request)
+        html = render_view(root[u'content_1'], request, name='navigation-widget')
         assert u'content_1' in html
         assert u'sub_1' in html
         assert u'content_2' in html
         assert u'sub_2' not in html
 
         request.context = root[u'content_2']
-        html = render_navigation_widget(root[u'content_2'], request)
+        html = render_view(root[u'content_2'], request, name='navigation-widget')
         assert u'content_1' in html
         assert u'sub_1' not in html
         assert u'content_2' in html
         assert u'sub_2' in html
 
         request.context = root[u'content_2'][u'sub_2']
-        html = render_navigation_widget(root[u'content_2'][u'sub_2'], request)
+        html = render_view(root[u'content_2'][u'sub_2'], request, name='navigation-widget')
         assert u'content_1' in html
         assert u'sub_1' not in html
         assert u'content_2' in html
@@ -80,7 +81,7 @@ class TestNavigationWidget(FunctionalTestBase):
 
         get_current_registry().settings['kotti_navigation.navigation_widget.open_all'] = u'true'
         request.context = root
-        html = render_navigation_widget(root, request)
+        html = render_view(root, request, name='navigation-widget')
         assert u'content_1' in html
         assert u'sub_1' in html
         assert u'content_2' in html
@@ -94,13 +95,13 @@ class TestNavigationWidget(FunctionalTestBase):
         root[u'content_2'].in_navigation = False
 
         # with standard settings the hidden nav points are hidden
-        html = render_navigation_widget(root, request)
+        html = render_view(root, request, name='navigation-widget')
         assert u'content_1' in html
         assert u'content_2' not in html
 
         # if we change the setting, the nav points still hidden
         get_current_registry().settings['kotti_navigation.navigation_widget.show_hidden_while_logged_in'] = u'true'
-        html = render_navigation_widget(root, request)
+        html = render_view(root, request, name='navigation-widget')
         assert u'content_1' in html
         assert u'content_2' not in html
 
@@ -122,10 +123,10 @@ class TestNavigationWidget(FunctionalTestBase):
         root[u'content_1'] = Content()
 
         # with no exclude the hidden nav points is shown
-        html = render_navigation_widget(root, request)
+        html = render_view(root, request, name='navigation-widget')
         assert u'content_1' in html
 
         # if we exclude the content type the nav point disappears
         get_current_registry().settings['kotti_navigation.navigation_widget.exclude_content_types'] = u'kotti.resources.Content'
-        html = render_navigation_widget(root, request)
+        html = render_view(root, request, name='navigation-widget')
         assert u'content_1' not in html
