@@ -13,7 +13,7 @@ from kotti.util import extract_from_settings
 from kotti.views.slots import (
     assign_slot,
 )
-
+from paste.deploy.converters import asbool
 from logging import getLogger
 log = getLogger('kotti_navigation: ')
 
@@ -45,16 +45,10 @@ def navigation_settings(name=''):
     return settings
 
 
-def check_true(value):
-    if value == u'true':
-        return True
-    return False
-
-
 def get_children(context, request):
     settings = navigation_settings()
     user = get_user(request)
-    show_hidden = check_true(settings['show_hidden_while_logged_in'])
+    show_hidden = asbool(settings['show_hidden_while_logged_in'])
     ex_cts = settings['exclude_content_types']
 
     if show_hidden and user:
@@ -73,7 +67,7 @@ def open_tree(item, request):
     """ Check if the tree should be opened for the given item.
     """
     # if all_open is true this is always True
-    if check_true(navigation_settings()['open_all']):
+    if asbool(navigation_settings()['open_all']):
         return True
 
     context = request.context
@@ -103,7 +97,7 @@ def navigation_widget(context, request, name=''):
 
     root = get_root()
 
-    include_root = check_true(settings['include_root'])
+    include_root = asbool(settings['include_root'])
     current_level = 2
 
     children = get_children(root, request)
