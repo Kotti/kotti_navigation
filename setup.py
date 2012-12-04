@@ -43,7 +43,7 @@ setup(name=project,
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'Kotti>=0.7a3',
+          'Kotti>=0.8a1',
       ],
       tests_require=tests_require,
       entry_points="""
