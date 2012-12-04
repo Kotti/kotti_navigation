@@ -3,6 +3,10 @@ Changelog
 
 0.3 (Unreleased)
 ----------------
+* Changes for compatibility with Kotti>=0.8. These changes
+  are not backward compatibel. If you want to use kotti_navigation
+  with Kotti<=0.7.x then pin kotti_navigation to 0.2.
+  * Use new children_with_permission function on context.
 
 
 0.2 (2012-08-15)

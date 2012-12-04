@@ -1,19 +1,16 @@
 from fanstatic import Library
 from fanstatic import Resource
-from pyramid.renderers import render
+
+from paste.deploy.converters import asbool
 from pyramid.i18n import TranslationStringFactory
+
 from kotti import _resolve_dotted
 from kotti.resources import get_root
-from kotti.security import (
-    has_permission,
-    get_user,
-)
+from kotti.security import get_user
 from kotti.static import view_needed
 from kotti.util import extract_from_settings
-from kotti.views.slots import (
-    assign_slot,
-)
-from paste.deploy.converters import asbool
+from kotti.views.slots import assign_slot
+
 from logging import getLogger
 log = getLogger('kotti_navigation: ')
 
@@ -52,14 +49,11 @@ def get_children(context, request):
     ex_cts = settings['exclude_content_types']
 
     if show_hidden and user:
-        childs = [child for child in context.values()
-                   if has_permission('view', child, request) and
-                   child.__class__ not in ex_cts]
+        childs = [child for child in context.children_with_permission(request)
+                   if child.__class__ not in ex_cts]
     else:
-        childs = [child for child in context.values()
-                    if child.in_navigation and
-                        has_permission('view', child, request) and
-                        child.__class__ not in ex_cts]
+        childs = [child for child in context.children_with_permission(request)
+                    if child.in_navigation and child.__class__ not in ex_cts]
     return childs
 
 
