@@ -2,10 +2,6 @@ from setuptools import setup, find_packages
 import os
 
 
-version = '0.3dev'
-project = 'kotti_navigation'
-
-
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
@@ -18,8 +14,8 @@ long_description = (
     read('CHANGES.txt'))
 
 
-setup(name=project,
-      version=version,
+setup(name='kotti_navigation',
+      version='0.3a1',
       description="""Add a configurable navigation to your Kotti site""",
       long_description=long_description,
       classifiers=[
