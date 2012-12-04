@@ -13,9 +13,9 @@ def read(*rnames):
 long_description = (
     read('README.rst')
     + '\n' +
-    read('docs', 'THANKS.txt')
+    read('THANKS.txt')
     + '\n' +
-    read('docs', 'CHANGES.txt'))
+    read('CHANGES.txt'))
 
 
 setup(name=project,
