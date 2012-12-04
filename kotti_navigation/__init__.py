@@ -3,6 +3,7 @@ from fanstatic import Resource
 
 from paste.deploy.converters import asbool
 from pyramid.i18n import TranslationStringFactory
+from pyramid.view import view_config
 
 from kotti import _resolve_dotted
 from kotti.resources import get_root
@@ -80,12 +81,16 @@ def open_tree(item, request):
     return open_tree
 
 
+@view_config(name='nav-tree',
+             renderer='kotti_navigation:templates/nav_tree.pt')
 def nav_tree(context, request):
     return {'open_tree': open_tree,
             'children': get_children(context, request),
             }
 
 
+@view_config(name='navigation-widget',
+             renderer='kotti_navigation:templates/navigation.pt')
 def navigation_widget(context, request, name=''):
     settings = navigation_settings()
 
@@ -103,18 +108,10 @@ def navigation_widget(context, request, name=''):
         }
 
 
-def include_view(config, name=''):
-    config.add_view(
-        'kotti_navigation.nav_tree',
-        name='nav-tree',
-        permission='view',
-        renderer='kotti_navigation:templates/nav_tree.pt',
-        )
-    config.add_view(
-        navigation_widget,
-        name='navigation-widget',
-        renderer='kotti_navigation:templates/navigation.pt')
-    config.add_static_view('static-kotti_navigation', 'kotti_navigation:static')
+def include_view(config):
+    config.scan(__name__)
+    config.add_static_view('static-kotti_navigation',
+                           'kotti_navigation:static')
 
 
 def include_navigation_widget(config, where='left'):  # pragma: no cover
