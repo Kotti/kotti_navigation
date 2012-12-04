@@ -1,8 +1,14 @@
 Changelog
 =========
 
+0.3 (Unreleased)
+----------------
+
+
+
 0.3a1 (2012-12-04)
 ------------------
+
 * Changes for compatibility with Kotti>=0.8. These changes
   are not backward compatibel. If you want to use kotti_navigation
   with Kotti<=0.7.x then pin kotti_navigation to 0.2.
