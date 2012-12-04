@@ -6,17 +6,6 @@ version = '0.3dev'
 project = 'kotti_navigation'
 
 
-tests_require = [
-    'WebTest',
-    'mock',
-    'pytest',
-    'pytest-cov',
-    'pytest-xdist',
-    'wsgi_intercept',
-    'zope.testbrowser',
-    ]
-
-
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
@@ -54,14 +43,12 @@ setup(name=project,
       install_requires=[
           'Kotti>=0.8a1',
       ],
-      tests_require=tests_require,
+      tests_require=[],
       entry_points="""
       [fanstatic.libraries]
       kotti_navigation = kotti_navigation:library
       """,
-      extras_require={
-          'testing': tests_require,
-          },
+      extras_require={},
       message_extractors={'kotti_navigation': [
             ('**.py', 'lingua_python', None),
             ('**.zcml', 'lingua_xml', None),
