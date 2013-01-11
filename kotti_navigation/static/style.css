@@ -1,22 +1,32 @@
-#navigation-display .nav {
+#navigation-tree .nav {
     margin-bottom: 0;
 }
-#navigation-display .nav li.hidden {
+#navigation-tree .nav li.hidden {
     border-left: 2px dotted orange;
 }
-#navigation-display ul li .nav-pills {
+#navigation-tree ul li .nav-pills {
     border-bottom: none;
     border-top: 1px dotted #DDDDDD;
 }
-#navigation-display ul li ul {
+#navigation-tree ul li ul {
     padding-left: 10px;
 }
-#navigation-display ul li ul li ul {
+#navigation-tree ul li ul li ul {
     padding-left: 20px;
 }
-#navigation-display ul li ul li ul li ul {
+#navigation-tree ul li ul li ul li ul {
     padding-left: 30px;
 }
-#navigation-display ul li ul li ul li ul li ul {
+#navigation-tree ul li ul li ul li ul li ul {
     padding-left: 40px;
+}
+#navigation-list .nav {
+    margin-bottom: 0;
+}
+#navigation-list .nav li.hidden {
+    border-left: 2px dotted orange;
+}
+#navigation-list ul li .nav-pills {
+    border-bottom: none;
+    border-top: 1px dotted #DDDDDD;
 }

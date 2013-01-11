@@ -1,5 +1,5 @@
 <div class="${use_container_class and 'container' or None}"
-    id="navigation-display"
+    id="${display_as_tree and 'navigation-tree' or 'navigation-list'}"
     tal:define="nav_stacked display_as_tree and 'nav-stacked' or ''">
   <ul class="nav nav-pills ${nav_stacked}">
     <li tal:condition="include_root"
