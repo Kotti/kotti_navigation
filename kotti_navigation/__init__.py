@@ -107,10 +107,10 @@ def navigation_widget(context, request, name=''):
     children = get_children(root, request)
     children_in_context = get_children(context, request)
 
-    needs_containment = True if nav_slot == 'beforebodyend' else False
+    use_container_class = True if nav_slot == 'beforebodyend' else False
 
     return {'root': root,
-         'needs_containment': needs_containment,
+         'use_container_class': use_container_class,
          'children': children,
          'children_in_context': children_in_context,
          'include_root': include_root,

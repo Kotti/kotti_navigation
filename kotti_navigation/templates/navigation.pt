@@ -1,4 +1,4 @@
-<div class="${needs_containment and 'container' or None}"
+<div class="${use_container_class and 'container' or None}"
     id="navigation-tree"
     tal:define="nav_stacked display_as_tree and 'nav-stacked' or ''">
   <ul class="nav nav-pills ${nav_stacked}">
