@@ -3,7 +3,7 @@ kotti_navigation
 ================
 
 This is an extension to the Kotti CMS that renders a navigation in the
-left or right slot.
+slots for a Kotti website (left, right, abovecontent, etc.).
 
 `Find out more about Kotti`_
 
@@ -16,12 +16,25 @@ left side add ``kotti_navigation.kotti_configure`` to the
 
     kotti.configurators = kotti_navigation.kotti_configure
 
-To set up the navigation widget on the right side you have to use the
+Or, to set up the navigation widget on the right side you have to use the
 pyramid.includes option in your ini file::
 
     pyramid.includes = 
         ...
         kotti_navigation.include_navigation_widget_right
+
+.. Note:: You should not have an entry for BOTH kotti.configurators and
+          pyramid.includes. An entry in kotti_configurators will use the
+          default left side display; otherwise include an explicit placement
+          choice in pyramid.includes.
+
+In this way, use your choice of widget position pyramid.includes::
+
+    kotti_navigation.include_navigation_widget_left
+    kotti_navigation.include_navigation_widget_right
+    kotti_navigation.include_navigation_widget_abovecontent
+    kotti_navigation.include_navigation_widget_belowcontent
+    kotti_navigation.include_navigation_widget_belowbodyend
 
 To exclude the root of the site from the navigation, set the
 ``kotti_navigation.navigation_widget.include_root`` variable.::
@@ -37,6 +50,15 @@ you plan to set up a popup menu via css or javascript::
     kotti_navigation.navigation_widget.open_all = false
 
 
+By default, only the immediate children for the context are shown in the
+navigation display, as a simple horizontal list of navpills wrapped within the
+available space. This style of display is appropriate for navigation menus in
+the abovecontent, belowcontent, and belowbodyend slots. For uses in left and
+right slots, and perhaps in other cases, a tree display is preferred. Control
+this with the display_as_tree boolean setting (default is False)::
+
+    kotti_navigation.navigation_widget.display_as_tree = True
+
 You can exclude specific content types from the whole navigation
 structure. If you not want to show images in the navigation at all,
 set the ``kotti_navigation.navigation_widget.exclude_content_types`` 
@@ -44,6 +66,7 @@ variable to the following.::
 
     kotti_navigation.navigation_widget.exclude_content_types = 
         kotti.resources.Image
+        kotti_myaddon.resources.MyContentType
 
 
 .. _Find out more about Kotti: http://pypi.python.org/pypi/Kotti

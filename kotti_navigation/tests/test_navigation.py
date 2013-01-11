@@ -43,7 +43,7 @@ class TestNavigationWidget(FunctionalTestBase):
         result = navigation_widget(root, request)
         assert result['include_root'] == False
 
-    def test_open_tree(self):
+    def test_is_tree_open(self):
         request = NavigationDummyRequest()
         root = get_root()
         root[u'content_1'] = Content()

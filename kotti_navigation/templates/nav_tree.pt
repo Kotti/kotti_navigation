@@ -6,7 +6,7 @@
      title="${getattr(item, 'description', None)}">
     ${item.title}
   </a>
-  <tal:open_tree tal:condition="open_tree(item, request)">
+  <tal:is_tree_open tal:condition="is_tree_open(item, request)">
     <tal:children tal:condition="children">
       <tal:repeat tal:repeat="child children">
           <ul class="nav nav-pills nav-stacked">
@@ -14,5 +14,5 @@
           </ul>
       </tal:repeat>
     </tal:children>
-  </tal:open_tree>
+  </tal:is_tree_open>
 </li>

@@ -19,6 +19,7 @@ _ = TranslationStringFactory('kotti_navigation')
 
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
+    'display_as_tree': 'false',
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
     'exclude_content_types': '',
@@ -58,7 +59,7 @@ def get_children(context, request):
     return childs
 
 
-def open_tree(item, request):
+def is_tree_open(item, request):
     """ Check if the tree should be opened for the given item.
     """
     # if all_open is true this is always True
@@ -68,23 +69,23 @@ def open_tree(item, request):
     context = request.context
 
     root = get_root()
-    open_tree = False
+    is_tree_open = False
     while 1:
         if item == context:
-            open_tree = True
+            is_tree_open = True
             break
         if root == context:
             break
         if not hasattr(context, '__parent__'):
             break
         context = context.__parent__
-    return open_tree
+    return is_tree_open
 
 
 @view_config(name='nav-tree',
              renderer='kotti_navigation:templates/nav_tree.pt')
 def nav_tree(context, request):
-    return {'open_tree': open_tree,
+    return {'is_tree_open': is_tree_open,
             'children': get_children(context, request),
             }
 
@@ -97,13 +98,17 @@ def navigation_widget(context, request, name=''):
     root = get_root()
 
     include_root = asbool(settings['include_root'])
+    display_as_tree = asbool(settings['display_as_tree'])
     current_level = 2
 
     children = get_children(root, request)
+    children_in_context = get_children(context, request)
 
     return {'root': root,
          'children': children,
+         'children_in_context': children_in_context,
          'include_root': include_root,
+         'display_as_tree': display_as_tree,
          'current_level': current_level,
         }
 
@@ -119,5 +124,21 @@ def include_navigation_widget(config, where='left'):  # pragma: no cover
     assign_slot('navigation-widget', where)
 
 
+def include_navigation_widget_left(config):  # pragma: no cover
+    include_navigation_widget(config, 'left')
+
+
 def include_navigation_widget_right(config):  # pragma: no cover
     include_navigation_widget(config, 'right')
+
+
+def include_navigation_widget_abovecontent(config):  # pragma: no cover
+    include_navigation_widget(config, 'abovecontent')
+
+
+def include_navigation_widget_belowcontent(config):  # pragma: no cover
+    include_navigation_widget(config, 'belowcontent')
+
+
+def include_navigation_widget_beforebodyend(config):  # pragma: no cover
+    include_navigation_widget(config, 'beforebodyend')

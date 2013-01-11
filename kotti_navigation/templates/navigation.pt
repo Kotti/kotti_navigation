@@ -1,5 +1,6 @@
-<div id="navigation-tree">
-  <ul class="nav nav-pills nav-stacked">
+<div id="navigation-tree"
+    tal:define="nav_stacked display_as_tree and 'nav-stacked' or ''">
+  <ul class="nav nav-pills ${nav_stacked}">
     <li tal:condition="include_root"
         tal:define="active root == request.context and 'active' or ''"
         class="${active}">
@@ -9,9 +10,24 @@
       </a>
     </li>
   </ul>
-  <tal:children tal:repeat="child children">
-    <ul class="nav nav-pills nav-stacked">
+  <tal:children tal:condition="display_as_tree" tal:repeat="child children">
+    <ul class="nav nav-pills ${nav_stacked}">
       <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
     </ul>
   </tal:children>
+  <tal:block tal:condition="not display_as_tree">
+    <ul class="nav nav-pills ${nav_stacked}">
+      <tal:repeat
+          tal:define="nodes children_in_context"
+          tal:repeat="item nodes">
+        <li tal:define="active item == context and 'active' or ''"
+            class="${active}">
+          <a href="${api.url(item)}"
+             title="${getattr(item, 'description', None)}">
+            ${item.title}
+          </a>
+        </li>
+      </tal:repeat>
+    </ul>
+  </tal:block>
 </div>
