@@ -107,6 +107,10 @@ def navigation_widget(context, request, name=''):
     children = get_children(root, request)
     children_in_context = get_children(context, request)
 
+    # When the nav display is set to the beforebodyend slot, the class for the
+    # containing div needs to be 'container' so it fits to the middle span12
+    # area for content. When nav is in any of the other slots, no class is
+    # needed, because the inherited CSS works to fit nav to the slot.
     use_container_class = True if nav_slot == 'beforebodyend' else False
 
     return {'root': root,
