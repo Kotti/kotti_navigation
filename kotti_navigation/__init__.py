@@ -29,6 +29,7 @@ library = Library("kotti_navigation", "static")
 kotti_navigation_css = Resource(library, "style.css")
 view_needed.add(kotti_navigation_css)
 
+nav_slot = 'left'
 
 def kotti_configure(settings):
     settings['pyramid.includes'] += ' kotti_navigation.include_navigation_widget'
@@ -93,6 +94,8 @@ def nav_tree(context, request):
 @view_config(name='navigation-widget',
              renderer='kotti_navigation:templates/navigation.pt')
 def navigation_widget(context, request, name=''):
+    global nav_slot
+
     settings = navigation_settings()
 
     root = get_root()
@@ -104,7 +107,10 @@ def navigation_widget(context, request, name=''):
     children = get_children(root, request)
     children_in_context = get_children(context, request)
 
+    needs_containment = True if nav_slot == 'beforebodyend' else False
+
     return {'root': root,
+         'needs_containment': needs_containment,
          'children': children,
          'children_in_context': children_in_context,
          'include_root': include_root,
@@ -120,8 +126,10 @@ def include_view(config):
 
 
 def include_navigation_widget(config, where='left'):  # pragma: no cover
+    global nav_slot
     include_view(config)
     assign_slot('navigation-widget', where)
+    nav_slot = where
 
 
 def include_navigation_widget_left(config):  # pragma: no cover

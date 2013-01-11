@@ -26,6 +26,7 @@ class TestNavigationWidget(FunctionalTestBase):
     def setUp(self, **kwargs):
         settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
                     'kotti_navigation.navigation_widget.include_root': 'true',
+                    'kotti_navigation.navigation_widget.display_as_tree': 'false',
                     'kotti_navigation.navigation_widget.open_all': 'false'}
         super(TestNavigationWidget, self).setUp(**settings)
 
