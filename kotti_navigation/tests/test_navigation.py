@@ -44,6 +44,15 @@ class TestNavigationWidget(FunctionalTestBase):
         result = navigation_widget(root, request)
         assert result['include_root'] == False
 
+    def test_display_as_tree(self):
+        request = NavigationDummyRequest()
+        root = get_root()
+        result = navigation_widget(root, request)
+        assert result['display_as_tree'] == True
+        get_current_registry().settings['kotti_navigation.navigation_widget.display_as_tree'] = u'true'
+        result = navigation_widget(root, request)
+        assert result['display_as_tree'] == True
+
     def test_is_tree_open(self):
         request = NavigationDummyRequest()
         root = get_root()
