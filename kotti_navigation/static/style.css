@@ -1,22 +1,22 @@
-#navigation-tree .nav {
+#navigation-display .nav {
     margin-bottom: 0;
 }
-#navigation-tree .nav li.hidden {
+#navigation-display .nav li.hidden {
     border-left: 2px dotted orange;
 }
-#navigation-tree ul li .nav-pills {
+#navigation-display ul li .nav-pills {
     border-bottom: none;
     border-top: 1px dotted #DDDDDD;
 }
-#navigation-tree ul li ul {
+#navigation-display ul li ul {
     padding-left: 10px;
 }
-#navigation-tree ul li ul li ul {
+#navigation-display ul li ul li ul {
     padding-left: 20px;
 }
-#navigation-tree ul li ul li ul li ul {
+#navigation-display ul li ul li ul li ul {
     padding-left: 30px;
 }
-#navigation-tree ul li ul li ul li ul li ul {
+#navigation-display ul li ul li ul li ul li ul {
     padding-left: 40px;
 }
