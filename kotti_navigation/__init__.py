@@ -20,6 +20,7 @@ _ = TranslationStringFactory('kotti_navigation')
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
     'display_as_tree': 'false',
+    'include_context_in_list': 'false',
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
     'exclude_content_types': '',
@@ -102,10 +103,13 @@ def navigation_widget(context, request, name=''):
 
     include_root = asbool(settings['include_root'])
     display_as_tree = asbool(settings['display_as_tree'])
+    include_context_in_list = asbool(settings['include_context_in_list'])
     current_level = 2
 
-    children = get_children(root, request)
-    children_in_context = get_children(context, request)
+    items = get_children(root, request)
+
+    if not display_as_tree and include_context_in_list:
+        items = [context] + items
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -115,8 +119,8 @@ def navigation_widget(context, request, name=''):
 
     return {'root': root,
          'use_container_class': use_container_class,
-         'children': children,
-         'children_in_context': children_in_context,
+         'items': items,
+         'include_context_in_list': include_context_in_list,
          'include_root': include_root,
          'display_as_tree': display_as_tree,
          'current_level': current_level,

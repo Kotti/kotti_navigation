@@ -11,17 +11,19 @@
       </a>
     </li>
   </ul>
-  <tal:children tal:condition="display_as_tree" tal:repeat="child children">
+  <tal:items tal:condition="display_as_tree" tal:repeat="item items">
     <ul class="nav nav-pills ${nav_stacked}">
-      <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
+      <tal:replace tal:replace="api.render_view('nav-tree', context=item)" />
     </ul>
-  </tal:children>
+  </tal:items>
   <tal:block tal:condition="not display_as_tree">
     <ul class="nav nav-pills ${nav_stacked}">
       <tal:repeat
-          tal:define="nodes children_in_context"
-          tal:repeat="item nodes">
-        <li tal:define="active item == context and 'active' or ''"
+          tal:repeat="item items">
+        <li tal:condition="item.number == 1 and include_context_in_list">
+          ${item.title}:&nbsp;
+        </li>
+        <li tal:condition="item.number > 1" tal:define="active item == context and 'active' or ''"
             class="${active}">
           <a href="${api.url(item)}"
              title="${getattr(item, 'description', None)}">
