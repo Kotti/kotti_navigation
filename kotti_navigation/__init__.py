@@ -32,8 +32,10 @@ view_needed.add(kotti_navigation_css)
 
 nav_slot = 'left'
 
+# We have no default, to force a choice of one of the config-to-specifi-slot
+# functions below, e.g. include_navigation_widget_abovecontent.
 def kotti_configure(settings):
-    settings['pyramid.includes'] += ' kotti_navigation.include_navigation_widget'
+    pass
 
 
 def navigation_settings(name=''):

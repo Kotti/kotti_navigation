@@ -10,25 +10,18 @@ slots for a Kotti website (left, right, abovecontent, etc.).
 Setting up the navigation widget
 ================================
 
-To set up the navigation widget to display on every page in Kotti on the
-left side add ``kotti_navigation.kotti_configure`` to the
-``kotti.configurators`` setting in your ini file::
-
-    kotti.configurators = kotti_navigation.kotti_configure
-
-Or, to set up the navigation widget on the right side you have to use the
-pyramid.includes option in your ini file::
+To set up the navigation widget to display on every page in Kotti in a given
+slot (left, right, abovecontent, belowcontent, belowbodyend), instead of
+setting a general config in kotti.configurators, set a specific choice in
+pyramid.includes in your ini file::
 
     pyramid.includes = 
         ...
         kotti_navigation.include_navigation_widget_right
 
-.. Note:: You should not have an entry for BOTH kotti.configurators and
-          pyramid.includes. An entry in kotti_configurators will use the
-          default left side display; otherwise include an explicit placement
-          choice in pyramid.includes.
+.. Note:: Configure navigation for only one slot.
 
-In this way, use your choice of widget position pyramid.includes::
+Choices of widget position configuration for pyramid.includes are::
 
     kotti_navigation.include_navigation_widget_left
     kotti_navigation.include_navigation_widget_right
@@ -39,16 +32,13 @@ In this way, use your choice of widget position pyramid.includes::
 To exclude the root of the site from the navigation, set the
 ``kotti_navigation.navigation_widget.include_root`` variable.::
 
-    kotti.configurators = kotti_navigation.kotti_configure
     kotti_navigation.navigation_widget.include_root = false
 
 To open the whole navigation all the time, set the
 ``kotti_navigation.navigation_widget.open_all`` variable. This is useful if
 you plan to set up a popup menu via css or javascript::
 
-    kotti.configurators = kotti_navigation.kotti_configure
     kotti_navigation.navigation_widget.open_all = false
-
 
 By default, only the immediate children for the context are shown in the
 navigation display, as a simple horizontal list of navpills wrapped within the
@@ -69,8 +59,7 @@ you can set::
 
 which will put the context as a label in the first item of the nav list, along
 with a colon. If the current context is "Animals" and the children are "Dogs"
-and "Cats", the nav list would be: Animals: Dogs Cats, as navpills, with only
-Dogs and Cats showing as active.
+and "Cats", the nav list would be: Animals: Dogs Cats, as navpills.
 
 You can exclude specific content types from the whole navigation
 structure. If you not want to show images in the navigation at all,
