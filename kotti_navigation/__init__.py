@@ -108,7 +108,7 @@ def navigation_widget(context, request, name=''):
 
     items = get_children(root, request)
 
-    if not display_as_tree and include_context_in_list:
+    if display_as_tree is False and include_context_in_list:
         items = [context] + items
 
     # When the nav display is set to the beforebodyend slot, the class for the

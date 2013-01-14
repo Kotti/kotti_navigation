@@ -18,12 +18,12 @@
   </tal:items>
   <tal:block tal:condition="not display_as_tree">
     <ul class="nav nav-pills ${nav_stacked}">
-      <tal:repeat
-          tal:repeat="item items">
+      <tal:repeat tal:repeat="item items">
         <li tal:condition="repeat.item.number == 1 and include_context_in_list">
           ${item.title}:&nbsp;
         </li>
-        <li tal:condition="repeat.item.number > 1" tal:define="active item == context and 'active' or ''"
+        <li tal:condition="repeat.item.number > 1"
+            tal:define="active item == context and 'active' or ''"
             class="${active}">
           <a href="${api.url(item)}"
              title="${getattr(item, 'description', None)}">
