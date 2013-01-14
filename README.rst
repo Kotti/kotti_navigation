@@ -57,7 +57,20 @@ the abovecontent, belowcontent, and belowbodyend slots. For uses in left and
 right slots, and perhaps in other cases, a tree display is preferred. Control
 this with the display_as_tree boolean setting (default is False)::
 
-    kotti_navigation.navigation_widget.display_as_tree = True
+    kotti_navigation.navigation_widget.display_as_tree = true
+
+If using a list display for navigation (display_as_tree = False), the default
+will only list children of the current context. This may not provide a clear
+user interface, such that it is obvious that the list items are children of
+the current context (especially when the abovecontent slot is used). To help,
+you can set::
+
+    kotti_navigation.navigation_widget.include_context_label_in_list = true
+
+which will put the context as a label in the first item of the nav list, along
+with a colon. If the current context is "Animals" and the children are "Dogs"
+and "Cats", the nav list would be: Animals: Dogs Cats, as navpills, with only
+Dogs and Cats showing as active.
 
 You can exclude specific content types from the whole navigation
 structure. If you not want to show images in the navigation at all,

@@ -2,7 +2,7 @@
     id="${display_as_tree and 'navigation-tree' or 'navigation-list'}"
     tal:define="nav_stacked display_as_tree and 'nav-stacked' or ''">
   <ul class="nav nav-pills ${nav_stacked}">
-    <li tal:condition="include_root"
+    <li tal:condition="include_root and display_as_tree"
         tal:define="active root == request.context and 'active' or ''"
         class="${active}">
       <a href="${api.url(root)}"
@@ -19,14 +19,15 @@
   <tal:block tal:condition="not display_as_tree">
     <ul class="nav nav-pills ${nav_stacked}">
       <tal:repeat tal:repeat="item items">
-        <li tal:condition="repeat.item.number == 1 and include_context_in_list"
-            class="disabled">
+        <li tal:condition="repeat.item.number == 1 and first_list_item_is_label"
+            tal:define="active item == context and 'active' or ''"
+            class="${active}">
           <a href="#"
              title="${getattr(item, 'description', None)}">
             ${item.title}:
           </a>
         </li>
-        <li tal:condition="repeat.item.number > 1"
+        <li tal:condition="(repeat.item.number == 1 and not first_list_item_is_label) or repeat.item.number > 1"
             tal:define="active item == context and 'active' or ''"
             class="${active}">
           <a href="${api.url(item)}"

@@ -20,7 +20,7 @@ _ = TranslationStringFactory('kotti_navigation')
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
     'display_as_tree': 'false',
-    'include_context_in_list': 'true',
+    'include_context_label_in_list': 'true',
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
     'exclude_content_types': '',
@@ -103,17 +103,28 @@ def navigation_widget(context, request, name=''):
 
     include_root = asbool(settings['include_root'])
     display_as_tree = asbool(settings['display_as_tree'])
-    include_context_in_list = asbool(settings['include_context_in_list'])
+    include_context_label_in_list = asbool(settings['include_context_label_in_list'])
     current_level = 2
 
     items = get_children(root, request)
 
+    # In the if below, first_list_item_is_label may be reset for the case of the
+    # root, so we use a different boolean to pass to the template, specifying
+    # explicitly if the first nav list item is a label, so should get a colon:
+    first_list_item_is_label = False
+
     if not display_as_tree:
-        if include_context_in_list:
+        if include_context_label_in_list:
             if len(context.children) > 0:
-                items = [context] + context.children
+                if context.parent:
+                    items = [context] + context.children
+                    first_list_item_is_label = True
+                else:
+                    items = context.children
             else:
                 items = []
+        else:
+            items = context.children
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -124,7 +135,7 @@ def navigation_widget(context, request, name=''):
     return {'root': root,
          'use_container_class': use_container_class,
          'items': items,
-         'include_context_in_list': include_context_in_list,
+         'first_list_item_is_label': first_list_item_is_label,
          'include_root': include_root,
          'display_as_tree': display_as_tree,
          'current_level': current_level,
