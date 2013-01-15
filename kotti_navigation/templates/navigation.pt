@@ -19,15 +19,19 @@
   <tal:block tal:condition="not display_as_tree">
     <ul class="nav nav-pills ${nav_stacked}">
       <tal:repeat tal:repeat="item items">
-        <li tal:condition="repeat.item.number == 1 and first_list_item_is_label"
+        <li tal:condition="repeat.item.number == 1 and show_label_in_list and label_is_context"
             tal:define="active item == context and 'active' or ''"
             class="${active}">
           <a href="#"
              title="${getattr(item, 'description', None)}">
-            ${item.title}:
+             ${item.title}:
           </a>
         </li>
-        <tal:block tal:condition="(repeat.item.number == 1 and not first_list_item_is_label) or repeat.item.number > 1">
+        <li tal:condition="repeat.item.number == 1 and show_label_in_list and not label_is_context"
+            class="nav-header">
+           ${item.title}
+        </li>
+        <tal:block tal:condition="(repeat.item.number == 1 and not show_label_in_list) or repeat.item.number > 1">
           <tal:children tal:condition="show_dropdown_menus_in_list and item.children">
             <li>
               <a href="${api.url(item)}"

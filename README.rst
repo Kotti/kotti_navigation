@@ -29,6 +29,26 @@ Choices of widget position configuration for pyramid.includes are::
     kotti_navigation.include_navigation_widget_belowcontent
     kotti_navigation.include_navigation_widget_belowbodyend
 
+Here are the slots available for the navigation widget::
+
+    +------------------------------------------------------+
+    | nav (the nav in the Kotti toolbar                    |
+    |------------------------------------------------------|
+    | editor_bar                                           |
+    |+----------------------------------------------------+|
+    || breadcrumbs                                        ||
+    |+-------------++---------------------++--------------+|
+    || SLOT "left" || SLOT "abovecontent" || SLOT "right" ||
+    ||             |+---------------------+|              ||
+    ||             || Content             ||              ||
+    ||             |+---------------------+|              ||
+    ||             || SLOT "belowcontent" ||              ||
+    |+-------------++---------------------++--------------+|
+    | footer                                               |
+    |------------------------------------------------------|
+    | SLOT "beforebodyend"                                 |
+    +------------------------------------------------------+
+
 To exclude the root of the site from the navigation, set the
 ``kotti_navigation.navigation_widget.include_root`` variable.::
 
@@ -50,13 +70,34 @@ this with the display_as_tree boolean setting (default is False)::
     kotti_navigation.navigation_widget.display_as_tree = true
 
 If using a list display for navigation (display_as_tree = False), the default
-will only list children of the current context. This may not provide a clear
-user interface, such that it is obvious that the list items are children of
-the current context (especially when the abovecontent slot is used). To help,
-you can set::
+will list children of the current context in a horizontal list of nav pills
+that wrap, if necessary. Along with the toolbar and and breadcrumbs, this may
+provide a perfectly good nav display. When the abovecontent slot is used,
+however, the title for the context is _underneath_ the nav list, so it may not
+be clear enough that that the nav pill items are contained within the context.
+Perhaps this would be true for the left slot, as well, but a bare nav pill list
+in the right and belowcontent slots might work well Regardless, for any slot,
+if desired, set nav_list_label (default is none) in one of two ways to add a
+label at the beginning of the nav list:
 
-    kotti_navigation.navigation_widget.include_context_label_in_list = true
+Option 1, set nav_list_label to a custom string::
 
+    kotti_navigation.nav_list_label = Contained Items:
+
+Option 2, set nav_list_label to the string 'context' (without the quotes)::
+
+    kotti_navigation.nav_list_label = context
+
+For option 1, a label using Bootstrap class ``nav-header`` will be put at the
+beginning of the nav list with text given in nav_list_label. Note that the
+example string, 'Contained Items:', contains a colon at the end. You may want
+to use another indicator, such as '-->', or none at all.
+
+For option 2, a nav pill li item, set with class ``active``, will be put at the
+beginning of the nav list with text as context.title. A colon is added to the
+of context.title.
+
+In the example above, where nav_list_labe = ``Contained Items:``
 which will put the context as a label in the first item of the nav list, along
 with a colon. If the current context is "Animals" and the children are "Dogs"
 and "Cats", the nav list would be: Animals: Dogs Cats, as navpills.

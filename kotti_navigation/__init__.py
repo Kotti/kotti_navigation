@@ -20,7 +20,7 @@ _ = TranslationStringFactory('kotti_navigation')
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
     'display_as_tree': 'false',
-    'include_context_label_in_list': 'false',
+    'label_for_list': 'none',
     'show_dropdown_menus_in_list': 'false',
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
@@ -106,23 +106,29 @@ def navigation_widget(context, request, name=''):
 
     include_root = asbool(settings['include_root'])
     display_as_tree = asbool(settings['display_as_tree'])
-    include_context_label_in_list = asbool(settings['include_context_label_in_list'])
     show_dropdown_menus_in_list = asbool(settings['show_dropdown_menus_in_list'])
+    label_for_list = settings['label_for_list']
+
     current_level = 2
 
     items = get_children(root, request)
 
-    # In the if below, first_list_item_is_label may be reset for the case of the
+    # In the if below, show_label_in_list may be reset for the case of the
     # root, so we use a different boolean to pass to the template, specifying
     # explicitly if the first nav list item is a label, so should get a colon:
-    first_list_item_is_label = False
+    show_label_in_list = False
+    label_is_context = False
 
     if not display_as_tree:
-        if include_context_label_in_list:
+        if not label_for_list in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
             if len(context.children) > 0:
                 if context.parent:
-                    items = [context] + context.children
-                    first_list_item_is_label = True
+                    if label_for_list in ['context', 'Context', 'CONTEXT']:
+                        items = [context] + context.children
+                        label_is_context = True
+                    else:
+                        items = [{'title': label_for_list}] + context.children
+                    show_label_in_list = True
                 else:
                     items = context.children
             else:
@@ -141,7 +147,8 @@ def navigation_widget(context, request, name=''):
          'include_root': include_root,
          'display_as_tree': display_as_tree,
          'items': items,
-         'first_list_item_is_label': first_list_item_is_label,
+         'show_label_in_list': show_label_in_list,
+         'label_is_context': label_is_context,
          'show_dropdown_menus_in_list': show_dropdown_menus_in_list,
          'current_level': current_level,
         }
