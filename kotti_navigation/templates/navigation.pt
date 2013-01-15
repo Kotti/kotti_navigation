@@ -29,12 +29,18 @@
         </li>
         <tal:block tal:condition="(repeat.item.number == 1 and not first_list_item_is_label) or repeat.item.number > 1">
           <tal:children tal:condition="show_dropdown_menus_in_list and item.children">
+            <li>
+              <a href="${api.url(item)}"
+                 title="${getattr(item, 'description', None)}"
+                 class="nav-list-careted">
+                ${item.title}
+              </a>
+            </li>
             <li class="dropdown">
               <a href="${api.url(item)}"
-                 class="dropdown-toggle"
+                 class="dropdown-toggle nav-list-caret"
                  data-toggle="dropdown"
                  title="${getattr(item, 'description', None)}">
-                ${item.title}
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">

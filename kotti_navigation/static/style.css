@@ -30,3 +30,10 @@
     border-bottom: none;
     border-top: 1px dotted #DDDDDD;
 }
+#navigation-list .nav-list-careted {
+    padding-right: 3px;
+}
+#navigation-list .nav-list-caret {
+    padding-left: 2px;
+    padding-right: 2px;
+}
