@@ -20,8 +20,8 @@ _ = TranslationStringFactory('kotti_navigation')
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
     'display_type': 'horizontal',
-    'label_for_list': 'none',
-    'show_dropdown_menus_in_list': 'false',
+    'label': 'none',
+    'show_dropdown_menus': 'false',
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
     'exclude_content_types': '',
@@ -106,8 +106,8 @@ def navigation_widget(context, request, name=''):
 
     include_root = asbool(settings['include_root'])
     display_type = settings['display_type']
-    show_dropdown_menus_in_list = asbool(settings['show_dropdown_menus_in_list'])
-    label_for_list = settings['label_for_list']
+    show_dropdown_menus = asbool(settings['show_dropdown_menus'])
+    label = settings['label']
 
     current_level = 2
 
@@ -118,16 +118,32 @@ def navigation_widget(context, request, name=''):
     # explicitly if the first nav list item is a label, so should get a colon:
     show_label_in_list = False
     label_is_context = False
+    label_contains_context = False
+    before_context = ''
+    after_context = ''
 
     if display_type == 'horizontal':
-        if not label_for_list in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
+        if not label in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
             if len(context.children) > 0:
                 if context.parent:
-                    if label_for_list in ['context', 'Context', 'CONTEXT']:
+                    label_lower = label.lower()
+                    if label_lower == 'context':
                         items = [context] + context.children
                         label_is_context = True
+                    elif 'context' in label or 'Context' in label or 'CONTEXT' in label:
+                        context_spelling = ''
+                        if 'context' in label:
+                            context_spelling = 'context'
+                        elif 'Context' in label:
+                            context_spelling = 'Context'
+                        elif 'CONTEXT' in label:
+                            context_spelling = 'CONTEXT'
+                        before_context, after_context = label.split(context_spelling)
+
+                        items = [context] + context.children
+                        label_contains_context = True
                     else:
-                        items = [{'title': label_for_list}] + context.children
+                        items = [{'title': label}] + context.children
                     show_label_in_list = True
                 else:
                     items = context.children
@@ -149,7 +165,10 @@ def navigation_widget(context, request, name=''):
          'items': items,
          'show_label_in_list': show_label_in_list,
          'label_is_context': label_is_context,
-         'show_dropdown_menus_in_list': show_dropdown_menus_in_list,
+         'label_contains_context': label_contains_context,
+         'before_context': before_context,
+         'after_context': after_context,
+         'show_dropdown_menus': show_dropdown_menus,
          'current_level': current_level,
         }
 

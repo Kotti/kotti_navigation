@@ -78,33 +78,83 @@ title for the context is _underneath_ the nav list, so it may not be clear
 enough that that the nav pill items are contained within the context.  Perhaps
 this would be true for the left slot, as well, but a bare nav pill list in the
 right and belowcontent slots might work well Regardless, for any slot, if
-desired, set nav_list_label (default is none) in one of two ways to add a label
-at the beginning of the nav list:
+desired, set label (default is none) to a string as illustrated in the
+following examples.
 
-Option 1, set nav_list_label to a custom string::
+For each example, the context is assumed to be a document titled Animals, and
+there are two children titled Dogs and Cats, the horizontal nav pill list will
+have items as Animals: Dogs Cats.
 
-    kotti_navigation.nav_list_label = Contained Items:
+If label is not set, the default value of none will result in two nav pill li
+items, <Dogs> and <Cats> (< > notation used here to denote nav pill li items).
 
-Option 2, set nav_list_label to the string 'context' (without the quotes)::
+Using a custom sring, punctuated with a colon::
 
-    kotti_navigation.nav_list_label = context
+    kotti_navigation.label = Contained Items
 
-.. Note:: String params in ini config files do not have quotes.
+would result in a nav-header styled label with two nav pill li items, as::
 
-For option 1, a label using Bootstrap class ``nav-header`` will be put at the
-beginning of the nav list with text given in nav_list_label. Note that the
-example string, 'Contained Items:', contains a colon at the end. You may want
-to use something other than a colon at the end, or omit; perhaps something
-like '-->' or '>>' would work too.
+    Contained items <Dogs> <Cats>
 
-For option 2, a nav pill li item, set with class ``active``, representing the
-context, will be put at the beginning of the nav list with text as
-context.title. A colon is added to the of context.title.
+Using punctuation might be a good idea::
 
-In the example above, where nav_list_labe = ``Contained Items:``
-which will put the context as a label in the first item of the nav list, along
-with a colon. If the current context is "Animals" and the children are "Dogs"
-and "Cats", the nav list would be: Contained Items: Dogs Cats, as navpills.
+    kotti_navigation.label = Subitems:
+
+would result in a nav-header styled label with two nav pill li items, as::
+
+    Subitems: <Dogs> <Cats>
+
+or, perhaps with some other punctuation::
+
+    kotti_navigation.label = Contents >>
+
+etc.
+
+Option 2, set label to a string using the word ``context`` anywhere in the
+string as a placeholder for context.title. If the label is set to be only
+the word ``context`` (only the word, with no punctuation), then a nav pill
+will be used for the label::
+
+    kotti_navigation.label = context
+
+The result would be three nav pill li items, as::
+
+    <Animals> <Dogs> <Cats>
+
+with <Animals> as the active link.
+
+With any punctuation or additional text of any sort, as with::
+
+    label = context:
+
+then instead of a nav pill, a nav-header styled li is used::
+
+    Animals: <Dogs> <Cats>
+
+If a phrase is used, take care to word appropriately, perhaps aided by use of
+quotes or another indicator for context, such as (), [], etc.::
+
+    kotti_navigation.label = Items in [context] are:::
+
+would result in::
+
+    Items in [Animals] are: <Dogs> <Cats>
+
+and::
+
+    kotti_navigation.label = "context" contains:
+
+would result in::
+
+    "Animals" contains: <Dogs> <Cats>
+
+etc.
+
+.. Note:: String params in ini config files do not have quotes, so the string
+          is whatever comes after the = sign, with leading whitespace deleted.
+
+Excluding Content Types
+-----------------------
 
 You can exclude specific content types from the whole navigation
 structure. If you not want to show images in the navigation at all,
