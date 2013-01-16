@@ -26,7 +26,7 @@ class TestNavigationWidget(FunctionalTestBase):
     def setUp(self, **kwargs):
         settings = {'pyramid.includes': 'kotti_navigation.kotti_configure',
                     'kotti_navigation.navigation_widget.include_root': 'true',
-                    'kotti_navigation.navigation_widget.display_as_tree': 'true',
+                    'kotti_navigation.navigation_widget.display_type': 'tree',
                     'kotti_navigation.navigation_widget.open_all': 'false'}
         super(TestNavigationWidget, self).setUp(**settings)
 
@@ -44,14 +44,14 @@ class TestNavigationWidget(FunctionalTestBase):
         result = navigation_widget(root, request)
         assert result['include_root'] == False
 
-    def test_display_as_list(self):
+    def test_display_as_horizontal(self):
         request = NavigationDummyRequest()
         root = get_root()
         result = navigation_widget(root, request)
-        assert result['display_as_tree'] == True
-        get_current_registry().settings['kotti_navigation.navigation_widget.display_as_tree'] = u'false'
+        assert result['display_type'] == 'tree'
+        get_current_registry().settings['kotti_navigation.navigation_widget.display_type'] = u'horizontal'
         result = navigation_widget(root, request)
-        assert result['display_as_tree'] == False
+        assert result['display_type'] == 'horizontal'
 
     def test_is_tree_open(self):
         request = NavigationDummyRequest()

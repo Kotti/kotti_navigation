@@ -19,7 +19,7 @@ _ = TranslationStringFactory('kotti_navigation')
 
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
-    'display_as_tree': 'false',
+    'display_type': 'horizontal',
     'label_for_list': 'none',
     'show_dropdown_menus_in_list': 'false',
     'open_all': 'false',
@@ -105,7 +105,7 @@ def navigation_widget(context, request, name=''):
     root = get_root()
 
     include_root = asbool(settings['include_root'])
-    display_as_tree = asbool(settings['display_as_tree'])
+    display_type = settings['display_type']
     show_dropdown_menus_in_list = asbool(settings['show_dropdown_menus_in_list'])
     label_for_list = settings['label_for_list']
 
@@ -119,7 +119,7 @@ def navigation_widget(context, request, name=''):
     show_label_in_list = False
     label_is_context = False
 
-    if not display_as_tree:
+    if display_type == 'horizontal':
         if not label_for_list in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
             if len(context.children) > 0:
                 if context.parent:
@@ -145,7 +145,7 @@ def navigation_widget(context, request, name=''):
     return {'root': root,
          'use_container_class': use_container_class,
          'include_root': include_root,
-         'display_as_tree': display_as_tree,
+         'display_type': display_type,
          'items': items,
          'show_label_in_list': show_label_in_list,
          'label_is_context': label_is_context,
