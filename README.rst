@@ -65,20 +65,21 @@ navigation display, as a simple horizontal list of navpills wrapped within the
 available space. This style of display is appropriate for navigation menus in
 the abovecontent, belowcontent, and belowbodyend slots. For uses in left and
 right slots, and perhaps in other cases, a tree display is preferred. Control
-this with the display_as_tree boolean setting (default is False)::
+this with the display_type setting, which can be either ``horizontal`` or
+``tree`` (default is horizontal)::
 
-    kotti_navigation.navigation_widget.display_as_tree = true
+    kotti_navigation.navigation_widget.display_type = horizontal
 
-If using a list display for navigation (display_as_tree = False), the default
-will list children of the current context in a horizontal list of nav pills
-that wrap, if necessary. Along with the toolbar and and breadcrumbs, this may
-provide a perfectly good nav display. When the abovecontent slot is used,
-however, the title for the context is _underneath_ the nav list, so it may not
-be clear enough that that the nav pill items are contained within the context.
-Perhaps this would be true for the left slot, as well, but a bare nav pill list
-in the right and belowcontent slots might work well Regardless, for any slot,
-if desired, set nav_list_label (default is none) in one of two ways to add a
-label at the beginning of the nav list:
+If using a horizontal list display for navigation, the default will list
+children of the current context in a horizontal list of nav pills that wrap, if
+necessary. Along with the toolbar and and breadcrumbs, this may provide a
+perfectly good nav display. When the abovecontent slot is used, however, the
+title for the context is _underneath_ the nav list, so it may not be clear
+enough that that the nav pill items are contained within the context.  Perhaps
+this would be true for the left slot, as well, but a bare nav pill list in the
+right and belowcontent slots might work well Regardless, for any slot, if
+desired, set nav_list_label (default is none) in one of two ways to add a label
+at the beginning of the nav list:
 
 Option 1, set nav_list_label to a custom string::
 
@@ -88,19 +89,22 @@ Option 2, set nav_list_label to the string 'context' (without the quotes)::
 
     kotti_navigation.nav_list_label = context
 
+.. Note:: String params in ini config files do not have quotes.
+
 For option 1, a label using Bootstrap class ``nav-header`` will be put at the
 beginning of the nav list with text given in nav_list_label. Note that the
 example string, 'Contained Items:', contains a colon at the end. You may want
-to use another indicator, such as '-->', or none at all.
+to use something other than a colon at the end, or omit; perhaps something
+like '-->' or '>>' would work too.
 
-For option 2, a nav pill li item, set with class ``active``, will be put at the
-beginning of the nav list with text as context.title. A colon is added to the
-of context.title.
+For option 2, a nav pill li item, set with class ``active``, representing the
+context, will be put at the beginning of the nav list with text as
+context.title. A colon is added to the of context.title.
 
 In the example above, where nav_list_labe = ``Contained Items:``
 which will put the context as a label in the first item of the nav list, along
 with a colon. If the current context is "Animals" and the children are "Dogs"
-and "Cats", the nav list would be: Animals: Dogs Cats, as navpills.
+and "Cats", the nav list would be: Contained Items: Dogs Cats, as navpills.
 
 You can exclude specific content types from the whole navigation
 structure. If you not want to show images in the navigation at all,
