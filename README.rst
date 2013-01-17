@@ -64,9 +64,9 @@ By default, only the immediate children for the context are shown in the
 navigation display, as a simple horizontal list of navpills wrapped within the
 available space. This style of display is appropriate for navigation menus in
 the abovecontent, belowcontent, and belowbodyend slots. For uses in left and
-right slots, and perhaps in other cases, a tree display is preferred. Control
-this with the display_type setting, which can be either ``horizontal`` or
-``tree`` (default is horizontal)::
+right slots, and perhaps in other cases, a tree display is usually preferred.
+Control this with the display_type setting, which can be either ``horizontal``
+or ``tree`` (default is horizontal)::
 
     kotti_navigation.navigation_widget.display_type = horizontal
 
