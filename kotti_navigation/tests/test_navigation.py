@@ -24,7 +24,7 @@ class NavigationDummyRequest(DummyRequest):
 class TestNavigationWidget(FunctionalTestBase):
 
     def setUp(self, **kwargs):
-        settings = {'pyramid.includes': 'kotti_navigation.kotti_configure',
+        settings = {'pyramid.includes': 'kotti_navigation.include_navigation_widget_left',
                     'kotti_navigation.navigation_widget.include_root': 'true',
                     'kotti_navigation.navigation_widget.display_type': 'tree',
                     'kotti_navigation.navigation_widget.open_all': 'false'}

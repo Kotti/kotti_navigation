@@ -16,7 +16,7 @@
       <tal:replace tal:replace="api.render_view('nav-tree', context=item)" />
     </ul>
   </tal:items>
-  <tal:block tal:condition="display_type == 'horizontal'">
+  <tal:items tal:condition="display_type == 'horizontal'">
     <ul class="nav nav-pills ${nav_stacked}">
       <tal:repeat tal:repeat="item items">
         <li tal:condition="repeat.item.number == 1 and show_label_in_list and label_is_context"
@@ -76,5 +76,5 @@
         </tal:block>
       </tal:repeat>
     </ul>
-  </tal:block>
+  </tal:items>
 </div>

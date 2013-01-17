@@ -55,8 +55,8 @@ Test hidden nav points
 
   >>> browser.open(testing.BASE_URL)
   >>> browser.getLink('Contents').click()
-  >>> childs = ctrl(name='children')
-  >>> childs.value = childs.options[0:1]
+  >>> children = ctrl(name='children')
+  >>> children.value = items.options[0:1]
   >>> ctrl(name='hide').click()
   >>> "Document 1 is no longer visible in the navigation" in browser.contents
   True
