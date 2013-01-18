@@ -21,14 +21,61 @@ class NavigationDummyRequest(DummyRequest):
         return ''  # pragma: no cover
 
 
-class TestNavigationWidget(FunctionalTestBase):
+class TestNavigationWidgetAsHorizontal(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'pyramid.includes': 'kotti_navigation.include_navigation_widget_left',
+                    'kotti_navigation.navigation_widget.display_type': 'horizontal',
+                    'kotti_navigation.navigation_widget.show_dropdown_menus': 'false',
+                    'kotti_navigation.navigation_widget.label': 'context'}
+        super(TestNavigationWidgetAsHorizontal, self).setUp(**settings)
+
+    def test_render_widget(self):
+        root = get_root()
+        html = render_view(root, NavigationDummyRequest(), name='navigation-widget')
+        # Note trailing blank after nav-pills, there because nav-stacked is
+        # conditionally removed in the template.
+        assert '<ul class="nav nav-pills ">' in html
+
+    def test_show_dropdown_menus(self):
+        request = NavigationDummyRequest()
+        root = get_root()
+        result = navigation_widget(root, request)
+        assert result['show_dropdown_menus'] == False
+        get_current_registry().settings['kotti_navigation.navigation_widget.show_dropdown_menus'] = u'true'
+        result = navigation_widget(root, request)
+        assert result['show_dropdown_menus'] == True
+
+    def test_label(self):
+        request = NavigationDummyRequest()
+        root = get_root()
+
+        root[u'content_1'] = Content(title=u'Content_1')
+        root[u'content_1'][u'sub_1'] = Content(title=u'Sub_1')
+        root[u'content_2'] = Content(title=u'Content_2')
+        root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
+
+        result = navigation_widget(root, request)
+
+        assert result['before_context'] == ''
+        assert result['after_context'] == ''
+        assert result['items'][0].title == 'Content_1'
+
+        get_current_registry().settings['kotti_navigation.navigation_widget.label'] = u'Items in [context] are:'
+        result = navigation_widget(root[u'content_1'], request)
+        assert result['before_context'] == 'Items in ['
+        assert result['items'][0].title == 'Content_1'
+        assert result['after_context'] == '] are:'
+
+
+class TestNavigationWidgetAsTree(FunctionalTestBase):
 
     def setUp(self, **kwargs):
         settings = {'pyramid.includes': 'kotti_navigation.include_navigation_widget_left',
                     'kotti_navigation.navigation_widget.include_root': 'true',
                     'kotti_navigation.navigation_widget.display_type': 'tree',
                     'kotti_navigation.navigation_widget.open_all': 'false'}
-        super(TestNavigationWidget, self).setUp(**settings)
+        super(TestNavigationWidgetAsTree, self).setUp(**settings)
 
     def test_render_widget(self):
         root = get_root()
@@ -44,7 +91,7 @@ class TestNavigationWidget(FunctionalTestBase):
         result = navigation_widget(root, request)
         assert result['include_root'] == False
 
-    def test_display_as_horizontal(self):
+    def test_display_type(self):
         request = NavigationDummyRequest()
         root = get_root()
         result = navigation_widget(root, request)
