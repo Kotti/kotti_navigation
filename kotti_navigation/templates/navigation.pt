@@ -30,8 +30,9 @@
         </li>
         <li tal:condition="repeat.item.number == 1 and show_label_in_list and not label_is_context"
             class="nav-header"
-            tal:define="labeltext before_context + item.title + after_context if label_contains_context else item.title">
-          ${labeltext}
+            tal:define="concatenated_label before_context + item.title + after_context;
+                        _label concatenated_label if label_contains_context else item.title">
+          ${_label}
         </li>
         <tal:block tal:condition="(repeat.item.number == 1 and not show_label_in_list) or repeat.item.number > 1">
           <tal:children tal:condition="show_dropdown_menus and item.children">
