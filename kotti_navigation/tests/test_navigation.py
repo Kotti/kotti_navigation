@@ -42,9 +42,22 @@ class TestNavigationWidgetAsHorizontal(FunctionalTestBase):
         root = get_root()
         result = navigation_widget(root, request)
         assert result['show_dropdown_menus'] == False
+
+        root[u'content_1'] = Content(title=u'Content_1')
+        root[u'content_1'][u'sub_1'] = Content(title=u'Sub_1')
+        root[u'content_1'][u'sub_1'][u'sub_sub_1'] = Content(title=u'Sub_Sub_1')
+        root[u'content_2'] = Content(title=u'Content_2')
+        root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
+
+        html = render_view(root[u'content_1'], NavigationDummyRequest(), name='navigation-widget')
+
+        assert not u'nav-list-careted' in html
+
         get_current_registry().settings['kotti_navigation.navigation_widget.show_dropdown_menus'] = u'true'
-        result = navigation_widget(root, request)
-        assert result['show_dropdown_menus'] == True
+
+        html = render_view(root[u'content_1'], NavigationDummyRequest(), name='navigation-widget')
+
+        assert u'nav-list-careted' in html
 
     def test_label(self):
         request = NavigationDummyRequest()
