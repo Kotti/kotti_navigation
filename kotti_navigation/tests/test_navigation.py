@@ -8,7 +8,7 @@ from kotti.resources import (
         Content,
 )
 from kotti.views.util import render_view
-from kotti_navigation import navigation_widget
+from kotti_navigation.views import navigation_widget
 
 
 class NavigationDummyRequest(DummyRequest):

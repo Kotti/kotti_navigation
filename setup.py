@@ -40,10 +40,11 @@ setup(name='kotti_navigation',
           'Kotti>=0.8a1',
       ],
       tests_require=[],
-      entry_points="""
-      [fanstatic.libraries]
-      kotti_navigation = kotti_navigation:library
-      """,
+      entry_points={
+          'fanstatic.libraries': [
+              'kotti_navigation = kotti_navigation.fanstatic:library',
+          ],
+      },
       extras_require={},
       message_extractors={'kotti_navigation': [
             ('**.py', 'lingua_python', None),
