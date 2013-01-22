@@ -24,7 +24,8 @@ class NavigationDummyRequest(DummyRequest):
 class TestNavigationWidgetAsHorizontal(FunctionalTestBase):
 
     def setUp(self, **kwargs):
-        settings = {'pyramid.includes': 'kotti_navigation.include_navigation_widget_left',
+        settings = {'kotti_configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.slot': 'abovecontent',
                     'kotti_navigation.navigation_widget.display_type': 'horizontal',
                     'kotti_navigation.navigation_widget.show_dropdown_menus': 'false',
                     'kotti_navigation.navigation_widget.label': 'context'}
@@ -84,9 +85,11 @@ class TestNavigationWidgetAsHorizontal(FunctionalTestBase):
 class TestNavigationWidgetAsTree(FunctionalTestBase):
 
     def setUp(self, **kwargs):
-        settings = {'pyramid.includes': 'kotti_navigation.include_navigation_widget_left',
+        settings = {'kotti_configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.slot': 'left',
                     'kotti_navigation.navigation_widget.include_root': 'true',
                     'kotti_navigation.navigation_widget.display_type': 'tree',
+                    'kotti_navigation.navigation_widget.label': 'none',
                     'kotti_navigation.navigation_widget.open_all': 'false'}
         super(TestNavigationWidgetAsTree, self).setUp(**settings)
 
