@@ -10,26 +10,29 @@ slots for a Kotti website (left, right, abovecontent, etc.).
 Setting up the navigation widget
 ================================
 
-To set up the navigation widget to display on every page in Kotti in a given
-slot (left, right, abovecontent, belowcontent, belowbodyend), instead of
-setting a general config in kotti.configurators, set a specific choice in
-pyramid.includes in your ini file::
+To set up the navigation widget to display on every page in Kotti in the
+default left slot as a tree display, add an entry to kotti.configurators
+in the .ini config file for your project::
 
-    pyramid.includes = 
+    kotti.configurators =
         ...
-        kotti_navigation.include_navigation_widget_right
+        kotti_navigation.kotti_configure
+
+Here are the slots available for the navigation widget::
+
+    left
+    right
+    abovecontent
+    belowcontent
+    belowbodyend
+
+which you set with a config parameter::
+
+    kotti_navigation.navigation_widget.slot = abovecontent
 
 .. Note:: Configure navigation for only one slot.
 
-Choices of widget position configuration for pyramid.includes are::
-
-    kotti_navigation.include_navigation_widget_left
-    kotti_navigation.include_navigation_widget_right
-    kotti_navigation.include_navigation_widget_abovecontent
-    kotti_navigation.include_navigation_widget_belowcontent
-    kotti_navigation.include_navigation_widget_belowbodyend
-
-Here are the slots available for the navigation widget::
+And here are the slots in a layout diagram::
 
     +------------------------------------------------------+
     | nav (the nav in the Kotti toolbar                    |
@@ -66,9 +69,12 @@ available space. This style of display is appropriate for navigation menus in
 the abovecontent, belowcontent, and belowbodyend slots. For uses in left and
 right slots, and perhaps in other cases, a tree display is usually preferred.
 Control this with the display_type setting, which can be either ``horizontal``
-or ``tree`` (default is horizontal)::
+(default) or ``tree``::
 
     kotti_navigation.navigation_widget.display_type = horizontal
+
+Configuring the Label
+---------------------
 
 If using a horizontal list display for navigation, the default will list
 children of the current context in a horizontal list of nav pills that wrap, if
@@ -77,13 +83,12 @@ perfectly good nav display. When the abovecontent slot is used, however, the
 title for the context is _underneath_ the nav list, so it may not be clear
 enough that that the nav pill items are contained within the context.  Perhaps
 this would be true for the left slot, as well, but a bare nav pill list in the
-right and belowcontent slots might work well Regardless, for any slot, if
-desired, set label (default is none) to a string as illustrated in the
-following examples.
+right and belowcontent slots might work well. Regardless, for any slot, if
+desired, set kotti_navigation.label (default is none) to a string as
+illustrated in the following examples.
 
 For each example, the context is assumed to be a document titled Animals, and
-there are two children titled Dogs and Cats, the horizontal nav pill list will
-have items as Animals: Dogs Cats.
+there are two children titled Dogs and Cats.
 
 If label is not set, the default value of none will result in two nav pill li
 items, <Dogs> and <Cats> (< > notation used here to denote nav pill li items).
@@ -164,6 +169,5 @@ variable to the following.::
     kotti_navigation.navigation_widget.exclude_content_types = 
         kotti.resources.Image
         kotti_myaddon.resources.MyContentType
-
 
 .. _Find out more about Kotti: http://pypi.python.org/pypi/Kotti

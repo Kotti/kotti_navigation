@@ -25,7 +25,7 @@ NAVIGATION_WIDGET_DEFAULTS = {
     'display_type': 'horizontal',
     'label': 'none',
     'show_dropdown_menus': 'false',
-    'position': 'left',
+    'slot': 'left',
     'open_all': 'false',
     'show_hidden_while_logged_in': 'false',
     'exclude_content_types': '',
@@ -51,12 +51,12 @@ def kotti_configure(settings):
 
     nav_settings = navigation_settings(settings=settings)
 
-    position = nav_settings['position']
-    if position is None:
-        position = 'left'
+    slot = nav_settings['slot']
+    if slot is None:
+        slot = 'left'
 
     nav_widget_directive = \
-            'kotti_navigation.include_navigation_widget_{0}'.format(position)
+            'kotti_navigation.include_navigation_widget_{0}'.format(slot)
 
     settings['pyramid.includes'] += ' {0}'.format(nav_widget_directive)
 
