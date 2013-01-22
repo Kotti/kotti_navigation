@@ -2,8 +2,8 @@
 kotti_navigation
 ================
 
-This is an extension to the Kotti CMS that renders a navigation in the
-slots for a Kotti website (left, right, abovecontent, etc.).
+This is an extension to the Kotti CMS that renders a navigation in one of the
+available slots for a Kotti website (left, right, abovecontent, etc.).
 
 `Find out more about Kotti`_
 
@@ -32,7 +32,7 @@ which you set with a config parameter::
 
 .. Note:: Configure navigation for only one slot.
 
-And here are the slots in a layout diagram::
+Here are the slot choices in a layout diagram::
 
     +------------------------------------------------------+
     | nav (the nav in the Kotti toolbar                    |
@@ -52,10 +52,28 @@ And here are the slots in a layout diagram::
     | SLOT "beforebodyend"                                 |
     +------------------------------------------------------+
 
+Excluding the Root
+------------------
+
 To exclude the root of the site from the navigation, set the
 ``kotti_navigation.navigation_widget.include_root`` variable.::
 
     kotti_navigation.navigation_widget.include_root = false
+
+Excluding Content Types
+-----------------------
+
+You can exclude specific content types from the whole navigation
+structure. If you not want to show images in the navigation at all,
+set the ``kotti_navigation.navigation_widget.exclude_content_types`` 
+variable to the following.::
+
+    kotti_navigation.navigation_widget.exclude_content_types = 
+        kotti.resources.Image
+        kotti_myaddon.resources.MyContentType
+
+Configuring for Use with a Menu System
+--------------------------------------
 
 To open the whole navigation all the time, set the
 ``kotti_navigation.navigation_widget.open_all`` variable. This is useful if
@@ -63,18 +81,72 @@ you plan to set up a popup menu via css or javascript::
 
     kotti_navigation.navigation_widget.open_all = false
 
-By default, only the immediate children for the context are shown in the
-navigation display, as a simple horizontal list of navpills wrapped within the
-available space. This style of display is appropriate for navigation menus in
-the abovecontent, belowcontent, and belowbodyend slots. For uses in left and
-right slots, and perhaps in other cases, a tree display is usually preferred.
-Control this with the display_type setting, which can be either ``horizontal``
+Setting Display Type
+--------------------
+
+Control the type of display with the display_type setting, which can be either ``horizontal``
 (default) or ``tree``::
 
     kotti_navigation.navigation_widget.display_type = horizontal
 
-Configuring the Label
----------------------
+Configuring the tree display is straightforward; you have the choice of
+including the root, or not. The navigation tree shows the full site content in
+an indented vertical list. When an item with children is clicked, it is
+exploded, and with another item is clicked, it is collapsed. The tree display
+is most appropriate for the left and right slots, but can be used in any other
+slot, probably accompanied by customization through CSS.
+
+The horizontal display does not show the full site content; Only the immediate
+children for the context are shown as a simple horizontal list of navpills
+wrapped within the available space. This style of display is appropriate for
+navigation menus in the abovecontent, belowcontent, and belowbodyend slots, but
+can be used in left and right slots too.
+
+Configuring a Label
+-------------------
+
+There is an optional label for the top of the tree display, or for the first
+item in the horizontal display.
+
+For the following discussion about the optional label, the context is assumed
+to be a document titled Animals, and there are two children titled Dogs and
+Cats.
+
+**A label for a tree display**
+
+The optional label at the top of the tree dislay would usually be set to
+``none``, because the nature of the indentation should make its use obvious. In
+some situations, however, a simple label such as "Site Navigation" or "Site
+Menu" could be desired. To set such a label, do::
+
+    kotti_navigation.label = Site Menu
+
+.. Note:: String params in ini config files do not have quotes, so the string
+          is whatever comes after the = sign, with leading whitespace deleted.
+
+The current context will be indicated by the highlighting of the context menu
+item in the tree display. This is normally adequate. However, for extra
+clarity, or for some special reason, you may want to include the current
+context in the label, in a phrase such as "Current item: context", where the
+word ``context`` would be replaced by the actual context.title, e.g.  "Current
+item: Cats". If you would like to use the context, include the actual word
+``context`` in the label text, such as::
+
+    kotti_navigation.label = <context>
+
+(the label would become ${'<' + context.title '>'} in the template code,
+``<Animals>`` in the example context.)
+
+Or, if the site's ``breadcrumbs`` display were to be disabled in CSS, and you
+want to have a simple replacement in concert with the tree display, do::
+
+    kotti_navigation.label = You are here: context
+
+(``You are here: Animals``).
+
+.. Note:: The nav-header CSS style is used for the label.
+
+**A label for a horizontal display**
 
 If using a horizontal list display for navigation, the default will list
 children of the current context in a horizontal list of nav pills that wrap, if
@@ -83,31 +155,22 @@ perfectly good nav display. When the abovecontent slot is used, however, the
 title for the context is _underneath_ the nav list, so it may not be clear
 enough that that the nav pill items are contained within the context.  Perhaps
 this would be true for the left slot, as well, but a bare nav pill list in the
-right and belowcontent slots might work well. Regardless, for any slot, if
-desired, set kotti_navigation.label (default is none) to a string as
-illustrated in the following examples.
-
-For each example, the context is assumed to be a document titled Animals, and
-there are two children titled Dogs and Cats.
+right and belowcontent slots might work well.
 
 If label is not set, the default value of none will result in two nav pill li
-items, <Dogs> and <Cats> (< > notation used here to denote nav pill li items).
+items for the example context as Animals in (Animals: dogs cats)::
 
-Using a custom sring, punctuated with a colon::
+    <Dogs> <Cats>
+    
+(< > notation used here to denote nav pill li items).
 
-    kotti_navigation.label = Contained Items
+Using a custom string, punctuated with a colon::
 
-would result in a nav-header styled label with two nav pill li items, as::
-
-    Contained items <Dogs> <Cats>
-
-Using punctuation might be a good idea::
-
-    kotti_navigation.label = Subitems:
+    kotti_navigation.label = Contained Items:
 
 would result in a nav-header styled label with two nav pill li items, as::
 
-    Subitems: <Dogs> <Cats>
+    Contained items: <Dogs> <Cats>
 
 or, perhaps with some other punctuation::
 
@@ -115,10 +178,10 @@ or, perhaps with some other punctuation::
 
 etc.
 
-Option 2, set label to a string using the word ``context`` anywhere in the
-string as a placeholder for context.title. If the label is set to be only
-the word ``context`` (only the word, with no punctuation), then a nav pill
-will be used for the label::
+Option 2, as described above, set label to a string using the word ``context``
+anywhere in the string as a placeholder for context.title. If the label is set
+to be only the word ``context`` (only the word, with no punctuation), then a
+nav pill will be used for the label::
 
     kotti_navigation.label = context
 
@@ -126,13 +189,15 @@ The result would be three nav pill li items, as::
 
     <Animals> <Dogs> <Cats>
 
-with <Animals> as the active link.
+with <Animals> as the active link (Note: no punctuation was used, so the first
+item, <Animals> is an actual nav pill.).
 
-With any punctuation or additional text of any sort, as with::
+With any punctuation or additional text of any sort along with context in the
+label, as with::
 
     label = context:
 
-then instead of a nav pill, a nav-header styled li is used::
+then instead of a nav pill for the first item, a nav-header styled li is used::
 
     Animals: <Dogs> <Cats>
 
@@ -155,19 +220,5 @@ would result in::
 
 etc.
 
-.. Note:: String params in ini config files do not have quotes, so the string
-          is whatever comes after the = sign, with leading whitespace deleted.
-
-Excluding Content Types
------------------------
-
-You can exclude specific content types from the whole navigation
-structure. If you not want to show images in the navigation at all,
-set the ``kotti_navigation.navigation_widget.exclude_content_types`` 
-variable to the following.::
-
-    kotti_navigation.navigation_widget.exclude_content_types = 
-        kotti.resources.Image
-        kotti_myaddon.resources.MyContentType
-
 .. _Find out more about Kotti: http://pypi.python.org/pypi/Kotti
+

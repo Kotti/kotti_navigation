@@ -62,6 +62,25 @@ def nav_tree(context, request):
             }
 
 
+def split_label_on_context(label):
+    """Splits a label string containing the word 'context', if present.
+    """
+
+    context_spelling = ''
+
+    if 'context' in label:
+        context_spelling = 'context'
+    elif 'Context' in label:
+        context_spelling = 'Context'
+    elif 'CONTEXT' in label:
+        context_spelling = 'CONTEXT'
+
+    if context_spelling:
+        return label.split(context_spelling)
+    else:
+        return ('', '')
+
+
 @view_config(name='navigation-widget',
              renderer='kotti_navigation:templates/navigation.pt')
 def navigation_widget(context, request, name=''):
@@ -81,17 +100,17 @@ def navigation_widget(context, request, name=''):
 
     items = get_children(root, request)
 
-    # In the if below, show_label_in_list may be reset for the case of the
+    # In the if below, show_label may be reset for the case of the
     # root, so we use a different boolean to pass to the template, specifying
     # explicitly if the first nav list item is a label, so should get a colon:
-    show_label_in_list = False
+    show_label = False
     label_is_context = False
     label_contains_context = False
     before_context = ''
     after_context = ''
 
     if display_type == 'horizontal':
-        if not label in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
+        if label and not label in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
             if len(context.children) > 0:
                 if context.parent:
                     label_lower = label.lower()
@@ -99,26 +118,26 @@ def navigation_widget(context, request, name=''):
                         items = [context] + context.children
                         label_is_context = True
                     elif 'context' in label or 'Context' in label or 'CONTEXT' in label:
-                        context_spelling = ''
-                        if 'context' in label:
-                            context_spelling = 'context'
-                        elif 'Context' in label:
-                            context_spelling = 'Context'
-                        elif 'CONTEXT' in label:
-                            context_spelling = 'CONTEXT'
-                        before_context, after_context = label.split(context_spelling)
+                        before_context, after_context = split_label_on_context(label)
 
                         items = [context] + context.children
                         label_contains_context = True
                     else:
                         items = [{'title': label}] + context.children
-                    show_label_in_list = True
+                    show_label = True
                 else:
                     items = context.children
             else:
                 items = []
         else:
             items = context.children
+    else:
+        if label and not label in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
+            if 'context' in label or 'Context' in label or 'CONTEXT' in label:
+                before_context, after_context = split_label_on_context(label)
+            show_label = True
+        else:
+            show_label = False
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -131,7 +150,7 @@ def navigation_widget(context, request, name=''):
             'include_root': include_root,
             'display_type': display_type,
             'items': items,
-            'show_label_in_list': show_label_in_list,
+            'show_label': show_label,
             'label_is_context': label_is_context,
             'label_contains_context': label_contains_context,
             'before_context': before_context,

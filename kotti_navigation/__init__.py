@@ -22,7 +22,7 @@ nav_slot = 'left'
 
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
-    'display_type': 'horizontal',
+    'display_type': 'tree',
     'label': 'none',
     'show_dropdown_menus': 'false',
     'slot': 'left',
