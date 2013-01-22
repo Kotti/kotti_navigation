@@ -102,6 +102,10 @@ wrapped within the available space. This style of display is appropriate for
 navigation menus in the abovecontent, belowcontent, and belowbodyend slots, but
 can be used in left and right slots too.
 
+.. Note:: If using the horizontal display type, to avoid redundancy, you will
+          likely want to override the nav.pt view template, or remove it from
+          master.pt, so that there are no nav items shown in the top bar.
+
 Configuring a Label
 -------------------
 
