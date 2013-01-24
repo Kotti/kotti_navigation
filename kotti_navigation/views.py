@@ -92,6 +92,8 @@ def navigation_widget(context, request, name=''):
 
     root = get_root()
 
+    top_level_items = []
+
     include_root = asbool(settings['include_root'])
     display_type = settings['display_type']
     show_dropdown_menus = asbool(settings['show_dropdown_menus'])
@@ -105,6 +107,7 @@ def navigation_widget(context, request, name=''):
     if display_type == 'tree':
         items = get_children(root, request)
     else:
+        top_level_items = get_children(root, request)
         items = get_children(context, request)
 
     if label:
@@ -129,12 +132,19 @@ def navigation_widget(context, request, name=''):
         ac = get_children(item, request)
         allowed_children.append(ac if ac else [])
 
+    # The horizontal display has a site menu available in a dropdown.
+    if context != root:
+        site_menu_items = [root] + top_level_items
+    else:
+        site_menu_items = top_level_items
+
     return {'root': root,
             'slot': nav_slot,
             'use_container_class': use_container_class,
             'include_root': include_root,
             'display_type': display_type,
             'items': items,
+            'site_menu_items': site_menu_items,
             'allowed_children': allowed_children,
             'label': label,
             'show_dropdown_menus': show_dropdown_menus,

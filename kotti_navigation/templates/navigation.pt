@@ -20,19 +20,20 @@
     </ul>
   </tal:items>
   <ul class="nav nav-pills ${nav_stacked}" tal:condition="display_type == 'horizontal'">
-    <li tal:condition="context.parent"
-        class="${'pull-left' if slot == 'left' else 'pull-right'}">
+    <li class="${'pull-left' if slot == 'left' else 'pull-right'}">
       <div class="btn-group">
-        <a class="btn" href="${api.url(context.parent)}">
-          &lt;&lt; Up
+        <a class="btn" href="${api.url(context.parent) if context.parent else '#'}"
+            tal:define="target '&lt;&lt; ' + context.parent.title if context.parent else '<Home>'">
+          ${target}
         </a>
         <button class="btn dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-          <li>
-            <a href="${api.url(context.parent)}">
-                &lt;&lt; Up a level
+          <li tal:repeat="smi site_menu_items">
+            <a href="${api.url(smi)}"
+               title="${getattr(smi, 'description', None)}">
+              ${smi.title}
             </a>
           </li>
         </ul>
