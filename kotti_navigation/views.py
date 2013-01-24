@@ -130,6 +130,7 @@ def navigation_widget(context, request, name=''):
         allowed_children.append(ac if ac else [])
 
     return {'root': root,
+            'slot': nav_slot,
             'use_container_class': use_container_class,
             'include_root': include_root,
             'display_type': display_type,
