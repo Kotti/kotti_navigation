@@ -63,15 +63,6 @@ def nav_tree(context, request):
             }
 
 
-@view_config(name='nav-horizontal',
-             renderer='kotti_navigation:templates/nav_horizontal.pt')
-def nav_horizontal(context, request):
-
-    return {'is_tree_open': is_tree_open,
-            'children': get_children(context, request),
-            }
-
-
 def split_label_on_context(label):
     """Splits a label string containing the word 'context', if present.
     """
