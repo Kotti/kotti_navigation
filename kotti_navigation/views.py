@@ -62,6 +62,15 @@ def nav_tree(context, request):
             }
 
 
+@view_config(name='nav-horizontal',
+             renderer='kotti_navigation:templates/nav_horizontal.pt')
+def nav_horizontal(context, request):
+
+    return {'is_tree_open': is_tree_open,
+            'children': get_children(context, request),
+            }
+
+
 def split_label_on_context(label):
     """Splits a label string containing the word 'context', if present.
     """
@@ -98,49 +107,25 @@ def navigation_widget(context, request, name=''):
 
     current_level = 2
 
-    items = get_children(root, request)
-
-    # In the if below, show_label may be reset for the case of the
-    # root, so we use a different boolean to pass to the template, specifying
-    # explicitly if the first nav list item is a label, so should get a colon:
-    show_label = False
-    label_is_context = False
-    label_contains_context = False
     before_context = ''
     after_context = ''
 
-    if display_type == 'horizontal':
-        if label and not label in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
-            if len(context.children) > 0:
-                if context.parent:
-                    label_lower = label.lower()
-                    if label_lower == 'context':
-                        items = [context] + context.children
-                        label_is_context = True
-                    elif ('context' in label
-                          or 'Context' in label
-                          or 'CONTEXT' in label):
-                        before_context, after_context = \
-                                split_label_on_context(label)
-
-                        items = [context] + context.children
-                        label_contains_context = True
-                    else:
-                        items = [{'title': label}] + context.children
-                    show_label = True
-                else:
-                    items = context.children
-            else:
-                items = []
-        else:
-            items = context.children
+    if display_type == 'tree':
+        items = get_children(root, request)
     else:
-        if label and not label in ['none', 'None', 'NONE', 'no', 'No', 'NO']:
-            if 'context' in label or 'Context' in label or 'CONTEXT' in label:
-                before_context, after_context = split_label_on_context(label)
-            show_label = True
-        else:
-            show_label = False
+        items = get_children(context, request)
+
+    if label:
+
+        label_lower = label.lower()
+
+        if label_lower == 'context':
+            label = context.title
+        elif ('context' in label
+              or 'Context' in label
+              or 'CONTEXT' in label):
+            before_context, after_context = split_label_on_context(label)
+            label = before_context + context.title + after_context
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -148,14 +133,18 @@ def navigation_widget(context, request, name=''):
     # needed, because the inherited CSS works to fit nav to the slot.
     use_container_class = True if nav_slot == 'beforebodyend' else False
 
+    allowed_children = []
+    for item in items:
+        ac = get_children(item, request)
+        allowed_children.append(ac if ac else [])
+
     return {'root': root,
             'use_container_class': use_container_class,
             'include_root': include_root,
             'display_type': display_type,
             'items': items,
-            'show_label': show_label,
-            'label_is_context': label_is_context,
-            'label_contains_context': label_contains_context,
+            'allowed_children': allowed_children,
+            'label': label,
             'before_context': before_context,
             'after_context': after_context,
             'show_dropdown_menus': show_dropdown_menus,
