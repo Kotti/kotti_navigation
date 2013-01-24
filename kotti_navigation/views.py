@@ -145,8 +145,6 @@ def navigation_widget(context, request, name=''):
             'items': items,
             'allowed_children': allowed_children,
             'label': label,
-            'before_context': before_context,
-            'after_context': after_context,
             'show_dropdown_menus': show_dropdown_menus,
             'current_level': current_level,
         }

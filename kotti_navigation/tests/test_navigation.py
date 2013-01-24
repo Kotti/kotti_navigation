@@ -71,10 +71,6 @@ class TestNavigationWidgetAsHorizontal(FunctionalTestBase):
 
         result = navigation_widget(root, request)
 
-        assert result['before_context'] == ''
-        assert result['after_context'] == ''
-        assert result['items'][0].title == 'Content_1'
-
         get_current_registry().settings['kotti_navigation.navigation_widget.label'] = u'Items in [context] are:'
         result = navigation_widget(root[u'content_1'], request)
         assert result['label'] == 'Items in [Content_1] are:'

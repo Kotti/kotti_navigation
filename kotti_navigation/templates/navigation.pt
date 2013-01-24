@@ -2,7 +2,7 @@
     id="${display_type == 'tree' and 'navigation-tree' or 'navigation-horizontal'}"
     tal:define="nav_stacked display_type == 'tree' and 'nav-stacked' or ''">
   <p tal:condition="display_type == 'tree' and label" class="nav-header">
-    ${before_context + context.title + after_context}
+    ${label}
   </p>
   <ul class="nav nav-pills ${nav_stacked}"
       tal:condition="include_root and display_type == 'tree'">
