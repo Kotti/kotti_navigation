@@ -1,14 +1,6 @@
-from fanstatic import Library
-from fanstatic import Resource
-
-from kotti.fanstatic import NeededGroup
 from pyramid.i18n import TranslationStringFactory
 
-from kotti.fanstatic import edit_needed_js
-from kotti.fanstatic import view_needed_js
-
 from kotti import _resolve_dotted
-from kotti.static import view_needed
 from kotti.views.slots import assign_slot
 from kotti.util import extract_from_settings
 

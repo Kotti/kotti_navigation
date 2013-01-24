@@ -19,11 +19,11 @@ def get_children(context, request):
     ex_cts = settings['exclude_content_types']
 
     if show_hidden and user:
-        children = [child for child in context.children_with_permission(request)
-                   if child.__class__ not in ex_cts]
+        children = [c for c in context.children_with_permission(request)
+                    if c.__class__ not in ex_cts]
     else:
-        children = [child for child in context.children_with_permission(request)
-                    if child.in_navigation and child.__class__ not in ex_cts]
+        children = [c for c in context.children_with_permission(request)
+                    if c.in_navigation and c.__class__ not in ex_cts]
 
     return children
 
