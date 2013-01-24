@@ -4,9 +4,9 @@
   <p tal:condition="display_type == 'tree' and label" class="nav-header">
     ${before_context + context.title + after_context}
   </p>
-  <ul class="nav nav-pills ${nav_stacked}">
-    <li tal:condition="include_root and display_type == 'tree'"
-        tal:define="active root == request.context and 'active' or ''"
+  <ul class="nav nav-pills ${nav_stacked}"
+      tal:condition="include_root and display_type == 'tree'">
+    <li tal:define="active root == request.context and 'active' or ''"
         class="${active}">
       <a href="${api.url(root)}"
          title="${getattr(root, 'description', None)}">
