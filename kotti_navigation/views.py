@@ -24,6 +24,7 @@ def get_children(context, request):
     else:
         children = [child for child in context.children_with_permission(request)
                     if child.in_navigation and child.__class__ not in ex_cts]
+
     return children
 
 
@@ -116,7 +117,6 @@ def navigation_widget(context, request, name=''):
         items = get_children(context, request)
 
     if label:
-
         label_lower = label.lower()
 
         if label_lower == 'context':

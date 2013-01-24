@@ -72,15 +72,6 @@ variable to the following.::
         kotti.resources.Image
         kotti_myaddon.resources.MyContentType
 
-Configuring for Use with a Menu System
---------------------------------------
-
-To open the whole navigation all the time, set the
-``kotti_navigation.navigation_widget.open_all`` variable. This is useful if
-you plan to set up a popup menu via css or javascript::
-
-    kotti_navigation.navigation_widget.open_all = false
-
 Setting Display Type
 --------------------
 
@@ -89,18 +80,20 @@ Control the type of display with the display_type setting, which can be either `
 
     kotti_navigation.navigation_widget.display_type = horizontal
 
-Configuring the tree display is straightforward; you have the choice of
+Configuring the ``tree`` display is straightforward; you have the choice of
 including the root, or not. The navigation tree shows the full site content in
 an indented vertical list. When an item with children is clicked, it is
 exploded, and with another item is clicked, it is collapsed. The tree display
 is most appropriate for the left and right slots, but can be used in any other
 slot, probably accompanied by customization through CSS.
 
-The horizontal display does not show the full site content; Only the immediate
-children for the context are shown as a simple horizontal list of navpills
-wrapped within the available space. This style of display is appropriate for
-navigation menus in the abovecontent, belowcontent, and belowbodyend slots, but
-can be used in left and right slots too.
+The ``horizontal`` display does not show the full site content; Only the
+immediate children for the context are shown as a simple horizontal list of
+navpills wrapped within the available space. This navigation menu is intended
+for use in combination with the breadcrumbs, which allows navigating back up
+the site hierarchy. This style of display is appropriate for navigation menus
+in the abovecontent, belowcontent, and belowbodyend slots, but can be used in
+left and right slots too.
 
 .. Note:: If using the horizontal display type, to avoid redundancy, you will
           likely want to override the nav.pt view template, or remove it from
@@ -223,6 +216,20 @@ would result in::
     "Animals" contains: <Dogs> <Cats>
 
 etc.
+
+Configuring for Use with a Menu System
+--------------------------------------
+
+To open the whole navigation all the time, set the
+``kotti_navigation.navigation_widget.open_all`` variable. This is useful if
+you plan to set up a popup menu via css or javascript::
+
+    kotti_navigation.navigation_widget.open_all = false
+
+You will want to set display_type to ``tree``, because the ``horizontal``
+shows, by design, only the children of the current context. The ``tree``
+display, when open_all is true, will produce items for each node in the full
+tree.
 
 .. _Find out more about Kotti: http://pypi.python.org/pypi/Kotti
 
