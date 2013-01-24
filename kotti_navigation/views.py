@@ -117,8 +117,11 @@ def navigation_widget(context, request, name=''):
                     if label_lower == 'context':
                         items = [context] + context.children
                         label_is_context = True
-                    elif 'context' in label or 'Context' in label or 'CONTEXT' in label:
-                        before_context, after_context = split_label_on_context(label)
+                    elif ('context' in label
+                          or 'Context' in label
+                          or 'CONTEXT' in label):
+                        before_context, after_context = \
+                                split_label_on_context(label)
 
                         items = [context] + context.children
                         label_contains_context = True
