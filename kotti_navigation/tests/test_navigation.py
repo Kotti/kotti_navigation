@@ -27,6 +27,7 @@ class TestNavigationWidgetAsList(FunctionalTestBase):
         settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
                     'kotti_navigation.navigation_widget.slot': 'abovecontent',
                     'kotti_navigation.navigation_widget.display_type': 'list',
+                    'kotti_navigation.navigation_widget.show_context_menu': 'true',
                     'kotti_navigation.navigation_widget.show_dropdown_menus': 'false',
                     'kotti_navigation.navigation_widget.label': 'context'}
         super(TestNavigationWidgetAsList, self).setUp(**settings)
