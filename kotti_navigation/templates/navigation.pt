@@ -1,11 +1,15 @@
 <div class="${use_container_class and 'container' or None}"
     id="${display_type == 'tree' and 'navigation-tree' or 'navigation-horizontal'}"
     tal:define="nav_stacked display_type == 'tree' and 'nav-stacked' or ''">
-  <p tal:condition="display_type == 'tree' and label" class="nav-header">
-    ${label}
-  </p>
-  <ul class="nav nav-pills ${nav_stacked}"
-      tal:condition="include_root and display_type == 'tree'">
+  <ul tal:condition="include_root and display_type == 'tree' and label"
+      class="nav nav-pills ${nav_stacked}">
+    <li class="nav-header">
+      ${label}
+    </li>
+    <li class="divider"></li>
+  </ul>
+  <ul tal:condition="include_root and display_type == 'tree'"
+      class="nav nav-pills ${nav_stacked}">
     <li tal:define="active root == request.context and 'active' or ''"
         class="${active}">
       <a href="${api.url(root)}"
@@ -19,8 +23,9 @@
       <tal:replace tal:replace="api.render_view('nav-tree', context=item)" />
     </ul>
   </tal:items>
-  <ul class="nav nav-pills ${nav_stacked}" tal:condition="display_type == 'horizontal'">
-    <li class="${'pull-left' if slot == 'left' else 'pull-right'}">
+  <ul tal:condition="display_type == 'horizontal'"
+      class="nav nav-pills">
+    <li class="${'pull-left' if slot in ['left',] else 'pull-right'}">
       <div class="btn-group">
         <a class="btn" href="${api.url(context.parent) if context.parent else '#'}"
             tal:define="target '&lt;&lt; ' + context.parent.title if context.parent else '<Home>'">
@@ -40,12 +45,12 @@
       </div>
     </li>
   </ul>
-  <ul class="nav nav-pills ${nav_stacked}" tal:condition="display_type == 'horizontal'">
-    <li tal:condition="label" class="nav-header">
-      <a href="#" title="${getattr(context, 'description', None)}">
-        ${label}
-      </a>
+  <ul tal:condition="display_type == 'horizontal'"
+      class="nav nav-pills">
+    <li tal:condition="label and items" class="nav-header">
+      ${label}
     </li>
+    <li tal:condition="label and items and slot in ['left', 'right']" class="divider"></li>
     <tal:block repeat="item items">
       <tal:with_dropdown 
                tal:define="children allowed_children[repeat.item.index]"
