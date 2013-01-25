@@ -9,8 +9,6 @@ log = getLogger('kotti_navigation: ')
 
 _ = TranslationStringFactory('kotti_navigation')
 
-nav_slot = 'left'
-
 
 NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
@@ -41,15 +39,11 @@ def navigation_settings(name='', settings=None):
 
 def kotti_configure(settings):
 
-    global nav_slot
-
     nav_settings = navigation_settings(settings=settings)
 
     slot = nav_settings['slot']
     if slot is None:
         slot = 'left'
-
-    nav_slot = slot
 
     nav_widget_directive = \
             'kotti_navigation.include_navigation_widget_{0}'.format(slot)

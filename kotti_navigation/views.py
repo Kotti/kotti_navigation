@@ -8,7 +8,6 @@ from kotti.resources import get_root
 from kotti.security import get_user
 
 from kotti_navigation import navigation_settings
-from kotti_navigation import nav_slot
 
 
 def get_children(context, request):
@@ -96,6 +95,7 @@ def navigation_widget(context, request, name=''):
 
     include_root = asbool(settings['include_root'])
     display_type = settings['display_type']
+    slot = settings['slot']
     show_dropdown_menus = asbool(settings['show_dropdown_menus'])
     label = settings['label']
 
@@ -125,7 +125,7 @@ def navigation_widget(context, request, name=''):
     # containing div needs to be 'container' so it fits to the middle span12
     # area for content. When nav is in any of the other slots, no class is
     # needed, because the inherited CSS works to fit nav to the slot.
-    use_container_class = True if nav_slot == 'beforebodyend' else False
+    use_container_class = True if slot == 'beforebodyend' else False
 
     allowed_children = []
     for item in items:
@@ -139,7 +139,7 @@ def navigation_widget(context, request, name=''):
         site_menu_items = top_level_items
 
     return {'root': root,
-            'slot': nav_slot,
+            'slot': slot,
             'use_container_class': use_container_class,
             'include_root': include_root,
             'display_type': display_type,

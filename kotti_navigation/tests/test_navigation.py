@@ -56,7 +56,6 @@ class TestNavigationWidgetAsList(FunctionalTestBase):
 
         html = render_view(root[u'content_1'], NavigationDummyRequest(), name='navigation-widget')
 
-        print html
         assert u'nav-list-careted' in html
 
     def test_label(self):
