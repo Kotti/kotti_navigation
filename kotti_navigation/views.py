@@ -96,6 +96,7 @@ def navigation_widget(context, request, name=''):
     include_root = asbool(settings['include_root'])
     display_type = settings['display_type']
     slot = settings['slot']
+    show_context_menu = asbool(settings['show_context_menu'])
     show_dropdown_menus = asbool(settings['show_dropdown_menus'])
     label = settings['label']
 
@@ -142,6 +143,7 @@ def navigation_widget(context, request, name=''):
             'include_root': include_root,
             'display_type': display_type,
             'items': items,
+            'show_context_menu': show_context_menu,
             'site_menu_items': site_menu_items,
             'allowed_children': allowed_children,
             'label': label,

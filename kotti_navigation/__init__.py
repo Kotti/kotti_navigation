@@ -14,6 +14,7 @@ NAVIGATION_WIDGET_DEFAULTS = {
     'include_root': 'true',
     'display_type': 'tree',
     'label': '',
+    'show_context_menu': 'false',
     'show_dropdown_menus': 'false',
     'slot': 'left',
     'open_all': 'false',

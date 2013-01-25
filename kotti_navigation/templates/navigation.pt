@@ -26,7 +26,7 @@
   </tal:items>
   <ul tal:condition="display_type == 'list'"
       class="nav ${nav_list}">
-    <li>
+    <li tal:condition="show_context_menu">
       <div class="btn-group">
         <a class="btn" href="${api.url(context.parent) if context.parent else '#'}"
             tal:define="target '&lt;&lt; ' + context.parent.title if context.parent else '<Home>'">
@@ -45,14 +45,18 @@
         </ul>
       </div>
     </li>
-    <li tal:condition="slot in ['left', 'right'] and items" class="divider"></li>
+    <li tal:condition="show_context_menu
+                       and slot in ['left', 'right']
+                       and items" class="divider"></li>
     <li tal:condition="label and items" class="nav-header">
       ${label}
     </li>
     <tal:block repeat="item items">
       <tal:with_dropdown 
                tal:define="children allowed_children[repeat.item.index]"
-               tal:condition="not slot in ['left', 'right'] and show_dropdown_menus and children">
+               tal:condition="not slot in ['left', 'right']
+                              and show_dropdown_menus
+                              and children">
         <li tal:define="hidden not item.in_navigation and 'hidden' or ''"
             class="${hidden}">
           <a href="${api.url(item)}"
@@ -83,7 +87,9 @@
       </tal:with_dropdown>
       <tal:without_dropdown
                tal:define="children allowed_children[repeat.item.index]"
-               tal:condition="(children and slot in ['left', 'right']) or (children and not show_dropdown_menus) or not children">
+               tal:condition="(children and slot in ['left', 'right'])
+                              or (children and not show_dropdown_menus)
+                              or not children">
         <li class="${active} ${hidden}"
             tal:define="active item == context and 'active' or '';
             hidden not item.in_navigation and 'hidden' or ''">
