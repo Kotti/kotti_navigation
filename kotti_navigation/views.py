@@ -132,7 +132,7 @@ def navigation_widget(context, request, name=''):
         ac = get_children(item, request)
         allowed_children.append(ac if ac else [])
 
-    # The horizontal display has a site menu available in a dropdown.
+    # The list display has a site menu available in a dropdown.
     if context != root:
         site_menu_items = [root] + top_level_items
     else:

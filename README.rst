@@ -75,10 +75,10 @@ variable to the following.::
 Setting Display Type
 --------------------
 
-Control the type of display with the display_type setting, which can be either ``horizontal``
+Control the type of display with the display_type setting, which can be either ``list``
 (default) or ``tree``::
 
-    kotti_navigation.navigation_widget.display_type = horizontal
+    kotti_navigation.navigation_widget.display_type = list
 
 Configuring the ``tree`` display is straightforward; you have the choice of
 including the root, or not. The navigation tree shows the full site content in
@@ -87,15 +87,15 @@ exploded, and with another item is clicked, it is collapsed. The tree display
 is most appropriate for the left and right slots, but can be used in any other
 slot, probably accompanied by customization through CSS.
 
-The ``horizontal`` display does not show the full site content; Only the
-immediate children for the context are shown as a simple horizontal list of
+The ``list`` display does not show the full site content; Only the
+immediate children for the context are shown as a simple list list of
 navpills wrapped within the available space. This navigation menu is intended
 for use in combination with the breadcrumbs, which allows navigating back up
 the site hierarchy. This style of display is appropriate for navigation menus
 in the abovecontent, belowcontent, and belowbodyend slots, but can be used in
 left and right slots too.
 
-.. Note:: If using the horizontal display type, to avoid redundancy, you will
+.. Note:: If using the list display type, to avoid redundancy, you will
           likely want to override the nav.pt view template, or remove it from
           master.pt, so that there are no nav items shown in the top bar.
 
@@ -103,7 +103,7 @@ Configuring a Label
 -------------------
 
 There is an optional label for the top of the tree display, or for the first
-item in the horizontal display.
+item in the list display.
 
 For the following discussion about the optional label, the context is assumed
 to be a document titled Animals, and there are two children titled Dogs and
@@ -143,10 +143,10 @@ want to have a simple replacement in concert with the tree display, do::
 
 .. Note:: The nav-header CSS style is used for the label.
 
-**A label for a horizontal display**
+**A label for a list display**
 
-If using a horizontal list display for navigation, the default will list
-children of the current context in a horizontal list of nav pills that wrap, if
+If using a list list display for navigation, the default will list
+children of the current context in a list list of nav pills that wrap, if
 necessary. Along with the toolbar and and breadcrumbs, this may provide a
 perfectly good nav display. When the abovecontent slot is used, however, the
 title for the context is _underneath_ the nav list, so it may not be clear
@@ -226,7 +226,7 @@ you plan to set up a popup menu via css or javascript::
 
     kotti_navigation.navigation_widget.open_all = false
 
-You will want to set display_type to ``tree``, because the ``horizontal``
+You will want to set display_type to ``tree``, because the ``list``
 shows, by design, only the children of the current context. The ``tree``
 display, when open_all is true, will produce items for each node in the full
 tree.

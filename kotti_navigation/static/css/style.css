@@ -20,20 +20,20 @@
 #navigation-tree ul li ul li ul li ul li ul {
     padding-left: 40px;
 }
-#navigation-horizontal .nav {
+#navigation-list .nav {
     margin-bottom: 0;
 }
-#navigation-horizontal .nav li.hidden {
+#navigation-list .nav li.hidden {
     border-left: 2px dotted orange;
 }
-#navigation-horizontal ul li .nav-pills {
+#navigation-list ul li .nav-pills {
     border-bottom: none;
     border-top: 1px dotted #DDDDDD;
 }
-#navigation-horizontal .nav-list-careted {
+#navigation-list .nav-list-careted {
     padding-right: 3px;
 }
-#navigation-horizontal .nav-list-caret {
+#navigation-list .nav-list-caret {
     padding-left: 2px;
     padding-right: 2px;
 }

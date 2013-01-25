@@ -1,15 +1,16 @@
 <div class="${use_container_class and 'container' or None}"
-    id="${display_type == 'tree' and 'navigation-tree' or 'navigation-horizontal'}"
-    tal:define="nav_stacked display_type == 'tree' and 'nav-stacked' or ''">
-  <ul tal:condition="include_root and display_type == 'tree' and label"
-      class="nav nav-pills ${nav_stacked}">
+    id="${display_type == 'tree' and 'navigation-tree' or 'navigation-list'}"
+    tal:define="nav_tree display_type == 'tree' and 'nav-stacked' or '';
+                nav_list (display_type == 'list' and slot in ['left', 'right']) and 'nav-list' or 'nav-pills'">
+  <ul class = "nav nav-list"
+      tal:condition="include_root and display_type == 'tree' and label">
     <li class="nav-header">
       ${label}
     </li>
     <li class="divider"></li>
   </ul>
-  <ul tal:condition="include_root and display_type == 'tree'"
-      class="nav nav-pills ${nav_stacked}">
+  <ul class="nav nav-pills ${nav_tree}"
+      tal:condition="include_root and display_type == 'tree'">
     <li tal:define="active root == request.context and 'active' or ''"
         class="${active}">
       <a href="${api.url(root)}"
@@ -19,13 +20,13 @@
     </li>
   </ul>
   <tal:items tal:condition="display_type == 'tree'" tal:repeat="item items">
-    <ul class="nav nav-pills ${nav_stacked}">
+    <ul class="nav nav-pills ${nav_tree}">
       <tal:replace tal:replace="api.render_view('nav-tree', context=item)" />
     </ul>
   </tal:items>
-  <ul tal:condition="display_type == 'horizontal'"
-      class="nav nav-pills">
-    <li class="${'pull-left' if slot in ['left',] else 'pull-right'}">
+  <ul tal:condition="display_type == 'list'"
+      class="nav ${nav_list}">
+    <li>
       <div class="btn-group">
         <a class="btn" href="${api.url(context.parent) if context.parent else '#'}"
             tal:define="target '&lt;&lt; ' + context.parent.title if context.parent else '<Home>'">
@@ -44,17 +45,14 @@
         </ul>
       </div>
     </li>
-  </ul>
-  <ul tal:condition="display_type == 'horizontal'"
-      class="nav nav-pills">
+    <li tal:condition="slot in ['left', 'right'] and items" class="divider"></li>
     <li tal:condition="label and items" class="nav-header">
       ${label}
     </li>
-    <li tal:condition="label and items and slot in ['left', 'right']" class="divider"></li>
     <tal:block repeat="item items">
       <tal:with_dropdown 
                tal:define="children allowed_children[repeat.item.index]"
-               tal:condition="show_dropdown_menus and children">
+               tal:condition="not slot in ['left', 'right'] and show_dropdown_menus and children">
         <li tal:define="hidden not item.in_navigation and 'hidden' or ''"
             class="${hidden}">
           <a href="${api.url(item)}"
@@ -63,8 +61,8 @@
             ${item.title}
           </a>
         </li>
-        <li tal:define="hidden not item.in_navigation and 'hidden' or ''"
-            class="dropdown ${hidden}">
+        <li class="dropdown ${hidden}"
+            tal:define="hidden not item.in_navigation and 'hidden' or ''">
           <a href="${api.url(item)}"
              class="dropdown-toggle nav-list-caret"
              data-toggle="dropdown"
@@ -85,10 +83,10 @@
       </tal:with_dropdown>
       <tal:without_dropdown
                tal:define="children allowed_children[repeat.item.index]"
-               tal:condition="(children and not show_dropdown_menus) or not children">
-        <li tal:define="active item == context and 'active' or '';
-                        hidden not item.in_navigation and 'hidden' or ''"
-            class="${active} ${hidden}">
+               tal:condition="(children and slot in ['left', 'right']) or (children and not show_dropdown_menus) or not children">
+        <li class="${active} ${hidden}"
+            tal:define="active item == context and 'active' or '';
+            hidden not item.in_navigation and 'hidden' or ''">
           <a href="${api.url(item)}"
              title="${getattr(item, 'description', None)}">
             ${item.title}

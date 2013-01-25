@@ -21,22 +21,20 @@ class NavigationDummyRequest(DummyRequest):
         return ''  # pragma: no cover
 
 
-class TestNavigationWidgetAsHorizontal(FunctionalTestBase):
+class TestNavigationWidgetAsList(FunctionalTestBase):
 
     def setUp(self, **kwargs):
         settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
                     'kotti_navigation.navigation_widget.slot': 'abovecontent',
-                    'kotti_navigation.navigation_widget.display_type': 'horizontal',
+                    'kotti_navigation.navigation_widget.display_type': 'list',
                     'kotti_navigation.navigation_widget.show_dropdown_menus': 'false',
                     'kotti_navigation.navigation_widget.label': 'context'}
-        super(TestNavigationWidgetAsHorizontal, self).setUp(**settings)
+        super(TestNavigationWidgetAsList, self).setUp(**settings)
 
     def test_render_widget(self):
         root = get_root()
         html = render_view(root, NavigationDummyRequest(), name='navigation-widget')
-        # Note trailing blank after nav-pills, there because nav-stacked is
-        # conditionally removed in the template.
-        assert '<ul class="nav nav-pills ">' in html
+        assert '<div class="btn-group">' in html
 
     def test_show_dropdown_menus(self):
         request = NavigationDummyRequest()
@@ -58,6 +56,7 @@ class TestNavigationWidgetAsHorizontal(FunctionalTestBase):
 
         html = render_view(root[u'content_1'], NavigationDummyRequest(), name='navigation-widget')
 
+        print html
         assert u'nav-list-careted' in html
 
     def test_label(self):
@@ -106,9 +105,9 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
         root = get_root()
         result = navigation_widget(root, request)
         assert result['display_type'] == 'tree'
-        get_current_registry().settings['kotti_navigation.navigation_widget.display_type'] = u'horizontal'
+        get_current_registry().settings['kotti_navigation.navigation_widget.display_type'] = u'list'
         result = navigation_widget(root, request)
-        assert result['display_type'] == 'horizontal'
+        assert result['display_type'] == 'list'
 
     def test_is_tree_open(self):
         request = NavigationDummyRequest()
