@@ -3,7 +3,7 @@
     tal:define="nav_tree display_type == 'tree' and 'nav-stacked' or '';
                 nav_list (display_type == 'list' and slot in ['left', 'right']) and 'nav-list' or 'nav-pills'">
   <ul class = "nav nav-list"
-      tal:condition="include_root and display_type == 'tree' and label">
+      tal:condition="display_type == 'tree' and label">
     <li class="nav-header">
       ${label}
     </li>
