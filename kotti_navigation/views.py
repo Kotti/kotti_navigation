@@ -99,8 +99,6 @@ def navigation_widget(context, request, name=''):
     show_dropdown_menus = asbool(settings['show_dropdown_menus'])
     label = settings['label']
 
-    current_level = 2
-
     before_context = ''
     after_context = ''
 
@@ -148,5 +146,4 @@ def navigation_widget(context, request, name=''):
             'allowed_children': allowed_children,
             'label': label,
             'show_dropdown_menus': show_dropdown_menus,
-            'current_level': current_level,
         }
