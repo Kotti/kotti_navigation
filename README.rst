@@ -10,6 +10,24 @@ available slots for a Kotti website (left, right, abovecontent, etc.).
 Setting up the navigation widget
 ================================
 
+These are the configuration settings we will be discussing here for the
+navigation widget:::
+
+    # general navigation widget settings, showing defaults
+    kotti_navigation.navigation_widget.display_type = tree
+    kotti_navigation.navigation_widget.show_context_menu = false
+    kotti_navigation.navigation_widget.label = none
+    kotti_navigation.navigation_widget.slot = left
+    kotti_navigation.navigation_widget.open_all = false
+    kotti_navigation.navigation_widget.show_hidden_while_logged_in = true
+    kotti_navigation.navigation_widget.exclude_content_types = (e.g., Image)
+     
+    # specific to tree display
+    kotti_navigation.navigation_widget.include_root = true
+     
+    # specific to list display
+    kotti_navigation.navigation_widget.show_dropdown_menus = true
+
 To set up the navigation widget to display on every page in Kotti in the
 default left slot as a tree display, add an entry to kotti.configurators
 in the .ini config file for your project::
@@ -89,11 +107,27 @@ slot, probably accompanied by customization through CSS.
 
 The ``list`` display does not show the full site content; Only the
 immediate children for the context are shown as a simple list list of
-navpills wrapped within the available space. This navigation menu is intended
-for use in combination with the breadcrumbs, which allows navigating back up
-the site hierarchy. This style of display is appropriate for navigation menus
-in the abovecontent, belowcontent, and belowbodyend slots, but can be used in
-left and right slots too.
+navpills wrapped within the available space. This navigation menu can be used
+in two ways, regarding the breadcrumbs display in default Kotti:
+
+* Turn off the context menu for the ``list`` display with ``show_context_menu``
+  set to false, and use Kotti's breadcrumbs display for providing essential
+  navigation back up the site hierarchy
+* Turn on the context menu fo the ``list`` display, and turn off Kotti's
+  breadcrumbs display by overriding via templates. The context menu will
+  provide an active link to go up one level from the current context, and will
+  provide links to the root and top-level content items.
+
+The ``list`` style of display is different for "horizontal" vs. "vertical"
+aspect slots, as follows:
+
+* In the abovecontent, belowcontent, and belowbodyend slots ("horizontal"
+  aspect), the ``list`` display is akin to the display of tags as nav pills
+  wrapping horizontally within a container filling the slot, plus a label
+  and/or context menu item button if they are configured to be present.
+* In the left and right slots, the ``list`` display is the nav-list style from
+  Bootstrap, which shows items in a more traditional "vertical aspect" list
+  format.
 
 .. Note:: If using the list display type, to avoid redundancy, you will
           likely want to override the nav.pt view template, or remove it from
