@@ -105,7 +105,7 @@ is most appropriate for the left and right slots, but can be used in any other
 slot, probably accompanied by customization through CSS.
 
 The ``list`` display does not show the full site content; Only the
-immediate children for the context are shown as a simple list list of
+immediate children for the context are shown as a simple list of
 navpills wrapped within the available space. This navigation menu can be used
 in two ways, regarding the breadcrumbs display in default Kotti:
 
@@ -135,8 +135,8 @@ aspect slots, as follows:
 Configuring a Label
 -------------------
 
-There is an optional label for the top of the tree display, or for the first
-item in the list display.
+There is an optional label for the top of the tree display, underneath the
+context menu if it is enabled, or for the first item in the list display.
 
 For the following discussion about the optional label, the context is assumed
 to be a document titled Animals, and there are two children titled Dogs and
@@ -145,9 +145,9 @@ Cats.
 **A label for a tree display**
 
 The optional label at the top of the tree dislay would usually be set to
-``none``, because the nature of the indentation should make its use obvious. In
-some situations, however, a simple label such as "Site Navigation" or "Site
-Menu" could be desired. To set such a label, do:::
+``none``, because the nature of the indentation should make the context
+obvious. In some situations, however, a simple label such as "Site Navigation"
+or "Site Menu" could be desired. To set such a label, do:::
 
     kotti_navigation.label = Site Menu
 
@@ -159,36 +159,34 @@ item in the tree display. This is normally adequate. However, for extra
 clarity, or for some special reason, you may want to include the current
 context in the label, in a phrase such as "Current item: context", where the
 word ``context`` would be replaced by the actual context.title, e.g.  "Current
-item: Cats". If you would like to use the context, include the actual word
-``context`` in the label text, such as:::
+item: Cats". So, include the actual word ``context`` in the label text:::
 
     kotti_navigation.label = <context>
 
-(the label would become ${'<' + context.title '>'} in the template code,
-``<Animals>`` in the example context.)
+(the label would become ${'<' + context.title '>'} in the template code, which
+would become ``<Animals>`` in the rendered label.)
 
-Or, if the site's ``breadcrumbs`` display were to be disabled in CSS, and you
-want to have a simple replacement in concert with the tree display, do:::
+Or, if the site's ``breadcrumbs`` display is not shown, by overriding
+templates, and you want to have a simple replacement in concert with the tree
+display, do:::
 
     kotti_navigation.label = You are here: context
 
 (``You are here: Animals``).
 
-.. Note:: The nav-header CSS style is used for the label.
-
 **A label for a list display**
 
-If using a list list display for navigation, the default will list
-children of the current context in a list list of nav pills that wrap, if
-necessary. Along with the toolbar and and breadcrumbs, this may provide a
-perfectly good nav display. When the abovecontent slot is used, however, the
-title for the context is _underneath_ the nav list, so it may not be clear
-enough that that the nav pill items are contained within the context.  Perhaps
-this would be true for the left slot, as well, but a bare nav pill list in the
-right and belowcontent slots might work well.
+If using a list display for navigation, the default will list children of the
+current context in a list of nav pills that wrap, if necessary. Along with the
+default Kotti nav toolbar and and breadcrumbs, this may provide a perfectly
+good nav display.  When the abovecontent slot is used, however, the title for
+the context is _underneath_ the nav list, so it may not be clear enough that
+that the nav pill items are children within the context.  Perhaps this would
+be true for the left slot, as well, but a bare nav pill list in the right and
+belowcontent slots might work well.
 
 If label is not set, the default value of none will result in two nav pill li
-items for the example context as Animals in (Animals: dogs cats):::
+items for the example Animals context:::
 
     <Dogs> <Cats>
     
@@ -208,26 +206,21 @@ or, perhaps with some other punctuation:::
 
 etc.
 
-Option 2, as described above, set label to a string using the word ``context``
-anywhere in the string as a placeholder for context.title. If the label is set
-to be only the word ``context`` (only the word, with no punctuation), then a
-nav pill will be used for the label:::
+As described above, set label to a string using the word ``context`` anywhere
+in the string as a placeholder for context.title.
 
     kotti_navigation.label = context
 
-The result would be three nav pill li items, as:::
+The result would be a label for Animals and two nav pill li items, as:::
 
-    <Animals> <Dogs> <Cats>
-
-with <Animals> as the active link (Note: no punctuation was used, so the first
-item, <Animals> is an actual nav pill.).
+    Animals <Dogs> <Cats>
 
 With any punctuation or additional text of any sort along with context in the
 label, as with:::
 
     label = context:
 
-then instead of a nav pill for the first item, a nav-header styled li is used:::
+becomes:::
 
     Animals: <Dogs> <Cats>
 
@@ -253,9 +246,8 @@ etc.
 Configuring for Use with a Menu System
 --------------------------------------
 
-To open the whole navigation all the time, set the
-``kotti_navigation.navigation_widget.open_all`` variable. This is useful if
-you plan to set up a popup menu via css or javascript:::
+To open the whole navigation all the time, set the ``open_all`` variable. This
+is useful if you plan to set up a popup menu via css or javascript:::
 
     kotti_navigation.navigation_widget.open_all = false
 
