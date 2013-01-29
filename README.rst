@@ -30,13 +30,13 @@ navigation widget:::
 
 To set up the navigation widget to display on every page in Kotti in the
 default left slot as a tree display, add an entry to kotti.configurators
-in the .ini config file for your project::
+in the .ini config file for your project:::
 
     kotti.configurators =
         ...
         kotti_navigation.kotti_configure
 
-Here are the slots available for the navigation widget::
+Here are the slots available for the navigation widget:::
 
     left
     right
@@ -44,13 +44,13 @@ Here are the slots available for the navigation widget::
     belowcontent
     belowbodyend
 
-which you set with a config parameter::
+which you set with a config parameter:::
 
     kotti_navigation.navigation_widget.slot = abovecontent
 
 .. Note:: Configure navigation for only one slot.
 
-Here are the slot choices in a layout diagram::
+Here are the slot choices in a layout diagram:::
 
     +------------------------------------------------------+
     | nav (the nav in the Kotti toolbar                    |
@@ -73,8 +73,7 @@ Here are the slot choices in a layout diagram::
 Excluding the Root
 ------------------
 
-To exclude the root of the site from the navigation, set the
-``kotti_navigation.navigation_widget.include_root`` variable.::
+To exclude the root of the site from the navigation, set this:::
 
     kotti_navigation.navigation_widget.include_root = false
 
@@ -84,7 +83,7 @@ Excluding Content Types
 You can exclude specific content types from the whole navigation
 structure. If you not want to show images in the navigation at all,
 set the ``kotti_navigation.navigation_widget.exclude_content_types`` 
-variable to the following.::
+variable to the following:::
 
     kotti_navigation.navigation_widget.exclude_content_types = 
         kotti.resources.Image
@@ -93,8 +92,8 @@ variable to the following.::
 Setting Display Type
 --------------------
 
-Control the type of display with the display_type setting, which can be either ``list``
-(default) or ``tree``::
+Control the type of display with the display_type setting, which can be either
+``list`` (default) or ``tree``:::
 
     kotti_navigation.navigation_widget.display_type = list
 
@@ -129,8 +128,8 @@ aspect slots, as follows:
   Bootstrap, which shows items in a more traditional "vertical aspect" list
   format.
 
-.. Note:: If using the list display type, to avoid redundancy, you will
-          likely want to override the nav.pt view template, or remove it from
+.. Note:: Regarding the default top nav-bar in Kotti, to avoid redundancy, you
+          may want to override the nav.pt view template, or remove it from
           master.pt, so that there are no nav items shown in the top bar.
 
 Configuring a Label
@@ -148,7 +147,7 @@ Cats.
 The optional label at the top of the tree dislay would usually be set to
 ``none``, because the nature of the indentation should make its use obvious. In
 some situations, however, a simple label such as "Site Navigation" or "Site
-Menu" could be desired. To set such a label, do::
+Menu" could be desired. To set such a label, do:::
 
     kotti_navigation.label = Site Menu
 
@@ -161,7 +160,7 @@ clarity, or for some special reason, you may want to include the current
 context in the label, in a phrase such as "Current item: context", where the
 word ``context`` would be replaced by the actual context.title, e.g.  "Current
 item: Cats". If you would like to use the context, include the actual word
-``context`` in the label text, such as::
+``context`` in the label text, such as:::
 
     kotti_navigation.label = <context>
 
@@ -169,7 +168,7 @@ item: Cats". If you would like to use the context, include the actual word
 ``<Animals>`` in the example context.)
 
 Or, if the site's ``breadcrumbs`` display were to be disabled in CSS, and you
-want to have a simple replacement in concert with the tree display, do::
+want to have a simple replacement in concert with the tree display, do:::
 
     kotti_navigation.label = You are here: context
 
@@ -189,21 +188,21 @@ this would be true for the left slot, as well, but a bare nav pill list in the
 right and belowcontent slots might work well.
 
 If label is not set, the default value of none will result in two nav pill li
-items for the example context as Animals in (Animals: dogs cats)::
+items for the example context as Animals in (Animals: dogs cats):::
 
     <Dogs> <Cats>
     
 (< > notation used here to denote nav pill li items).
 
-Using a custom string, punctuated with a colon::
+Using a custom string, punctuated with a colon:::
 
     kotti_navigation.label = Contained Items:
 
-would result in a nav-header styled label with two nav pill li items, as::
+would result in a nav-header styled label with two nav pill li items, as:::
 
     Contained items: <Dogs> <Cats>
 
-or, perhaps with some other punctuation::
+or, perhaps with some other punctuation:::
 
     kotti_navigation.label = Contents >>
 
@@ -212,11 +211,11 @@ etc.
 Option 2, as described above, set label to a string using the word ``context``
 anywhere in the string as a placeholder for context.title. If the label is set
 to be only the word ``context`` (only the word, with no punctuation), then a
-nav pill will be used for the label::
+nav pill will be used for the label:::
 
     kotti_navigation.label = context
 
-The result would be three nav pill li items, as::
+The result would be three nav pill li items, as:::
 
     <Animals> <Dogs> <Cats>
 
@@ -224,28 +223,28 @@ with <Animals> as the active link (Note: no punctuation was used, so the first
 item, <Animals> is an actual nav pill.).
 
 With any punctuation or additional text of any sort along with context in the
-label, as with::
+label, as with:::
 
     label = context:
 
-then instead of a nav pill for the first item, a nav-header styled li is used::
+then instead of a nav pill for the first item, a nav-header styled li is used:::
 
     Animals: <Dogs> <Cats>
 
 If a phrase is used, take care to word appropriately, perhaps aided by use of
-quotes or another indicator for context, such as (), [], etc.::
+quotes or another indicator for context, such as (), [], etc.:::
 
     kotti_navigation.label = Items in [context] are:::
 
-would result in::
+would result in:::
 
     Items in [Animals] are: <Dogs> <Cats>
 
-and::
+and:::
 
     kotti_navigation.label = "context" contains:
 
-would result in::
+would result in:::
 
     "Animals" contains: <Dogs> <Cats>
 
@@ -256,7 +255,7 @@ Configuring for Use with a Menu System
 
 To open the whole navigation all the time, set the
 ``kotti_navigation.navigation_widget.open_all`` variable. This is useful if
-you plan to set up a popup menu via css or javascript::
+you plan to set up a popup menu via css or javascript:::
 
     kotti_navigation.navigation_widget.open_all = false
 
