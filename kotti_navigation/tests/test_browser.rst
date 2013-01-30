@@ -7,7 +7,9 @@ Setup and Login
   >>> from kotti import testing
   >>> tools = testing.setUpFunctional(
   ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure',
+  ...        'kotti_navigation.navigation_widget.slot': 'left',
   ...        'kotti_navigation.navigation_widget.include_root': 'true',
+  ...        'kotti_navigation.navigation_widget.display_type': 'tree',
   ...        'kotti_navigation.navigation_widget.open_all': 'true',
   ...        'kotti_navigation.navigation_widget.show_hidden_while_logged_in': 'true',
   ...       })
@@ -54,8 +56,8 @@ Test hidden nav points
 
   >>> browser.open(testing.BASE_URL)
   >>> browser.getLink('Contents').click()
-  >>> childs = ctrl(name='children')
-  >>> childs.value = childs.options[0:1]
+  >>> children = ctrl(name='children')
+  >>> children.value = children.options[0:1]
   >>> ctrl(name='hide').click()
   >>> "Document 1 is no longer visible in the navigation" in browser.contents
   True

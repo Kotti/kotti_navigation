@@ -8,7 +8,7 @@ from kotti.resources import (
         Content,
 )
 from kotti.views.util import render_view
-from kotti_navigation import navigation_widget
+from kotti_navigation.views import navigation_widget
 
 
 class NavigationDummyRequest(DummyRequest):
@@ -21,13 +21,70 @@ class NavigationDummyRequest(DummyRequest):
         return ''  # pragma: no cover
 
 
-class TestNavigationWidget(FunctionalTestBase):
+class TestNavigationWidgetAsList(FunctionalTestBase):
 
     def setUp(self, **kwargs):
         settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.slot': 'abovecontent',
+                    'kotti_navigation.navigation_widget.display_type': 'list',
+                    'kotti_navigation.navigation_widget.show_context_menu': 'true',
+                    'kotti_navigation.navigation_widget.show_dropdown_menus': 'false',
+                    'kotti_navigation.navigation_widget.label': 'context'}
+        super(TestNavigationWidgetAsList, self).setUp(**settings)
+
+    def test_render_widget(self):
+        root = get_root()
+        html = render_view(root, NavigationDummyRequest(), name='navigation-widget')
+        assert '<div class="btn-group">' in html
+
+    def test_show_dropdown_menus(self):
+        request = NavigationDummyRequest()
+        root = get_root()
+        result = navigation_widget(root, request)
+        assert result['show_dropdown_menus'] == False
+
+        root[u'content_1'] = Content(title=u'Content_1')
+        root[u'content_1'][u'sub_1'] = Content(title=u'Sub_1')
+        root[u'content_1'][u'sub_1'][u'sub_sub_1'] = Content(title=u'Sub_Sub_1')
+        root[u'content_2'] = Content(title=u'Content_2')
+        root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
+
+        html = render_view(root[u'content_1'], NavigationDummyRequest(), name='navigation-widget')
+
+        assert not u'nav-list-careted' in html
+
+        get_current_registry().settings['kotti_navigation.navigation_widget.show_dropdown_menus'] = u'true'
+
+        html = render_view(root[u'content_1'], NavigationDummyRequest(), name='navigation-widget')
+
+        assert u'nav-list-careted' in html
+
+    def test_label(self):
+        request = NavigationDummyRequest()
+        root = get_root()
+
+        root[u'content_1'] = Content(title=u'Content_1')
+        root[u'content_1'][u'sub_1'] = Content(title=u'Sub_1')
+        root[u'content_2'] = Content(title=u'Content_2')
+        root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
+
+        result = navigation_widget(root, request)
+
+        get_current_registry().settings['kotti_navigation.navigation_widget.label'] = u'Items in [context] are:'
+        result = navigation_widget(root[u'content_1'], request)
+        assert result['label'] == 'Items in [Content_1] are:'
+
+
+class TestNavigationWidgetAsTree(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.slot': 'left',
                     'kotti_navigation.navigation_widget.include_root': 'true',
+                    'kotti_navigation.navigation_widget.display_type': 'tree',
+                    'kotti_navigation.navigation_widget.label': 'none',
                     'kotti_navigation.navigation_widget.open_all': 'false'}
-        super(TestNavigationWidget, self).setUp(**settings)
+        super(TestNavigationWidgetAsTree, self).setUp(**settings)
 
     def test_render_widget(self):
         root = get_root()
@@ -43,7 +100,16 @@ class TestNavigationWidget(FunctionalTestBase):
         result = navigation_widget(root, request)
         assert result['include_root'] == False
 
-    def test_open_tree(self):
+    def test_display_type(self):
+        request = NavigationDummyRequest()
+        root = get_root()
+        result = navigation_widget(root, request)
+        assert result['display_type'] == 'tree'
+        get_current_registry().settings['kotti_navigation.navigation_widget.display_type'] = u'list'
+        result = navigation_widget(root, request)
+        assert result['display_type'] == 'list'
+
+    def test_is_tree_open(self):
         request = NavigationDummyRequest()
         root = get_root()
         root[u'content_1'] = Content()
