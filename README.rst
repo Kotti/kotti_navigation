@@ -51,7 +51,7 @@ which you set with a config parameter:::
 Here are the slot choices in a layout diagram:::
 
     +------------------------------------------------------+
-    | nav (the nav in the Kotti toolbar                    |
+    | nav (the nav in the Kotti toolbar -- configurable)   |
     |------------------------------------------------------|
     | editor_bar                                           |
     |+----------------------------------------------------+|
@@ -67,6 +67,38 @@ Here are the slot choices in a layout diagram:::
     |------------------------------------------------------|
     | SLOT "beforebodyend"                                 |
     +------------------------------------------------------+
+
+Configuring to Replace Top Nav
+------------------------------
+
+You see the top nav position in the diagram above (it is not a slot), where
+default Kotti puts the nav.pt template. kotti_navigation provides a nav.pt
+that can replace Kotti's nav.pt:::
+
+    kotti_navigation/kotti-overrides/templates/view/nav.pt
+
+that can be enabled in your ini file with:::
+
+    kotti.asset_overrides = kotti_navigation:kotti-overrides/
+
+This will tell Kotti that you are selecting any templates that are defined
+within kotti_navigation:kotti-overrides and which match Kotti's directory
+structure for templates. 
+
+This top position is not a slot, so make sure to omit the slot setting or to
+set it as:::
+
+    kotti_navigation.navigation_widget.slot = none
+
+For this top position, you will probably want to configure these nav settings
+as:::
+
+    kotti_navigation.navigation_widget.display_type = list
+    kotti_navigation.navigation_widget.show_context_menu = true
+
+and you probably want to omit the label setting. The breadrumbs may in this
+usage be deemed redundant. If so, override Kotti's master template to omit it
+(See below, under discussion of display_type).
 
 Excluding the Root
 ------------------
