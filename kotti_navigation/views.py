@@ -1,4 +1,5 @@
 from pyramid.view import view_config
+from pyramid.location import lineage
 
 from paste.deploy.converters import asbool
 
@@ -26,6 +27,22 @@ def get_children(context, request):
 
     return children
 
+
+def get_lineage(context, request):
+
+    settings = navigation_settings()
+    user = get_user(request)
+    show_hidden = asbool(settings['show_hidden_while_logged_in'])
+    ex_cts = settings['exclude_content_types']
+
+    if show_hidden and user:
+        items = [item for item in list(lineage(context))
+                 if item.__class__ not in ex_cts]
+    else:
+        items = [item for item in list(lineage(context))
+                 if item.in_navigation and item.__class__ not in ex_cts]
+
+    return items
 
 def is_tree_open(item, request):
     """ Check if the tree should be opened for the given item.
@@ -131,11 +148,9 @@ def navigation_widget(context, request, name=''):
         ac = get_children(item, request)
         allowed_children.append(ac if ac else [])
 
-    # The list display has a site menu available in a dropdown.
-    if context != root:
-        site_menu_items = [root] + top_level_items
-    else:
-        site_menu_items = top_level_items
+    lineage_items = get_lineage(context, request)
+    if not include_root:
+        lineage_items.remove(root)
 
     return {'root': root,
             'slot': slot,
@@ -144,7 +159,8 @@ def navigation_widget(context, request, name=''):
             'display_type': display_type,
             'items': items,
             'show_context_menu': show_context_menu,
-            'site_menu_items': site_menu_items,
+            'top_level_items': top_level_items,
+            'lineage_items': reversed(lineage_items),
             'allowed_children': allowed_children,
             'label': label,
             'show_dropdown_menus': show_dropdown_menus,

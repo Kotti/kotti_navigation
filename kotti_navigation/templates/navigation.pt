@@ -36,10 +36,33 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-          <li tal:repeat="smi site_menu_items">
-            <a href="${api.url(smi)}"
-               title="${getattr(smi, 'description', None)}">
-              ${smi.title}
+          <li tal:condition="include_root" class="nav-header">
+            Site:
+          </li>
+          <li tal:condition="include_root">
+            <a href="${api.url(root)}"
+               title="${getattr(root, 'description', None)}">
+              ${root.title}
+            </a>
+          </li>
+          <li tal:condition="top_level_items" class="nav-header">
+            Top level:
+          </li>
+          <li tal:condition="top_level_items"
+              tal:repeat="tli top_level_items">
+            <a href="${api.url(tli)}"
+               title="${getattr(tli, 'description', None)}">
+              ${tli.title}
+            </a>
+          </li>
+          <li tal:condition="lineage_items" class="nav-header">
+            Lineage:
+          </li>
+          <li tal:repeat="cmi lineage_items">
+            <a href="${api.url(cmi)}"
+               style="padding-left: ${repeat.cmi.index + 1}em;"
+               title="${getattr(cmi, 'description', None)}">
+              ${cmi.title}
             </a>
           </li>
         </ul>

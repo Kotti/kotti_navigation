@@ -21,8 +21,6 @@ navigation widget:::
     kotti_navigation.navigation_widget.open_all = false
     kotti_navigation.navigation_widget.show_hidden_while_logged_in = true
     kotti_navigation.navigation_widget.exclude_content_types = (e.g., Image)
-     
-    # specific to tree display
     kotti_navigation.navigation_widget.include_root = true
      
     # specific to list display
@@ -73,7 +71,8 @@ Here are the slot choices in a layout diagram:::
 Excluding the Root
 ------------------
 
-To exclude the root of the site from the navigation, set this:::
+To exclude the root of the site from the navigation, in either the tree
+display or the context menu of the list display, set this:::
 
     kotti_navigation.navigation_widget.include_root = false
 
