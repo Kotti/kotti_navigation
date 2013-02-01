@@ -44,7 +44,7 @@ def kotti_configure(settings):
 
     slot = nav_settings['slot']
     if slot is None:
-        slot = 'left'
+        slot = 'none'
 
     nav_widget_directive = \
             'kotti_navigation.include_navigation_widget_{0}'.format(slot)
@@ -61,7 +61,8 @@ def include_view(config):
 def include_navigation_widget(config, where='left'):  # pragma: no cover
 
     include_view(config)
-    assign_slot('navigation-widget', where)
+    if where != 'none':
+        assign_slot('navigation-widget', where)
 
 
 def include_navigation_widget_left(config):  # pragma: no cover
@@ -87,3 +88,7 @@ def include_navigation_widget_belowcontent(config):  # pragma: no cover
 def include_navigation_widget_beforebodyend(config):  # pragma: no cover
 
     include_navigation_widget(config, 'beforebodyend')
+
+def include_navigation_widget_none(config):  # pragma: no cover
+
+    include_navigation_widget(config, 'none')

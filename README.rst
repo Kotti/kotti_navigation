@@ -21,8 +21,6 @@ navigation widget:::
     kotti_navigation.navigation_widget.open_all = false
     kotti_navigation.navigation_widget.show_hidden_while_logged_in = true
     kotti_navigation.navigation_widget.exclude_content_types = (e.g., Image)
-     
-    # specific to tree display
     kotti_navigation.navigation_widget.include_root = true
      
     # specific to list display
@@ -53,7 +51,7 @@ which you set with a config parameter:::
 Here are the slot choices in a layout diagram:::
 
     +------------------------------------------------------+
-    | nav (the nav in the Kotti toolbar                    |
+    | nav (the nav in the Kotti toolbar -- configurable)   |
     |------------------------------------------------------|
     | editor_bar                                           |
     |+----------------------------------------------------+|
@@ -70,10 +68,43 @@ Here are the slot choices in a layout diagram:::
     | SLOT "beforebodyend"                                 |
     +------------------------------------------------------+
 
+Configuring to Replace Top Nav
+------------------------------
+
+You see the top nav position in the diagram above (it is not a slot), where
+default Kotti puts the nav.pt template. kotti_navigation provides a nav.pt
+that can replace Kotti's nav.pt:::
+
+    kotti_navigation/kotti-overrides/templates/view/nav.pt
+
+that can be enabled in your ini file with:::
+
+    kotti.asset_overrides = kotti_navigation:kotti-overrides/
+
+This will tell Kotti that you are selecting any templates that are defined
+within kotti_navigation:kotti-overrides and which match Kotti's directory
+structure for templates. 
+
+This top position is not a slot, so make sure to omit the slot setting or to
+set it as:::
+
+    kotti_navigation.navigation_widget.slot = none
+
+For this top position, you will probably want to configure these nav settings
+as:::
+
+    kotti_navigation.navigation_widget.display_type = list
+    kotti_navigation.navigation_widget.show_context_menu = true
+
+and you probably want to omit the label setting. The breadrumbs may in this
+usage be deemed redundant. If so, override Kotti's master template to omit it
+(See below, under discussion of display_type).
+
 Excluding the Root
 ------------------
 
-To exclude the root of the site from the navigation, set this:::
+To exclude the root of the site from the navigation, in either the tree
+display or the context menu of the list display, set this:::
 
     kotti_navigation.navigation_widget.include_root = false
 
