@@ -5,7 +5,9 @@
         <a href="${request.application_url}/">${api.site_title}</a>
       </span>
       <div tal:replace="api.render_template('kotti:templates/view/search.pt')" />
-      <div tal:replace="api.render_view('navigation-widget')" />
+      <div class="nav-collapse">
+        <div tal:replace="api.render_view('navigation-widget')" />
+      </div>
     </div>
   </div>
 </div>
