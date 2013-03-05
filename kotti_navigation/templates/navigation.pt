@@ -26,10 +26,10 @@
   </tal:items>
   <ul tal:condition="display_type == 'list'"
       class="nav ${nav_list}">
-    <li tal:condition="show_context_menu">
+    <li tal:condition="show_context_menu and context.parent">
       <div class="btn-group">
-        <a class="btn" href="${api.url(context.parent) if context.parent else '#'}"
-            tal:define="target '&lt;&lt; ' + context.parent.title if context.parent else '<Home>'">
+        <a class="btn" href="${api.url(context.parent)}"
+            tal:define="target '&lt;&lt; ' + context.parent.title if context.parent.parent else '&lt;&lt; Home'">
           ${target}
         </a>
         <button class="btn dropdown-toggle" data-toggle="dropdown">
@@ -56,11 +56,11 @@
             </a>
           </li>
           <li tal:condition="lineage_items" class="nav-header">
-            Lineage:
+            You are here:
           </li>
           <li tal:repeat="cmi lineage_items">
             <a href="${api.url(cmi)}"
-               style="padding-left: ${repeat.cmi.index + 1}em;"
+               style="padding-left: ${(repeat.cmi.index + 1) + 1}em;"
                title="${getattr(cmi, 'description', None)}">
               ${cmi.title}
             </a>
@@ -71,7 +71,7 @@
     <li tal:condition="show_context_menu
                        and slot in ['left', 'right']
                        and items" class="divider"></li>
-    <li tal:condition="label and items" class="nav-header">
+    <li tal:condition="label and context.parent and items" class="nav-header">
       ${label}
     </li>
     <tal:block repeat="item items">
