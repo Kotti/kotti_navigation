@@ -58,11 +58,22 @@
           <li tal:condition="lineage_items" class="nav-header">
             You are here:
           </li>
-          <li tal:repeat="cmi lineage_items">
-            <a href="${api.url(cmi)}"
-               style="padding-left: ${(repeat.cmi.index + 1) + 1}em;"
-               title="${getattr(cmi, 'description', None)}">
-              ${cmi.title}
+          <tal:block repeat="lineage_item lineage_items">
+            <li tal:define="active lineage_item==context and 'active' or '';
+                            hidden not lineage_item.in_navigation and 'hidden' or ''"
+                class="${active} ${hidden}">
+              <a href="${api.url(lineage_item)}"
+                 style="padding-left: ${(repeat.lineage_item.index + 1) + 1}em;"
+                 title="${getattr(lineage_item, 'description', None)}">
+                ${lineage_item.title}
+              </a>
+            </li>
+          </tal:block>
+          <li tal:repeat="child items">
+            <a href="${api.url(child)}"
+               style="padding-left: ${len(lineage_items) + 2}em;"
+               title="${getattr(child, 'description', None)}">
+              ${child.title}
             </a>
           </li>
         </ul>
@@ -113,9 +124,9 @@
                tal:condition="(children and slot in ['left', 'right'])
                               or (children and not show_dropdown_menus)
                               or not children">
-        <li class="${active} ${hidden}"
-            tal:define="active item == context and 'active' or '';
-            hidden not item.in_navigation and 'hidden' or ''">
+        <li tal:define="active item == context and 'active' or '';
+                        hidden not item.in_navigation and 'hidden' or ''"
+            class="${active} ${hidden}">
           <a href="${api.url(item)}"
              title="${getattr(item, 'description', None)}">
             ${item.title}

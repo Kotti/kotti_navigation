@@ -51,6 +51,8 @@ def kotti_configure(settings):
 
     settings['pyramid.includes'] += ' {0}'.format(nav_widget_directive)
 
+    if 'kotti_navigation.widget.slot' in settings:
+        assign_slot('recent_news', settings['kotti_newsitem.widget.slot'])
 
 def include_view(config):
 
