@@ -35,7 +35,7 @@ class TestNavigationWidgetAsList(FunctionalTestBase):
     def test_render_widget(self):
         root = get_root()
         html = render_view(root, NavigationDummyRequest(), name='navigation-widget')
-        assert '<div class="btn-group">' in html
+        assert ' class="nav nav-pills"' in html
 
     def test_show_dropdown_menus(self):
         request = NavigationDummyRequest()
