@@ -44,6 +44,7 @@ def get_lineage(context, request):
 
     return items
 
+
 def is_tree_open(item, request):
     """ Check if the tree should be opened for the given item.
     """
