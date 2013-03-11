@@ -54,6 +54,7 @@ def kotti_configure(settings):
     if 'kotti_navigation.widget.slot' in settings:
         assign_slot('recent_news', settings['kotti_newsitem.widget.slot'])
 
+
 def include_view(config):
 
     config.add_translation_dirs('kotti_navigation:locale')
@@ -90,6 +91,7 @@ def include_navigation_widget_belowcontent(config):  # pragma: no cover
 def include_navigation_widget_beforebodyend(config):  # pragma: no cover
 
     include_navigation_widget(config, 'beforebodyend')
+
 
 def include_navigation_widget_none(config):  # pragma: no cover
 
