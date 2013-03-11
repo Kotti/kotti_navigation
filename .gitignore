@@ -1,6 +1,11 @@
 *.py[co]
 Kotti.db
 
+# Folder
+include/
+lib/
+local/
+
 # Packages
 *.egg
 *.egg-info
