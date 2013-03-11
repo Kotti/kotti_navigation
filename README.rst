@@ -100,6 +100,9 @@ and you probably want to omit the label setting. The breadrumbs may in this
 usage be deemed redundant. If so, override Kotti's master template to omit it
 (See below, under discussion of display_type).
 
+The default development.ini config file has a tree nav in the left slot. See
+the alternate top.ini for an example of a configuration replacing nav.pt.
+
 Excluding the Root
 ------------------
 

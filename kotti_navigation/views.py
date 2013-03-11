@@ -148,9 +148,18 @@ def navigation_widget(context, request, name=''):
         ac = get_children(item, request)
         allowed_children.append(ac if ac else [])
 
+    # The lineage function of pyramid is used to make a breadcrumbs-style
+    # display for the context menu.
     lineage_items = get_lineage(context, request)
     if not include_root:
         lineage_items.remove(root)
+
+    # The lineage comes back in root-last order, so reverse.
+    lineage_items.reverse()
+
+    # The lineage (breadcrumbs style) display in navigation.pt shows
+    # lineage_items in an indented dropdown list, and below that has a li
+    # repeat on items, indented beneath context.
 
     return {'root': root,
             'slot': slot,
@@ -160,7 +169,7 @@ def navigation_widget(context, request, name=''):
             'items': items,
             'show_context_menu': show_context_menu,
             'top_level_items': top_level_items,
-            'lineage_items': reversed(lineage_items),
+            'lineage_items': lineage_items,
             'allowed_children': allowed_children,
             'label': label,
             'show_dropdown_menus': show_dropdown_menus,
