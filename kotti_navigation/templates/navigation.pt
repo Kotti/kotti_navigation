@@ -63,7 +63,7 @@
                             hidden not lineage_item.in_navigation and 'hidden' or ''"
                 class="${active} ${hidden}">
               <a href="${api.url(lineage_item)}"
-                 style="padding-left: ${(repeat.lineage_item.index + 1) + 1}em;"
+                 class="gap${(repeat.lineage_item.index)}"
                  title="${getattr(lineage_item, 'description', None)}">
                 ${lineage_item.title}
               </a>
@@ -71,7 +71,7 @@
           </tal:block>
           <li tal:repeat="child items">
             <a href="${api.url(child)}"
-               style="padding-left: ${len(lineage_items) + 2}em;"
+               class="gap${len(lineage_items)}"
                title="${getattr(child, 'description', None)}">
               ${child.title}
             </a>
@@ -86,7 +86,7 @@
       ${label}
     </li>
     <tal:block repeat="item items">
-      <tal:with_dropdown 
+      <tal:with_dropdown
                tal:define="children allowed_children[repeat.item.index]"
                tal:condition="not slot in ['left', 'right']
                               and show_dropdown_menus

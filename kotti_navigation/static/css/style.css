@@ -37,3 +37,24 @@
     padding-left: 2px;
     padding-right: 2px;
 }
+#navigation-list a.gap0 {
+    padding-left: 2em;
+}
+#navigation-list a.gap {
+    padding-left: 3em;
+}
+#navigation-list a.gap1 {
+    padding-left: 3em;
+}
+#navigation-list a.gap2 {
+    padding-left: 4em;
+}
+#navigation-list a.gap3 {
+    padding-left: 5em;
+}
+#navigation-list a.gap4 {
+    padding-left: 6em;
+}
+#navigation-list a.gap5 {
+    padding-left: 7em;
+}
