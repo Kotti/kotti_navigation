@@ -4,6 +4,8 @@ Changelog
 0.3 (Unreleased)
 ----------------
 
+* Made the context menu highlight context as the active li item. [geojeff]
+* Added logic for better home label in context menu. [geojeff]
 
 
 0.3a2 (2013-02-01)
