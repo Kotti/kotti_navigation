@@ -1,0 +1,48 @@
+<div class="navbar navbar-inverse navbar-static-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <span class="brand">
+        <a href="${request.application_url}/">${api.site_title}</a>
+      </span>
+      <div tal:replace="api.render_template('kotti:templates/view/search.pt')" />
+      <div class="${use_container_class and 'container' or None}"
+           tal:condition="display_type == 'menu'"
+           tal:replace="api.render_view('navigation-widget-menu', context=context)"
+           id="navigation-menu">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content">
+  <div class="container">
+    <div class="${use_container_class and 'container' or None}"
+         tal:condition="display_type in ['hor_tabs', 'hor_pills', 'hor_tabs_with_dropdowns', 'hor_pills_with_dropdowns']"
+         tal:replace="api.render_view('navigation-widget-items', context=context)"
+         id="navigation-list">
+    </div>
+    <div class="${use_container_class and 'container' or None}"
+         tal:condition="display_type in ['ver_tabs_stacked', 'ver_pills_stacked', 'ver_tabs_stacked_open_all', 'ver_pills_stacked_open_all']"
+         tal:replace="api.render_view('navigation-widget-tree', context=context)"
+         id="navigation-tree">
+    </div>
+    <ul class="breadcrumb"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        i18n:domain="kotti_navigation"
+        tal:define="breadcrumbs [i for i in api.breadcrumbs]"
+        tal:condition="display_type == 'breadcrumbs' and len(breadcrumbs) > 1">
+      <span tal:omit-tag="" i18n:translate="">${label}</span>
+      <tal:repeat tal:repeat="item breadcrumbs">
+        <li tal:define="first repeat.item.start; last repeat.item.end"
+            class="${last and 'active' or None}">
+    
+          <a tal:omit-tag="last"
+             href="${api.url(item)}">
+            <span tal:condition="not first">${item.title}</span>
+          </a>
+    
+          <span class="divider" tal:condition="not (first or last)">/</span>
+        </li>
+      </tal:repeat>
+    </ul>
+  </div>
+</div>

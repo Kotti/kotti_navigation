@@ -1,0 +1,62 @@
+<div class="${use_container_class and 'container' or None}"
+     id="navigation-list">
+  <ul class="${nav_class}">
+    <li tal:condition="show_menu and context.parent"
+        tal:replace="api.render_view('navigation-widget-menu', context=context)" /> 
+    <li tal:condition="show_menu
+                       and aspect == 'vertical'
+                       and items" class="divider"></li>
+    <li tal:condition="label and context.parent and items" class="nav-header">
+      ${label}
+    </li>
+    <tal:block repeat="item items">
+      <tal:with_dropdown
+               tal:define="children allowed_children[repeat.item.index]"
+               tal:condition="aspect == 'horizontal'
+                              and show_item_dropdowns
+                              and children">
+        <li tal:define="hidden not item.in_navigation and 'hidden' or ''"
+            class="${hidden}">
+          <a href="${api.url(item)}"
+             title="${getattr(item, 'description', None)}"
+             class="nav-list-careted">
+            ${item.title}
+          </a>
+        </li>
+        <li class="dropdown ${hidden}"
+            tal:define="hidden not item.in_navigation and 'hidden' or ''">
+          <a href="${api.url(item)}"
+             class="dropdown-toggle nav-list-caret"
+             data-toggle="dropdown"
+             title="${getattr(item, 'description', None)}">
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <tal:repeat tal:repeat="child children">
+              <li>
+                <a href="${api.url(child)}"
+                   title="${getattr(child, 'description', None)}">
+                  ${child.title}
+                </a>
+              </li>
+            </tal:repeat>
+          </ul>
+        </li>
+      </tal:with_dropdown>
+      <tal:without_dropdown
+               tal:define="children allowed_children[repeat.item.index]"
+               tal:condition="(children and aspect == 'vertical')
+                              or (children and not show_item_dropdowns)
+                              or not children">
+        <li tal:define="active item == context and 'active' or '';
+                        hidden not item.in_navigation and 'hidden' or ''"
+            class="${active} ${hidden}">
+          <a href="${api.url(item)}"
+             title="${getattr(item, 'description', None)}">
+            ${item.title}
+          </a>
+        </li>
+      </tal:without_dropdown>
+    </tal:block>
+  </ul>
+</div>

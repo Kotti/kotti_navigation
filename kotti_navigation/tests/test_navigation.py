@@ -25,7 +25,7 @@ class TestNavigationWidgetAsList(FunctionalTestBase):
 
     def setUp(self, **kwargs):
         settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
-            'kotti_navigation.navigation_widget.slot': 'abovecontent',
+            'kotti_navigation.navigation_widget.location': 'abovecontent',
             'kotti_navigation.navigation_widget.display_type': 'list',
             'kotti_navigation.navigation_widget.show_context_menu': 'true',
             'kotti_navigation.navigation_widget.show_dropdown_menus': 'false',
@@ -85,7 +85,7 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
 
     def setUp(self, **kwargs):
         settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
-                    'kotti_navigation.navigation_widget.slot': 'left',
+                    'kotti_navigation.navigation_widget.location': 'left',
                     'kotti_navigation.navigation_widget.include_root': 'true',
                     'kotti_navigation.navigation_widget.display_type': 'tree',
                     'kotti_navigation.navigation_widget.label': 'none',

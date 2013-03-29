@@ -1,0 +1,19 @@
+<ul class="breadcrumb"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="kotti_navigation"
+    tal:define="breadcrumbs [i for i in api.breadcrumbs]"
+    tal:condition="len(breadcrumbs) > 1">
+  <span tal:omit-tag="" i18n:translate="">${label}</span>
+  <tal:repeat tal:repeat="item breadcrumbs">
+    <li tal:define="first repeat.item.start; last repeat.item.end"
+        class="${last and 'active' or None}">
+
+      <a tal:omit-tag="last"
+         href="${api.url(item)}">
+        <span tal:condition="not first">${item.title}</span>
+      </a>
+
+      <span class="divider" tal:condition="not (first or last)">/</span>
+    </li>
+  </tal:repeat>
+</ul>

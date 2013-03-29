@@ -1,0 +1,29 @@
+<li tal:define="item context;
+                active item == request.context and 'active' or '';
+                hidden not item.in_navigation and 'hidden' or ''"
+    class="${active} ${hidden}">
+  <a href="${api.url(item)}"
+     title="${getattr(item, 'description', None)}">
+    ${item.title}
+  </a>
+  <tal:is_tree_open tal:condition="is_open_all or is_open(item, request)">
+    <tal:children tal:condition="children">
+      <tal:repeat tal:repeat="child children">
+        <ul class="${nav_class}">
+          <tal:replace 
+            tal:condition="nav_view == 'nav-recurse-tabs-stacked'"
+            tal:replace="api.render_view('nav-recurse-tabs-stacked', context=child)" />
+          <tal:replace 
+            tal:condition="nav_view == 'nav-recurse-tabs-stacked-open-all'"
+            tal:replace="api.render_view('nav-recurse-tabs-stacked-open-all', context=child)" />
+          <tal:replace 
+            tal:condition="nav_view == 'nav-recurse-pills-stacked'"
+            tal:replace="api.render_view('nav-recurse-pills-stacked', context=child)" />
+          <tal:replace 
+            tal:condition="nav_view == 'nav-recurse-pills-stacked-open-all'"
+            tal:replace="api.render_view('nav-recurse-pills-stacked-open-all', context=child)" />
+        </ul>
+      </tal:repeat>
+    </tal:children>
+  </tal:is_tree_open>
+</li>

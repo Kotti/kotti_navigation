@@ -1,0 +1,37 @@
+<div class="${use_container_class and 'container' or None}"
+     id="navigation-tree">
+  <ul class="${nav_class}">
+    <li tal:condition="show_menu and context.parent"
+        tal:replace="api.render_view('navigation-widget-menu', context=context)" /> 
+    <li tal:condition="show_menu
+                       and aspect == 'vertical'
+                       and items" class="divider"></li>
+    <li tal:condition="label and context.parent and items" class="nav-header">
+      ${label}
+    </li>
+    <li tal:condition="label and context.parent and items" class="divider">
+    </li>
+    <li tal:define="active root == request.context and 'active' or ''"
+        tal:condition="include_root"
+        class="${active}">
+      <a href="${api.url(root)}"
+         title="${getattr(root, 'description', None)}">
+        ${root.title}
+      </a>
+    </li>
+    <tal:items tal:repeat="item items">
+      <tal:replace 
+        tal:condition="nav_view == 'nav-recurse-tabs-stacked'"
+        tal:replace="api.render_view('nav-recurse-tabs-stacked', context=item)" />
+      <tal:replace 
+        tal:condition="nav_view == 'nav-recurse-tabs-stacked-open-all'"
+        tal:replace="api.render_view('nav-recurse-tabs-stacked-open-all', context=item)" />
+      <tal:replace 
+        tal:condition="nav_view == 'nav-recurse-pills-stacked'"
+        tal:replace="api.render_view('nav-recurse-pills-stacked', context=item)" />
+      <tal:replace 
+        tal:condition="nav_view == 'nav-recurse-pills-stacked-open-all'"
+        tal:replace="api.render_view('nav-recurse-pills-stacked-open-all', context=item)" />
+    </tal:items>
+  </ul>
+</div>

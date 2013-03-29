@@ -7,7 +7,7 @@ Setup and Login
   >>> from kotti import testing
   >>> tools = testing.setUpFunctional(
   ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure',
-  ...        'kotti_navigation.navigation_widget.slot': 'left',
+  ...        'kotti_navigation.navigation_widget.location': 'left',
   ...        'kotti_navigation.navigation_widget.include_root': 'true',
   ...        'kotti_navigation.navigation_widget.display_type': 'tree',
   ...        'kotti_navigation.navigation_widget.open_all': 'true',
