@@ -75,47 +75,45 @@ none, or omit them.
 Display Type
 ------------
 
-There are five "horizontal aspect" and four "vertical aspect" navigation
-display types available, with some restrictions on where you can use them:::
+There are five "horizontal aspect" and five "vertical aspect" navigation
+display types available, and a menu dropped down from a single button:::
 
-Display Type                 Aspect            Items Shown
----------------------------  ----------        --------------------
-hor_tabs                     horizontal        context children
-hor_pills                    horizontal        context children
-hor_tabs_with_dropdowns      horizontal        context children +1
-hor_pills_with_dropdowns     horizontal        context children +1
-breadcrumbs                  horizontal        path to context
-ver_tabs_stacked             vertical          context children
-ver_pills_stacked            vertical          context children
-ver_tabs_stacked_open_all    vertical          entire hierarchy
-ver_pills_stacked_open_all   vertical          entire hierarchy
-ver_list                     vertical          context children
-menu                         dropdown button   path to context +1
+    Display Type                 Aspect            Items Shown
+    ---------------------------  ----------        --------------------
+    hor_tabs                     horizontal        context children
+    hor_pills                    horizontal        context children
+    hor_tabs_with_dropdowns      horizontal        context children +1
+    hor_pills_with_dropdowns     horizontal        context children +1
+    breadcrumbs                  horizontal        path to context
+    ver_tabs_stacked             vertical          context children
+    ver_pills_stacked            vertical          context children
+    ver_tabs_stacked_open_all    vertical          entire hierarchy
+    ver_pills_stacked_open_all   vertical          entire hierarchy
+    ver_list                     vertical          context children
+    menu                         dropdown button   path to context +1
 
 The display type names in the table above are used to configure by location,
 for example:::
 
-    kotti_navigation.navigation_widget.top_display_type = nav_tabs
+    kotti_navigation.navigation_widget.top_display_type = hor_tabs
 
 Terminology
 -----------
 
 The names of Bootstrap styles are used directly for display types, because this
-is clearer than use of the terms "tree" and "list". Although the term tree is
-more straightforward usually, for Bootstrap it can be confusing to distinguish
-from the use of the term list, and the term list on its own is used several
-ways.
+is more explicit than use of the terms "tree" and "list". Although the term
+tree is straightforward usually, for Bootstrap it can be confusing.
 
 Any of the display types having "stacked" in the name are tree-like, and have a
 vertical aspect, consisting of items shown one under the other, indented to
-show the hierarchy: nav_tabs_stacked, nav_pills_stacked,
-nav_tabs_stacked_open_all, and nav_pills_stacked_open_all.
+show the hierarchy: ver_tabs_stacked, ver_pills_stacked,
+ver_tabs_stacked_open_all, and ver_pills_stacked_open_all.
 
 The ``open_all`` choices are useful if you plan to set up a popup menu via css
 or javascript, because all items in the site hierarchy are always included.
 
-nav_list is also tree-like, but this uses the specific nav-list CSS style of
-Bootstrap, vs. nav-tabs and nav-pills used for the "stacked" choices.
+ver_list is also vertical aspect, but this uses the specific nav-list CSS style
+of Bootstrap, vs. nav-tabs and nav-pills used for the "stacked" choices.
 
 All of the display types listed above as having a horizontal aspect consist of
 items shown one after another, from left to right, in a row-fluid style
@@ -129,7 +127,8 @@ here" information in breadcrumbs.
 
 The breadcrumbs display type is exactly the one used in default Kotti, showing
 items in the path (in the lineage) as links in a horizontal list, delimited by
-the "/" character, and ending in an item for the current context.
+the "/" character, and ending in an item for the current context. With this
+breadcrumbs display, however, you can control the label.
 
 Configuration for Display Types
 -------------------------------
@@ -149,7 +148,7 @@ restrictions on display type described above:::
     kotti_navigation.navigation_widget.left_exclude_content_types = (e.g., Image)
     kotti_navigation.navigation_widget.left_show_hidden_while_logged_in = true
 
-(Substitute another location name for "left" in these settings.)
+(Substitute any another location name for "left" in these settings.)
 
 If show_menu is True, a button which fires the menu dropdown will be shown as
 the first item in either a horizontal or vertical aspect display of items.
