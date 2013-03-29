@@ -38,11 +38,11 @@ They can be used in any combination.
 Here are the location choices in a layout diagram:::
 
     +------------------------------------------------------+
-    | "top nav" (the nav in toolbar; not a real slot)      |
+    | "top" (This is the top toolbar; not a real slot)     |
     |------------------------------------------------------|
     | editor_bar                                           |
     |+----------------------------------------------------+|
-    || breadcrumbs                                        ||
+    || breadcrumbs (This is Kotti's; Leave or override.)  ||
     |+-------------++---------------------++--------------+|
     || SLOT "left" || SLOT "abovecontent" || SLOT "right" ||
     ||             |+---------------------+|              ||
@@ -128,7 +128,9 @@ here" information in breadcrumbs.
 The breadcrumbs display type is exactly the one used in default Kotti, showing
 items in the path (in the lineage) as links in a horizontal list, delimited by
 the "/" character, and ending in an item for the current context. With this
-breadcrumbs display, however, you can control the label.
+breadcrumbs display, however, you can control the label. The default master
+template for Kotti has a breadcrumbs display at the top of the content area.
+Override this template to remove Kotti's breadcrumbs if desired.
 
 Configuration for Display Types
 -------------------------------
