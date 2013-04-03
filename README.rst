@@ -66,7 +66,7 @@ config .ini file:::
     kotti_navigation.navigation_widget.belowcontent = none
     kotti_navigation.navigation_widget.belowbodyend = none
 
-Or your could omit them altogether and they would default to none.
+Or you could omit them altogether and they would default to none.
 
 For a typical website that has a tree navigation display in the right slot,
 you would configure for only the right location, and leave the others set to

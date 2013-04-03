@@ -7,11 +7,9 @@ Setup and Login
   >>> from kotti import testing
   >>> tools = testing.setUpFunctional(
   ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure',
-  ...        'kotti_navigation.navigation_widget.location': 'left',
-  ...        'kotti_navigation.navigation_widget.include_root': 'true',
-  ...        'kotti_navigation.navigation_widget.display_type': 'tree',
-  ...        'kotti_navigation.navigation_widget.open_all': 'true',
-  ...        'kotti_navigation.navigation_widget.show_hidden_while_logged_in': 'true',
+  ...        'kotti_navigation.navigation_widget.left_display_type': 'ver_tabs_stacked_open_all',
+  ...        'kotti_navigation.navigation_widget.left_include_root': 'true',
+  ...        'kotti_navigation.navigation_widget.left_show_hidden_while_logged_in': 'true',
   ...       })
   >>> browser = tools['Browser']()
   >>> ctrl = browser.getControl

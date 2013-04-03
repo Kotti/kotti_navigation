@@ -6,22 +6,28 @@
      title="${getattr(item, 'description', None)}">
     ${item.title}
   </a>
-  <tal:is_tree_open tal:condition="is_open_all or is_open(item, request)">
+  <tal:is_tree_open tal:condition="tree_is_open_all or is_node_open(item, request)">
     <tal:children tal:condition="children">
       <tal:repeat tal:repeat="child children">
         <ul class="${nav_class}">
           <tal:replace 
-            tal:condition="nav_view == 'nav-recurse-tabs-stacked'"
-            tal:replace="api.render_view('nav-recurse-tabs-stacked', context=child)" />
+            tal:condition="location == 'top'"
+            tal:replace="api.render_view('nav-recurse-top', context=child)" />
           <tal:replace 
-            tal:condition="nav_view == 'nav-recurse-tabs-stacked-open-all'"
-            tal:replace="api.render_view('nav-recurse-tabs-stacked-open-all', context=child)" />
+            tal:condition="location == 'left'"
+            tal:replace="api.render_view('nav-recurse-left', context=child)" />
           <tal:replace 
-            tal:condition="nav_view == 'nav-recurse-pills-stacked'"
-            tal:replace="api.render_view('nav-recurse-pills-stacked', context=child)" />
+            tal:condition="location == 'right'"
+            tal:replace="api.render_view('nav-recurse-right', context=child)" />
           <tal:replace 
-            tal:condition="nav_view == 'nav-recurse-pills-stacked-open-all'"
-            tal:replace="api.render_view('nav-recurse-pills-stacked-open-all', context=child)" />
+            tal:condition="location == 'abovecontent'"
+            tal:replace="api.render_view('nav-recurse-abovecontent', context=child)" />
+          <tal:replace 
+            tal:condition="location == 'belowcontent'"
+            tal:replace="api.render_view('nav-recurse-belowcontent', context=child)" />
+          <tal:replace 
+            tal:condition="location == 'beforebodyend'"
+            tal:replace="api.render_view('nav-recurse-beforebodyend', context=child)" />
         </ul>
       </tal:repeat>
     </tal:children>

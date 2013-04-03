@@ -17,12 +17,12 @@
   <div class="container">
     <div class="${use_container_class and 'container' or None}"
          tal:condition="display_type in ['hor_tabs', 'hor_pills', 'hor_tabs_with_dropdowns', 'hor_pills_with_dropdowns']"
-         tal:replace="api.render_view('navigation-widget-items', context=context)"
+         tal:replace="api.render_view('navigation-widget-items-top', context=context)"
          id="navigation-list">
     </div>
     <div class="${use_container_class and 'container' or None}"
          tal:condition="display_type in ['ver_tabs_stacked', 'ver_pills_stacked', 'ver_tabs_stacked_open_all', 'ver_pills_stacked_open_all']"
-         tal:replace="api.render_view('navigation-widget-tree', context=context)"
+         tal:replace="api.render_view('navigation-widget-tree-top', context=context)"
          id="navigation-tree">
     </div>
     <ul class="breadcrumb"

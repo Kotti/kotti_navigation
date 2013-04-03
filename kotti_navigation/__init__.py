@@ -13,7 +13,7 @@ locations = ['top', 'left', 'right',
              'abovecontent', 'belowcontent', 'beforebodyend']
 
 property_endings_and_defaults = [('_display_type', 'none'),
-                                 ('_show_context_menu', 'false'),
+                                 ('_show_menu', 'false'),
                                  ('_label', ''),
                                  ('_include_root', 'true'),
                                  ('_show_hidden_while_logged_in', 'false'),
@@ -64,52 +64,25 @@ def kotti_configure(settings):
 
         display_type = nav_settings['{0}_display_type'.format(slot)]
 
-        if display_type != 'none':
-            if 'hor_' in display_type:
+        if display_type and display_type != 'none':
 
-                tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
-                dropdowns = 'true' if display_type.endswith('downs') else 'false'
+            if 'hor_' in display_type or display_type == 'ver_list':
 
-                assign_slot(
-                    'navigation-widget-items',
-                    slot,
-                    params=dict(location=slot,
-                                aspect='horizontal',
-                                nav_class='nav nav-{0}'.format(tabs_or_pills),
-                                dropdowns=dropdowns))
+                view_name = 'navigation-widget-items-{0}'.format(slot)
 
             elif 'ver_' in display_type:
 
-                tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
-                is_open = 'true' if display_type.endswith('open_all') else 'false'
-
-                assign_slot('navigation-widget-tree',
-                            slot,
-                            params=dict(location=slot,
-                                        tabs_or_pills=tabs_or_pills,
-                                        is_open=is_open))
-
-            elif display_type == 'ver_list':
-
-                dropdowns = 'true' if display_type.endswith('downs') else 'false'
-                assign_slot('navigation-widget-items',
-                            slot,
-                            params=dict(location=slot,
-                                        aspect='vertical',
-                                        nav_class='nav nav-list',
-                                        dropdowns=dropdowns))
+                view_name = 'navigation-widget-tree-{0}'.format(slot)
 
             elif display_type == 'breadcrumbs':
 
-                assign_slot('navigation-widget-breadcrumbs',
-                            slot,
-                            params=dict(location=slot))
+                view_name = 'navigation-widget-breadcrumbs-{0}'.format(slot)
 
             elif display_type == 'menu':
 
-                assign_slot('navigation-widget-menu',
-                            slot,
-                            params=dict(location=slot))
+                view_name = 'navigation-widget-menu-{0}'.format(slot)
+
+            assign_slot(view_name, slot)
 
     settings['pyramid.includes'] += ' kotti_navigation.include_navigation'
 

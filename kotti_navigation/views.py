@@ -11,79 +11,113 @@ from kotti.security import get_user
 from kotti_navigation import navigation_settings
 
 
-def get_children(context, request):
+def split_label_on_context(label):
+    """Splits a label string containing the word 'context', if present.
+    """
 
-    if len(request.POST.items()) == 0:
-        location = 'top'
+    context_spelling = ''
+
+    if 'context' in label:
+        context_spelling = 'context'
+    elif 'Context' in label:
+        context_spelling = 'Context'
+    elif 'CONTEXT' in label:
+        context_spelling = 'CONTEXT'
+
+    if context_spelling:
+        return label.split(context_spelling)
     else:
-        location = 'left'
-        for k,v in request.POST.items():
-            if k == 'location':
-                location = v
+        return ('', '')
+
+
+def parse_label(title, label):
+
+    if label:
+
+        if label == 'none':
+            label = ''
+        else:
+            label_lower = label.lower()
+
+            if label_lower == 'context':
+                label = title
+            elif 'context' in label_lower:
+                before_context, after_context = split_label_on_context(label)
+                label = before_context + title + after_context
+    else:
+        label = ''
+
+    return label
+
+
+def get_children(context, request, location):
+
+    user = get_user(request)
 
     settings = navigation_settings()
-    user = get_user(request)
+
     show_hidden = asbool(
             settings['{0}_show_hidden_while_logged_in'.format(location)])
-    in_cts = settings['{0}_include_content_types'.format(location)]
-    ex_cts = settings['{0}_exclude_content_types'.format(location)]
+    content_types_to_include = \
+            settings['{0}_include_content_types'.format(location)]
+    content_types_to_exclude = \
+            settings['{0}_exclude_content_types'.format(location)]
 
     if show_hidden and user:
-        if in_cts:
+        if content_types_to_include:
             children = [c for c in context.children_with_permission(request)
-                    if c.__class__ not in ex_cts and c.__class__ in in_cts]
+                    if c.__class__ not in content_types_to_exclude and c.__class__ in content_types_to_include]
         else:
             children = [c for c in context.children_with_permission(request)
-                    if c.__class__ not in ex_cts]
+                    if c.__class__ not in content_types_to_exclude]
     else:
-        if in_cts:
+        if content_types_to_include:
             children = [c for c in context.children_with_permission(request)
-                    if c.__class in in_cts \
-                            and c.in_navigation and c.__class__ not in ex_cts]
+                    if c.__class in content_types_to_include \
+                            and c.in_navigation and c.__class__ not in content_types_to_exclude]
         else:
             children = [c for c in context.children_with_permission(request)
-                    if c.in_navigation and c.__class__ not in ex_cts]
+                    if c.in_navigation and c.__class__ not in content_types_to_exclude]
 
     return children
 
 
-def get_lineage(context, request):
+def get_lineage(context, request, location):
 
-    if len(request.POST.items()) == 0:
-        location = 'top'
-    else:
-        location = 'left'
-        for k,v in request.POST.items():
-            if k == 'location':
-                location = v
+    user = get_user(request)
 
     settings = navigation_settings()
-    user = get_user(request)
+
     show_hidden = asbool(
             settings['{0}_show_hidden_while_logged_in'.format(location)])
-    in_cts = settings['{0}_include_content_types'.format(location)]
-    ex_cts = settings['{0}_exclude_content_types'.format(location)]
+    content_types_to_include = \
+            settings['{0}_include_content_types'.format(location)]
+    content_types_to_exclude = \
+            settings['{0}_exclude_content_types'.format(location)]
 
     if show_hidden and user:
-        if in_cts:
+        if content_types_to_include:
             items = [item for item in list(lineage(context))
-                 if item.__class__ not in ex_cts and item.__class in in_cts]
+                 if item.__class__ not in content_types_to_exclude
+                 and item.__class in content_types_to_include]
         else:
             items = [item for item in list(lineage(context))
-                 if item.__class__ not in ex_cts]
+                 if item.__class__ not in content_types_to_exclude]
     else:
-        if in_cts:
+        if content_types_to_include:
             items = [item for item in list(lineage(context))
-                 if item.in_navigation and item.__class__ not in ex_cts]
+                 if item.in_navigation
+                 and item.__class__ not in content_types_to_exclude]
         else:
             items = [item for item in list(lineage(context))
-                 if item.__class__ in in_cts \
-                     and item.in_navigation and item.__class__ not in ex_cts]
+                 if item.__class__ in content_types_to_include \
+                     and item.in_navigation
+                     and item.__class__ not in content_types_to_exclude]
 
     return items
 
 
-def is_open(item, request):
+def is_node_open(item, request):
     """ Check if the item (node in the "tree") should be opened.
     """
 
@@ -105,61 +139,62 @@ def is_open(item, request):
     return is_open
 
 
-def nav_stacked(context, request, tabs_or_pills, open):
+@view_config(name='nav-recurse-top',
+             renderer='kotti_navigation:templates/nav_recurse.pt')
+def nav_recurse_top(context, request):
 
-    return {'is_open_all': open,
-            'is_open': is_open,
+    return nav_stacked(context, request, 'top')
+
+
+@view_config(name='nav-recurse-left',
+             renderer='kotti_navigation:templates/nav_recurse.pt')
+def nav_recurse_left(context, request):
+
+    return nav_stacked(context, request, 'left')
+
+
+@view_config(name='nav-recurse-right',
+             renderer='kotti_navigation:templates/nav_recurse.pt')
+def nav_recurse_right(context, request):
+
+    return nav_stacked(context, request, 'right')
+
+
+@view_config(name='nav-recurse-abovecontent',
+             renderer='kotti_navigation:templates/nav_recurse.pt')
+def nav_recurse_abovecontent(context, request):
+
+    return nav_stacked(context, request, 'abovecontent')
+
+
+@view_config(name='nav-recurse-belowcontent',
+             renderer='kotti_navigation:templates/nav_recurse.pt')
+def nav_recurse_belowcontent(context, request):
+
+    return nav_stacked(context, request, 'belowcontent')
+
+
+@view_config(name='nav-recurse-beforebodyend',
+             renderer='kotti_navigation:templates/nav_recurse.pt')
+def nav_recurse_beforebodyend(context, request):
+
+    return nav_stacked(context, request, 'beforebodyend')
+
+
+def nav_stacked(context, request, location):
+
+    settings = navigation_settings()
+
+    display_type = settings['{0}_display_type'.format(location)]
+    tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
+    tree_is_open_all = True if display_type.endswith('open_all') else False
+
+    return {'location': location,
+            'tree_is_open_all': tree_is_open_all,
+            'is_node_open': is_node_open,
             'nav_class': 'nav nav-{0} {0}-stacked'.format(tabs_or_pills),
-            'nav_view': 'nav-{0}-stacked'.format(tabs_or_pills),
-            'children': get_children(context, request),
+            'children': get_children(context, request, location),
             }
-
-
-@view_config(name='nav-recurse-tabs-stacked',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_tabs_stacked(context, request):
-
-    return nav_stacked(context, request, 'tabs', False)
-
-
-@view_config(name='nav-recurse-tabs-stacked-open-all',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_tabs_stacked_open_all(context, request):
-
-    return nav_stacked(context, request, 'tabs', True)
-
-
-@view_config(name='nav-recurse-pills-stacked',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_pills_stacked(context, request):
-
-    return nav_stacked(context, request, 'pills', False)
-
-
-@view_config(name='nav-recurse-pills-stacked-open-all',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_pills_stacked_open_all(context, request):
-
-    return nav_stacked(context, request, 'pills', True)
-
-
-def split_label_on_context(label):
-    """Splits a label string containing the word 'context', if present.
-    """
-
-    context_spelling = ''
-
-    if 'context' in label:
-        context_spelling = 'context'
-    elif 'Context' in label:
-        context_spelling = 'Context'
-    elif 'CONTEXT' in label:
-        context_spelling = 'CONTEXT'
-
-    if context_spelling:
-        return label.split(context_spelling)
-    else:
-        return ('', '')
 
 
 @view_config(name='navigation-top',
@@ -181,101 +216,6 @@ def navigation_top(context, request, name=''):
             'show_top_nav': asbool(settings['show_top_nav'])}
 
 
-@view_config(name='navigation-widget',
-             renderer='kotti_navigation:templates/nav_widget.pt')
-def navigation_widget(context, request, name=''):
-
-    return {'display_type': navigation_settings()['display_type']}
-
-
-def navigation_widget_tree(context, request, name='', location=''):
-
-    resource_group.need()
-
-    root = get_root()
-
-    settings = navigation_settings()
-
-    include_root_key = '{0}_include_root'.format(location)
-    if include_root_key in settings:
-        include_root = asbool(settings[include_root_key])
-    else:
-        include_root = False
-
-    show_menu_key = '{0}_show_menu'.format(location)
-    if show_menu_key in settings:
-        show_menu = asbool(settings[show_menu_key])
-    else:
-        show_menu = False
-
-    label_key = '{0}_label'.format(location)
-    if label_key in settings:
-        label = settings[label_key]
-    else:
-        label = ''
-
-    # When the nav display is set to the beforebodyend slot, the class for the
-    # containing div needs to be 'container' so it fits to the middle span12
-    # area for content. When nav is in any of the other slots, no class is
-    # needed, because the inherited CSS works to fit nav to the slot.
-    use_container_class = True if location == 'beforebodyend' else False
-
-    items = get_children(context, request)
-
-    if label:
-        label_lower = label.lower()
-
-        if label_lower == 'context':
-            label = context.title
-        elif ('context' in label
-              or 'Context' in label
-              or 'CONTEXT' in label):
-            before_context, after_context = split_label_on_context(label)
-            label = before_context + context.title + after_context
-
-    return {'root': root,
-            'include_root': include_root,
-            'show_menu': show_menu,
-            'aspect': 'vertical',
-            'use_container_class': use_container_class,
-            'items': items,
-            'label': label}
-
-
-@view_config(name='navigation-widget-tree',
-             renderer='kotti_navigation:templates/nav_widget_tree.pt')
-def navigation_widget_stacked(context, request, name=''):
-
-    if len(request.POST.items()) == 0:
-
-        location = 'top'
-        display_type = navigation_settings()['top_display_type']
-        tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
-        is_open = True if display_type.endswith('open_all') else False
-
-    else:
-
-        for k,v in request.POST.items():
-            if k == 'location':
-                location = v
-            elif k == 'tabs_or_pills':
-                tabs_or_pills = v
-            elif k == 'is_open':
-                is_open = True if v == 'true' else False
-
-    tree_properties = navigation_widget_tree(
-            context, request, name='', location=location)
-
-    tree_properties['location'] = location
-    tree_properties['nav_class'] = \
-            'nav nav-{0} nav-stacked'.format(tabs_or_pills)
-    tree_properties['is_open'] = is_open
-    tree_properties['nav_view'] = \
-            'nav-recurse-{0}-stacked'.format(tabs_or_pills)
-
-    return tree_properties
-
-
 @view_config(name='navigation-widget-top',
              renderer='kotti_navigation:templates/nav_widget_top.pt')
 def navigation_widget_top(context, request, name=''):
@@ -291,10 +231,12 @@ def navigation_widget_top(context, request, name=''):
         include_root = asbool(settings['top_include_root'])
     else:
         include_root = False
+
     if 'top_label' in settings:
-        label = settings['top_label']
+        label = parse_label(context.title, settings['top_label'])
     else:
         label = ''
+
     if 'top_show_menu' in settings:
         show_menu = asbool(settings['top_show_menu'])
     else:
@@ -304,23 +246,18 @@ def navigation_widget_top(context, request, name=''):
 
     if 'hor_' in display_type:
 
-        tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
-        dropdowns = True if display_type.endswith('downs') else False
-
-        top_properties = navigation_widget_items(context, request, name,
-            location='top', nav_class='nav nav-{0}'.format(tabs_or_pills),
-            aspect='horizontal', dropdowns=dropdowns)
+        tree_properties = navigation_widget_items(
+                context, request, name='', location='top')
 
     elif display_type == 'ver_list':
 
-        top_properties = navigation_widget_items(context, request, name,
-            location='top', nav_class='nav nav-list',
-            aspect='vertical', dropdowns=dropdowns)
+        tree_properties = navigation_widget_items(
+                context, request, name='', location='top')
 
     elif 'ver_' in display_type:
 
         tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
-        is_open = True if display_type.endswith('open_all') else False
+        tree_is_open_all = True if display_type.endswith('open_all') else False
 
         tree_properties = navigation_widget_tree(
                 context, request, name='', location='top')
@@ -328,9 +265,8 @@ def navigation_widget_top(context, request, name=''):
         tree_properties['location'] = 'top'
         tree_properties['nav_class'] = \
             'nav nav-{0} nav-stacked'.format(tabs_or_pills)
-        tree_properties['is_open'] = is_open
-        tree_properties['nav_view'] = \
-            'nav-recurse-{0}-stacked'.format(tabs_or_pills)
+        tree_properties['tree_is_open_all'] = tree_is_open_all
+        tree_properties['is_node_open'] = is_node_open
 
         top_properties = tree_properties
 
@@ -344,6 +280,7 @@ def navigation_widget_top(context, request, name=''):
         top_properties = navigation_widget_menu(
                     context, request, name, location='top')
 
+
     top_properties['display_type'] = display_type
     top_properties['include_root'] = include_root
     top_properties['label'] = label
@@ -352,46 +289,85 @@ def navigation_widget_top(context, request, name=''):
     return top_properties
 
 
-@view_config(name='navigation-widget-items',
-             renderer='kotti_navigation:templates/nav_widget_items.pt')
-def navigation_widget_items_for_slot(context, request, name=''):
+@view_config(name='navigation-widget-tree-top',
+             renderer='kotti_navigation:templates/nav_widget_tree.pt')
+def navigation_widget_tree_top(context, request, name=''):
 
-    if len(request.POST.items()) == 0:
-
-        location = 'top'
-        display_type = navigation_settings()['top_display_type']
-        aspect = \
-            'vertical' if display_type.startswith('ver_') else 'horizontal'
-        tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
-        nav_class = 'nav nav-{0}'.format(tabs_or_pills)
-        dropdowns = True if display_type.endswith('downs') else False
-
-    else:
-
-        for k,v in request.POST.items():
-            if k == 'nav_class':
-                nav_class = v
-            elif k == 'location':
-                location = v
-            elif k == 'aspect':
-                aspect = v
-            elif k == 'dropdowns':
-                dropdowns = True if v == 'true' else False
-
-    return navigation_widget_items(context, request, name,
-            location, nav_class, aspect, dropdowns)
+    return navigation_widget_tree(
+            context, request, name='', location='top')
 
 
-def navigation_widget_items(context, request, name='',
-        location='', nav_class='', aspect='', dropdowns=False):
+@view_config(name='navigation-widget-tree-left',
+             renderer='kotti_navigation:templates/nav_widget_tree.pt')
+def navigation_widget_tree_left(context, request, name=''):
+
+    return navigation_widget_tree(
+            context, request, name='', location='left')
+
+
+@view_config(name='navigation-widget-tree-right',
+             renderer='kotti_navigation:templates/nav_widget_tree.pt')
+def navigation_widget_tree_right(context, request, name=''):
+
+    return navigation_widget_tree(
+            context, request, name='', location='right')
+
+
+@view_config(name='navigation-widget-tree-abovecontent',
+             renderer='kotti_navigation:templates/nav_widget_tree.pt')
+def navigation_widget_tree_abovecontent(context, request, name=''):
+
+    return navigation_widget_tree(
+            context, request, name='', location='abovecontent')
+
+
+@view_config(name='navigation-widget-tree-belowcontent',
+             renderer='kotti_navigation:templates/nav_widget_tree.pt')
+def navigation_widget_tree_belowcontent(context, request, name=''):
+
+    return navigation_widget_tree(
+            context, request, name='', location='belowcontent')
+
+
+@view_config(name='navigation-widget-tree-beforebodyend',
+             renderer='kotti_navigation:templates/nav_widget_tree.pt')
+def navigation_widget_tree_beforebodyend(context, request, name=''):
+
+    return navigation_widget_tree(
+            context, request, name='', location='beforebodyend')
+
+
+def navigation_widget_tree(context, request, name='', location=''):
 
     resource_group.need()
 
+    root = get_root()
+
     settings = navigation_settings()
 
-    show_menu = asbool(settings['{0}_show_menu'.format(location)])
+    display_type_key = '{0}_display_type'.format(location)
+    if display_type_key in settings:
+        display_type = settings[display_type_key]
+    else:
+        display_type = 'ver_tabs_stacked'
 
-    label = settings['{0}_label'.format(location)]
+    include_root_key = '{0}_include_root'.format(location)
+    if include_root_key in settings:
+        include_root = asbool(settings[include_root_key])
+    else:
+        include_root = False
+
+    show_menu_key = '{0}_show_menu'.format(location)
+    if show_menu_key in settings:
+        show_menu = asbool(settings[show_menu_key])
+    else:
+        show_menu = False
+
+    label_key = '{0}_label'.format(location)
+    if label_key in settings:
+        label = parse_label(context.title, settings[label_key])
+    else:
+        label = ''
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -399,27 +375,118 @@ def navigation_widget_items(context, request, name='',
     # needed, because the inherited CSS works to fit nav to the slot.
     use_container_class = True if location == 'beforebodyend' else False
 
-    items = get_children(context, request)
+    items = get_children(context, request, location)
 
-    if label:
-        label_lower = label.lower()
+    tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
+    nav_class = 'nav nav-{0} nav-stacked'.format(tabs_or_pills)
+    tree_is_open_all = True if display_type.endswith('open_all') else False
 
-        if label_lower == 'context':
-            label = context.title
-        elif ('context' in label
-              or 'Context' in label
-              or 'CONTEXT' in label):
-            before_context, after_context = split_label_on_context(label)
-            label = before_context + context.title + after_context
+    return {'location': location,
+            'root': root,
+            'display_type': display_type,
+            'include_root': include_root,
+            'show_menu': show_menu,
+            'nav_class': nav_class,
+            'tree_is_open_all': tree_is_open_all,
+            'is_node_open': is_node_open,
+            'use_container_class': use_container_class,
+            'items': items,
+            'label': label}
+
+
+@view_config(name='navigation-widget-items-top',
+             renderer='kotti_navigation:templates/nav_widget_items.pt')
+def navigation_widget_items_top(context, request, name=''):
+
+    return navigation_widget_items(
+            context, request, name, location='top')
+
+
+@view_config(name='navigation-widget-items-left',
+             renderer='kotti_navigation:templates/nav_widget_items.pt')
+def navigation_widget_items_left(context, request, name=''):
+
+    return navigation_widget_items(
+            context, request, name, location='left')
+
+
+@view_config(name='navigation-widget-items-right',
+             renderer='kotti_navigation:templates/nav_widget_items.pt')
+def navigation_widget_items_right(context, request, name=''):
+
+    return navigation_widget_items(
+            context, request, name, location='right')
+
+
+@view_config(name='navigation-widget-items-abovecontent',
+             renderer='kotti_navigation:templates/nav_widget_items.pt')
+def navigation_widget_items_abovecontent(context, request, name=''):
+
+    return navigation_widget_items(
+            context, request, name, location='abovecontent')
+
+
+@view_config(name='navigation-widget-items-belowcontent',
+             renderer='kotti_navigation:templates/nav_widget_items.pt')
+def navigation_widget_items_belowcontent(context, request, name=''):
+
+    return navigation_widget_items(
+            context, request, name, location='belowcontent')
+
+
+@view_config(name='navigation-widget-items-beforebodyend',
+             renderer='kotti_navigation:templates/nav_widget_items.pt')
+def navigation_widget_items_beforebodyend(context, request, name=''):
+
+    return navigation_widget_items(
+            context, request, name, location='beforebodyend')
+
+
+def navigation_widget_items(context, request, name='', location=''):
+
+    resource_group.need()
+
+    settings = navigation_settings()
+
+    display_type = settings['{0}_display_type'.format(location)]
+
+    show_menu = asbool(settings['{0}_show_menu'.format(location)])
+
+    label = parse_label(context.title, settings['{0}_label'.format(location)])
+
+    if 'hor_' in display_type:
+
+        tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
+        nav_class = 'nav nav-{0}'.format(tabs_or_pills)
+        dropdowns = True if display_type.endswith('downs') else False
+
+    elif display_type == 'ver_list':
+
+        nav_class = 'nav nav-list'
+        dropdowns = True if display_type.endswith('downs') else False
+
+    else:
+
+        nav_class = 'nav nav-tabs'
+        dropdowns = False
+
+
+    # When the nav display is set to the beforebodyend slot, the class for the
+    # containing div needs to be 'container' so it fits to the middle span12
+    # area for content. When nav is in any of the other slots, no class is
+    # needed, because the inherited CSS works to fit nav to the slot.
+    use_container_class = True if location == 'beforebodyend' else False
+
+    items = get_children(context, request, location)
 
     allowed_children = []
     for item in items:
-        ac = get_children(item, request)
+        ac = get_children(item, request, location)
         allowed_children.append(ac if ac else [])
 
     return {'location': location,
             'items': items,
-            'aspect': aspect,
+            'display_type': display_type,
             'nav_class': nav_class,
             'use_container_class': use_container_class,
             'show_menu': show_menu,
@@ -429,19 +496,52 @@ def navigation_widget_items(context, request, name='',
         }
 
 
-@view_config(name='navigation-widget-breadcrumbs',
+@view_config(name='navigation-widget-breadcrumbs-top',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-def navigation_widget_breadcrumbs_slot(context, request, name=''):
+def navigation_widget_breadcrumbs_top(context, request, name=''):
 
-    if len(request.POST.items()) == 0:
-        location = 'top'
-    else:
-        location = 'left'
-        for k,v in request.POST.items():
-            if k == 'location':
-                location = v
+    return navigation_widget_breadcrumbs(
+            context, request, name, location='top')
 
-    return navigation_widget_breadcrumbs(context, request, name, location)
+
+@view_config(name='navigation-widget-breadcrumbs-left',
+             renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
+def navigation_widget_breadcrumbs_left(context, request, name=''):
+
+    return navigation_widget_breadcrumbs(
+            context, request, name, location='left')
+
+
+@view_config(name='navigation-widget-breadcrumbs-right',
+             renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
+def navigation_widget_breadcrumbs_right(context, request, name=''):
+
+    return navigation_widget_breadcrumbs(
+            context, request, name, location='right')
+
+
+@view_config(name='navigation-widget-breadcrumbs-abovecontent',
+             renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
+def navigation_widget_breadcrumbs_abovecontent(context, request, name=''):
+
+    return navigation_widget_breadcrumbs(
+            context, request, name, location='abovecontent')
+
+
+@view_config(name='navigation-widget-breadcrumbs-belowcontent',
+             renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
+def navigation_widget_breadcrumbs_belowcontent(context, request, name=''):
+
+    return navigation_widget_breadcrumbs(
+            context, request, name, location='belowcontent')
+
+
+@view_config(name='navigation-widget-breadcrumbs-beforebodyend',
+             renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
+def navigation_widget_breadcrumbs_beforebodyend(context, request, name=''):
+
+    return navigation_widget_breadcrumbs(
+            context, request, name, location='beforebodyend')
 
 
 def navigation_widget_breadcrumbs(context, request, name='', location=''):
@@ -453,7 +553,8 @@ def navigation_widget_breadcrumbs(context, request, name='', location=''):
     settings = navigation_settings()
 
     include_root = asbool(settings['{0}_include_root'.format(location)])
-    label = settings['{0}_label'.format(location)]
+
+    label = parse_label(context.title, settings['{0}_label'.format(location)])
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -461,7 +562,7 @@ def navigation_widget_breadcrumbs(context, request, name='', location=''):
     # needed, because the inherited CSS works to fit nav to the slot.
     use_container_class = True if location == 'beforebodyend' else False
 
-    lineage_items = get_lineage(context, request)
+    lineage_items = get_lineage(context, request, location)
     if not include_root:
         lineage_items.remove(root)
 
@@ -473,19 +574,52 @@ def navigation_widget_breadcrumbs(context, request, name='', location=''):
             'lineage_items': lineage_items}
 
 
-@view_config(name='navigation-widget-menu',
+@view_config(name='navigation-widget-menu-top',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
-def navigation_widget_menu_slot(context, request, name=''):
+def navigation_widget_menu_top(context, request, name=''):
 
-    if len(request.POST.items()) == 0:
-        location = 'top'
-    else:
-        location = 'left'
-        for k,v in request.POST.items():
-            if k == 'location':
-                location = v
+    return navigation_widget_menu(
+            context, request, name, location='top')
 
-    return navigation_widget_menu(context, request, name, location)
+
+@view_config(name='navigation-widget-menu-left',
+             renderer='kotti_navigation:templates/nav_widget_menu.pt')
+def navigation_widget_menu_left(context, request, name=''):
+
+    return navigation_widget_menu(
+            context, request, name, location='left')
+
+
+@view_config(name='navigation-widget-menu-right',
+             renderer='kotti_navigation:templates/nav_widget_menu.pt')
+def navigation_widget_menu_right(context, request, name=''):
+
+    return navigation_widget_menu(
+            context, request, name, location='right')
+
+
+@view_config(name='navigation-widget-menu-abovecontent',
+             renderer='kotti_navigation:templates/nav_widget_menu.pt')
+def navigation_widget_menu_abovecontent(context, request, name=''):
+
+    return navigation_widget_menu(
+            context, request, name, location='abovecontent')
+
+
+@view_config(name='navigation-widget-menu-belowcontent',
+             renderer='kotti_navigation:templates/nav_widget_menu.pt')
+def navigation_widget_menu_belowcontent(context, request, name=''):
+
+    return navigation_widget_menu(
+            context, request, name, location='belowcontent')
+
+
+@view_config(name='navigation-widget-menu-beforebodyend',
+             renderer='kotti_navigation:templates/nav_widget_menu.pt')
+def navigation_widget_menu_beforebodyend(context, request, name=''):
+
+    return navigation_widget_menu(
+            context, request, name, location='beforebodyend')
 
 
 def navigation_widget_menu(context, request, name='', location=''):
@@ -504,13 +638,13 @@ def navigation_widget_menu(context, request, name='', location=''):
     # needed, because the inherited CSS works to fit nav to the slot.
     use_container_class = True if location == 'beforebodyend' else False
 
-    items = get_children(context, request)
+    items = get_children(context, request, location)
 
-    top_level_items = get_children(root, request)
+    top_level_items = get_children(root, request, location)
 
     # The lineage function of pyramid is used to make a breadcrumbs-style
     # display for the context menu.
-    lineage_items = get_lineage(context, request)
+    lineage_items = get_lineage(context, request, location)
     if not include_root:
         lineage_items.remove(root)
 
