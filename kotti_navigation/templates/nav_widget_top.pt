@@ -7,7 +7,7 @@
       <div tal:replace="api.render_template('kotti:templates/view/search.pt')" />
       <div class="${use_container_class and 'container' or None}"
            tal:condition="display_type == 'menu'"
-           tal:replace="api.render_view('navigation-widget-menu', context=context)"
+           tal:replace="api.render_view('navigation-widget-menu-top', context=context)"
            id="navigation-menu">
       </div>
     </div>

@@ -13,7 +13,7 @@ from kotti_navigation import navigation_settings
 
 ###########################################
 #
-#          Utility Functions
+#           Utility Functions
 #
 
 def split_label_on_context(label):
@@ -49,6 +49,7 @@ def parse_label(title, label):
             elif 'context' in label_lower:
                 before_context, after_context = split_label_on_context(label)
                 label = before_context + title + after_context
+
     else:
         label = ''
 
@@ -57,9 +58,9 @@ def parse_label(title, label):
 
 def get_children(context, request, location):
 
-    user = get_user(request)
+    # [TODO] Move these function calls out to caller.
 
-    print dir(user)
+    user = get_user(request)
 
     settings = navigation_settings()
 
@@ -93,6 +94,8 @@ def get_children(context, request, location):
 
 
 def get_lineage(context, request, location):
+
+    # [TODO] Move these function calls out to caller.
 
     user = get_user(request)
 
@@ -217,7 +220,6 @@ def nav_recurse(context, request, location):
             }
 
 
-#-----------------------------------------------------------------------------
 #
 #    Views for display type "tree", continued:
 #
