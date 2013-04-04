@@ -82,7 +82,7 @@ def get_children(context, request, location):
     else:
         if content_types_to_include:
             children = [c for c in context.children_with_permission(request)
-                    if c.__class in content_types_to_include \
+                    if c.__class in content_types_to_include
                             and c.in_navigation
                             and c.__class__ not in content_types_to_exclude]
         else:
@@ -123,7 +123,7 @@ def get_lineage(context, request, location):
                  and item.__class__ not in content_types_to_exclude]
         else:
             items = [item for item in list(lineage(context))
-                 if item.__class__ in content_types_to_include \
+                 if item.__class__ in content_types_to_include
                      and item.in_navigation
                      and item.__class__ not in content_types_to_exclude]
 
@@ -220,7 +220,6 @@ def nav_recurse(context, request, location):
             }
 
 
-#
 #    Views for display type "tree", continued:
 #
 #      - These are the main views for the tree display type, each using the
@@ -228,7 +227,6 @@ def nav_recurse(context, request, location):
 #
 #      - The nav recurse views above are called from nav_widget_tree.pt,
 #        used in each of these.
-#
 
 @view_config(name='navigation-widget-tree-top',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
@@ -345,6 +343,7 @@ def navigation_widget_tree(context, request, name='', location=''):
 #      - They each use the general navigation_widget_items() view function.
 #
 
+
 @view_config(name='navigation-widget-items-top',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
 def navigation_widget_items_top(context, request, name=''):
@@ -421,7 +420,6 @@ def navigation_widget_items(context, request, name='', location=''):
         nav_class = 'nav nav-tabs'
         dropdowns = False
 
-
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
     # area for content. When nav is in any of the other slots, no class is
@@ -454,6 +452,7 @@ def navigation_widget_items(context, request, name='', location=''):
 #
 #      - They each use the general navigation_widget_breadcrumbs() function.
 #
+
 
 @view_config(name='navigation-widget-breadcrumbs-top',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
@@ -543,6 +542,7 @@ def navigation_widget_breadcrumbs(context, request, name='', location=''):
 #        location, or it can be combined with a label and/or another display
 #        type, e.g. a horizontal items nav display.
 #
+
 
 @view_config(name='navigation-widget-menu-top',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
@@ -731,13 +731,9 @@ def navigation_widget_top(context, request, name=''):
         top_properties = navigation_widget_menu(
                     context, request, name, location='top')
 
-
     top_properties['display_type'] = display_type
     top_properties['include_root'] = include_root
     top_properties['label'] = label
     top_properties['show_menu'] = show_menu
 
     return top_properties
-
-
-
