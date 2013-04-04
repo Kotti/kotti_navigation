@@ -11,6 +11,11 @@ from kotti.security import get_user
 from kotti_navigation import navigation_settings
 
 
+###########################################
+#
+#          Utility Functions
+#
+
 def split_label_on_context(label):
     """Splits a label string containing the word 'context', if present.
     """
@@ -54,6 +59,8 @@ def get_children(context, request, location):
 
     user = get_user(request)
 
+    print dir(user)
+
     settings = navigation_settings()
 
     show_hidden = asbool(
@@ -66,7 +73,8 @@ def get_children(context, request, location):
     if show_hidden and user:
         if content_types_to_include:
             children = [c for c in context.children_with_permission(request)
-                    if c.__class__ not in content_types_to_exclude and c.__class__ in content_types_to_include]
+                    if c.__class__ not in content_types_to_exclude
+                    and c.__class__ in content_types_to_include]
         else:
             children = [c for c in context.children_with_permission(request)
                     if c.__class__ not in content_types_to_exclude]
@@ -74,10 +82,12 @@ def get_children(context, request, location):
         if content_types_to_include:
             children = [c for c in context.children_with_permission(request)
                     if c.__class in content_types_to_include \
-                            and c.in_navigation and c.__class__ not in content_types_to_exclude]
+                            and c.in_navigation
+                            and c.__class__ not in content_types_to_exclude]
         else:
             children = [c for c in context.children_with_permission(request)
-                    if c.in_navigation and c.__class__ not in content_types_to_exclude]
+                    if c.in_navigation
+                    and c.__class__ not in content_types_to_exclude]
 
     return children
 
@@ -139,49 +149,59 @@ def is_node_open(item, request):
     return is_open
 
 
+##############################################################################
+#
+#    Views for the "tree" display type.
+#
+#      - This first section has the nav-recurse-top, -left, etc. views that
+#        are called from the main nav_widget_tree.pt template.
+#
+#      - Each of these views uses the general nav_recurse() function.
+#
+
 @view_config(name='nav-recurse-top',
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse_top(context, request):
 
-    return nav_stacked(context, request, 'top')
+    return nav_recurse(context, request, 'top')
 
 
 @view_config(name='nav-recurse-left',
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse_left(context, request):
 
-    return nav_stacked(context, request, 'left')
+    return nav_recurse(context, request, 'left')
 
 
 @view_config(name='nav-recurse-right',
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse_right(context, request):
 
-    return nav_stacked(context, request, 'right')
+    return nav_recurse(context, request, 'right')
 
 
 @view_config(name='nav-recurse-abovecontent',
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse_abovecontent(context, request):
 
-    return nav_stacked(context, request, 'abovecontent')
+    return nav_recurse(context, request, 'abovecontent')
 
 
 @view_config(name='nav-recurse-belowcontent',
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse_belowcontent(context, request):
 
-    return nav_stacked(context, request, 'belowcontent')
+    return nav_recurse(context, request, 'belowcontent')
 
 
 @view_config(name='nav-recurse-beforebodyend',
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse_beforebodyend(context, request):
 
-    return nav_stacked(context, request, 'beforebodyend')
+    return nav_recurse(context, request, 'beforebodyend')
 
 
-def nav_stacked(context, request, location):
+def nav_recurse(context, request, location):
 
     settings = navigation_settings()
 
@@ -197,97 +217,16 @@ def nav_stacked(context, request, location):
             }
 
 
-@view_config(name='navigation-top',
-             renderer='kotti_navigation:templates/nav_top.pt')
-def navigation_top(context, request, name=''):
-
-    settings = navigation_settings()
-
-    location = settings['top_location']
-
-    # When the nav display is set to the beforebodyend slot, the class for the
-    # containing div needs to be 'container' so it fits to the middle span12
-    # area for content. When nav is in any of the other slots, no class is
-    # needed, because the inherited CSS works to fit nav to the slot.
-    use_container_class = True if location == 'beforebodyend' else False
-
-    return {'location': location,
-            'use_container_class': use_container_class,
-            'show_top_nav': asbool(settings['show_top_nav'])}
-
-
-@view_config(name='navigation-widget-top',
-             renderer='kotti_navigation:templates/nav_widget_top.pt')
-def navigation_widget_top(context, request, name=''):
-
-    settings = navigation_settings()
-
-    if 'top_display_type' in settings:
-        display_type = settings['top_display_type']
-    else:
-        return {}
-
-    if 'top_include_root' in settings:
-        include_root = asbool(settings['top_include_root'])
-    else:
-        include_root = False
-
-    if 'top_label' in settings:
-        label = parse_label(context.title, settings['top_label'])
-    else:
-        label = ''
-
-    if 'top_show_menu' in settings:
-        show_menu = asbool(settings['top_show_menu'])
-    else:
-        show_menu = False
-
-    top_properties = {}
-
-    if 'hor_' in display_type:
-
-        tree_properties = navigation_widget_items(
-                context, request, name='', location='top')
-
-    elif display_type == 'ver_list':
-
-        tree_properties = navigation_widget_items(
-                context, request, name='', location='top')
-
-    elif 'ver_' in display_type:
-
-        tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
-        tree_is_open_all = True if display_type.endswith('open_all') else False
-
-        tree_properties = navigation_widget_tree(
-                context, request, name='', location='top')
-
-        tree_properties['location'] = 'top'
-        tree_properties['nav_class'] = \
-            'nav nav-{0} nav-stacked'.format(tabs_or_pills)
-        tree_properties['tree_is_open_all'] = tree_is_open_all
-        tree_properties['is_node_open'] = is_node_open
-
-        top_properties = tree_properties
-
-    elif display_type == 'breadcrumbs':
-
-        top_properties = navigation_widget_breadcrumbs(
-                    context, request, name, location='top')
-
-    elif display_type == 'menu':
-
-        top_properties = navigation_widget_menu(
-                    context, request, name, location='top')
-
-
-    top_properties['display_type'] = display_type
-    top_properties['include_root'] = include_root
-    top_properties['label'] = label
-    top_properties['show_menu'] = show_menu
-
-    return top_properties
-
+#-----------------------------------------------------------------------------
+#
+#    Views for display type "tree", continued:
+#
+#      - These are the main views for the tree display type, each using the
+#        general navigation_widget_tree() view function.
+#
+#      - The nav recurse views above are called from nav_widget_tree.pt,
+#        used in each of these.
+#
 
 @view_config(name='navigation-widget-tree-top',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
@@ -393,6 +332,16 @@ def navigation_widget_tree(context, request, name='', location=''):
             'items': items,
             'label': label}
 
+##############################################################################
+#
+#    Views for the "items" display type, a term used to avoid confusion
+#    that comes with calling this a "list" -- there are horizontal lists and
+#    there are vertical aspect lists. We distinguish here that the following
+#    views are not recursive and tree-like. They offer a limited list of
+#    items for the current context.
+#
+#      - They each use the general navigation_widget_items() view function.
+#
 
 @view_config(name='navigation-widget-items-top',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
@@ -495,6 +444,14 @@ def navigation_widget_items(context, request, name='', location=''):
             'show_item_dropdowns': dropdowns,
         }
 
+##############################################################################
+#
+#    Views for the "breadcrumbs" display type, which is essentially the
+#    same as Kotti's default breadcrumbs display, except that here you have
+#    control of the associated label.
+#
+#      - They each use the general navigation_widget_breadcrumbs() function.
+#
 
 @view_config(name='navigation-widget-breadcrumbs-top',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
@@ -573,6 +530,17 @@ def navigation_widget_breadcrumbs(context, request, name='', location=''):
             'label': label,
             'lineage_items': lineage_items}
 
+##############################################################################
+#
+#    Views for the "menu" display type, which consists of a single button
+#    with a dropdown for presenting a full site context menu.
+#
+#      - They each use the general navigation_widget_menu() view function.
+#
+#      - The menu can be used standalone as the only nav display in a given
+#        location, or it can be combined with a label and/or another display
+#        type, e.g. a horizontal items nav display.
+#
 
 @view_config(name='navigation-widget-menu-top',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
@@ -662,3 +630,112 @@ def navigation_widget_menu(context, request, name='', location=''):
             'include_root': include_root,
             'top_level_items': top_level_items,
             'lineage_items': lineage_items}
+
+##############################################################################
+#
+#    Views for the special-case top location, which must be handled with
+#    care, because Kotti's own default nav display must be overridden, and
+#    because the top location is not a simple "slot." It consists of a navbar
+#    at the very top, and a div location underneath that, as used here. The
+#    menu (represented by a single button) is appropriate for use within the
+#    navbar, but not so for the other display types, which are put in the div
+#    underneath.
+#
+#    The driver for these views is the overridden nav.pt, which you will find
+#    in /kotti-overrides/templates/view/nav.pt.
+#
+
+
+@view_config(name='navigation-top',
+             renderer='kotti_navigation:templates/nav_top.pt')
+def navigation_top(context, request, name=''):
+
+    settings = navigation_settings()
+
+    location = settings['top_location']
+
+    # When the nav display is set to the beforebodyend slot, the class for the
+    # containing div needs to be 'container' so it fits to the middle span12
+    # area for content. When nav is in any of the other slots, no class is
+    # needed, because the inherited CSS works to fit nav to the slot.
+    use_container_class = True if location == 'beforebodyend' else False
+
+    return {'location': location,
+            'use_container_class': use_container_class,
+            'show_top_nav': asbool(settings['show_top_nav'])}
+
+
+@view_config(name='navigation-widget-top',
+             renderer='kotti_navigation:templates/nav_widget_top.pt')
+def navigation_widget_top(context, request, name=''):
+
+    settings = navigation_settings()
+
+    if 'top_display_type' in settings:
+        display_type = settings['top_display_type']
+    else:
+        return {}
+
+    if 'top_include_root' in settings:
+        include_root = asbool(settings['top_include_root'])
+    else:
+        include_root = False
+
+    if 'top_label' in settings:
+        label = parse_label(context.title, settings['top_label'])
+    else:
+        label = ''
+
+    if 'top_show_menu' in settings:
+        show_menu = asbool(settings['top_show_menu'])
+    else:
+        show_menu = False
+
+    top_properties = {}
+
+    if 'hor_' in display_type:
+
+        tree_properties = navigation_widget_items(
+                context, request, name='', location='top')
+
+    elif display_type == 'ver_list':
+
+        tree_properties = navigation_widget_items(
+                context, request, name='', location='top')
+
+    elif 'ver_' in display_type:
+
+        tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
+        tree_is_open_all = True if display_type.endswith('open_all') else False
+
+        tree_properties = navigation_widget_tree(
+                context, request, name='', location='top')
+
+        tree_properties['location'] = 'top'
+        tree_properties['nav_class'] = \
+            'nav nav-{0} nav-stacked'.format(tabs_or_pills)
+        tree_properties['tree_is_open_all'] = tree_is_open_all
+        tree_properties['is_node_open'] = is_node_open
+
+        top_properties = tree_properties
+
+    elif display_type == 'breadcrumbs':
+
+        top_properties = navigation_widget_breadcrumbs(
+                    context, request, name, location='top')
+
+    elif display_type == 'menu':
+
+        top_properties = navigation_widget_menu(
+                    context, request, name, location='top')
+
+
+    top_properties['display_type'] = display_type
+    top_properties['include_root'] = include_root
+    top_properties['label'] = label
+    top_properties['show_menu'] = show_menu
+
+    return top_properties
+
+
+
