@@ -1,18 +1,9 @@
 <div class="${use_container_class and 'container' or None}"
      id="navigation-tree">
   <ul class="${nav_class}">
-    <li tal:condition="show_menu and context.parent and location == 'top'"
-        tal:replace="api.render_view('navigation-widget-menu-top', context=context)" /> 
-    <li tal:condition="show_menu and context.parent and location == 'left'"
-        tal:replace="api.render_view('navigation-widget-menu-left', context=context)" /> 
-    <li tal:condition="show_menu and context.parent and location == 'right'"
-        tal:replace="api.render_view('navigation-widget-menu-right', context=context)" /> 
-    <li tal:condition="show_menu and context.parent and location == 'abovecontent'"
-        tal:replace="api.render_view('navigation-widget-menu-abovecontent', context=context)" /> 
-    <li tal:condition="show_menu and context.parent and location == 'belowcontent'"
-        tal:replace="api.render_view('navigation-widget-menu-belowcontent', context=context)" /> 
-    <li tal:condition="show_menu and context.parent and location == 'beforebodyend'"
-        tal:replace="api.render_view('navigation-widget-menu-beforebodyend', context=context)" /> 
+    <li tal:condition="show_menu and context.parent"
+        tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
+        tal:replace="api.render_view(view_name, context=context)" /> 
     <li tal:condition="show_menu
                        and context.parent
                        and display_type.startswith('ver_')
@@ -32,23 +23,8 @@
     </li>
     <tal:items tal:repeat="item items">
       <tal:replace 
-        tal:condition="location == 'top'"
-        tal:replace="api.render_view('nav-recurse-top', context=item)" />
-      <tal:replace 
-        tal:condition="location == 'left'"
-        tal:replace="api.render_view('nav-recurse-left', context=item)" />
-      <tal:replace 
-        tal:condition="location == 'right'"
-        tal:replace="api.render_view('nav-recurse-right', context=item)" />
-      <tal:replace 
-        tal:condition="location == 'abovecontent'"
-        tal:replace="api.render_view('nav-recurse-abovecontent', context=item)" />
-      <tal:replace 
-        tal:condition="location == 'belowcontent'"
-        tal:replace="api.render_view('nav-recurse-belowcontent', context=item)" />
-      <tal:replace 
-        tal:condition="location == 'beforebodyend'"
-        tal:replace="api.render_view('nav-recurse-beforebodyend', context=item)" />
+        tal:define="view_name 'nav-recurse-{0}'.format(location)"
+        tal:replace="api.render_view(view_name, context=item)" />
     </tal:items>
   </ul>
 </div>
