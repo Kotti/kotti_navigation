@@ -209,3 +209,58 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
             u'kotti.resources.Content'
         html = render_view(root, request, name='navigation-widget-tree-left')
         assert u'content_1' not in html
+
+
+class TestNavigationWidgetAllLocations(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.top_display_type': 'hor_pills_with_dropdowns',
+                    'kotti_navigation.navigation_widget.top_show_menu': 'true',
+                    'kotti_navigation.navigation_widget.top_label': 'context:',
+                    'kotti_navigation.navigation_widget.top_include_root': 'false',
+                    'kotti_navigation.navigation_widget.top_show_hidden_while_logged_in': 'true',
+                    'kotti_navigation.navigation_widget.top_exclude_content_types': 'kotti.resources.Image',
+                    'kotti_navigation.navigation_widget.abovecontent_display_type': 'ver_tabs_stacked_open_all',
+                    'kotti_navigation.navigation_widget.abovecontent_show_menu': 'false',
+                    'kotti_navigation.navigation_widget.abovecontent_include_root': 'true',
+                    'kotti_navigation.navigation_widget.abovecontent_show_hidden_while_logged_in': 'true',
+                    'kotti_navigation.navigation_widget.abovecontent_exclude_content_types': 'kotti.resources.Image',
+                    'kotti_navigation.navigation_widget.left_display_type': 'hor_tabs_with_dropdowns',
+                    'kotti_navigation.navigation_widget.left_show_menu': 'true',
+                    'kotti_navigation.navigation_widget.left_include_root': 'true',
+                    'kotti_navigation.navigation_widget.left_show_hidden_while_logged_in': 'true',
+                    'kotti_navigation.navigation_widget.left_exclude_content_types': 'kotti.resources.Image',
+                    'kotti_navigation.navigation_widget.right_display_type': 'ver_pills_stacked',
+                    'kotti_navigation.navigation_widget.right_show_menu': 'false',
+                    'kotti_navigation.navigation_widget.right_label': 'Images:',
+                    'kotti_navigation.navigation_widget.right_include_root': 'false',
+                    'kotti_navigation.navigation_widget.right_show_hidden_while_logged_in': 'true',
+                    'kotti_navigation.navigation_widget.right_include_content_types': 'kotti.resources.Image',
+                    'kotti_navigation.navigation_widget.belowcontent_display_type': 'menu',
+                    'kotti_navigation.navigation_widget.belowcontent_show_menu': 'true',
+                    'kotti_navigation.navigation_widget.belowcontent_include_root': 'true',
+                    'kotti_navigation.navigation_widget.belowcontent_show_hidden_while_logged_in': 'true',
+                    'kotti_navigation.navigation_widget.belowcontent_exclude_content_types': 'kotti.resources.Image',
+                    'kotti_navigation.navigation_widget.beforebodyend_display_type': 'breadcrumbs',
+                    'kotti_navigation.navigation_widget.beforebodyend_label': 'You are here:',
+                    'kotti_navigation.navigation_widget.beforebodyend_show_hidden_while_logged_in': 'true',
+                    'kotti_navigation.navigation_widget.beforebodyend_exclude_content_types': 'kotti.resources.Image'}
+        super(TestNavigationWidgetAllLocations, self).setUp(**settings)
+
+    def test_label(self):
+        request = NavigationDummyRequest()
+        root = get_root()
+
+        root[u'content_1'] = Content(title=u'Content_1')
+        root[u'content_1'][u'sub_1'] = Content(title=u'Sub_1')
+        root[u'content_2'] = Content(title=u'Content_2')
+        root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
+
+        result = navigation_widget_items(root, request, location='left')
+
+        se = get_current_registry().settings
+        se['kotti_navigation.navigation_widget.left_label'] =\
+            u'Items in [context] are:'
+        result = navigation_widget_items(root[u'content_1'], request, location='left')
+        assert result['label'] == 'Items in [Content_1] are:'
