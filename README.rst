@@ -18,8 +18,11 @@ add-on, to kotti.configurators of your .ini config file:::
         ...
         kotti_navigation.kotti_configure
 
-The default configuration, if you do nothing else, will put a tree navigation
-display in the left slot location.
+The default configuration will add no navigation display, and it will remove
+the default Kotti navbar in the top position, so you MUST configure for at
+least one location, unless you are using kotti_navigation, ironically, to
+purposefully turn off Kotti's default top navigation (Kotti's default
+breadcrumbs would be the only navigation available).
 
 Location
 --------
@@ -35,74 +38,80 @@ Six locations are available for the navigation widget:::
 
 They can be used in any combination.
 
-Here are the location choices in a layout diagram:::
+Here are the location choices (in all-caps) in a layout diagram:::
 
     +------------------------------------------------------+
-    | "top" (This is the top toolbar; not a real slot)     |
+    | "TOP" (This is the top toolbar; not a real slot.     |
+    |        kotti_navigation changes it to be only the    |
+    |        brand at left and search at right. Some       |
+    |        nav display choices are available for the     |
+    |        space between branch and search, and below    |
+    |        the div for the top nav bar, in a separate    |
+    |        div.                                          | 
     |------------------------------------------------------|
     | editor_bar                                           |
     |+----------------------------------------------------+|
-    || breadcrumbs (This is Kotti's; Leave or override.)  ||
+    || breadcrumbs (This is Kotti's default breadcrumbs.  ||
+    ||              Depending on how you configure        ||
+    ||              kotti_navigation, you may want to     ||
+    ||              turn this off by overriding           ||
+    ||              master.pt in kotti_overrides).        ||
     |+-------------++---------------------++--------------+|
-    || SLOT "left" || SLOT "abovecontent" || SLOT "right" ||
+    || slot "LEFT" || slot "ABOVECONTENT" || slot "RIGHT" ||
     ||             |+---------------------+|              ||
     ||             || Content             ||              ||
     ||             |+---------------------+|              ||
-    ||             || SLOT "belowcontent" ||              ||
+    ||             || slot "BELOWCONTENT" ||              ||
     |+-------------++---------------------++--------------+|
-    | footer                                               |
+    | footer (Kotti's; not removed).                       |
     |------------------------------------------------------|
-    | SLOT "beforebodyend"                                 |
+    | slot "BEFOREBODYEND"                                 |
     +------------------------------------------------------+
 
-Each of these locations can be separately configured to have a navigation
-display. For a site with NO navigation, you could add these lines to your
-config .ini file:::
+Each of these locations can be separately configured to have one or more
+navigation displays. The display type and other options for a given location
+are configured with lines like these:::
 
-    kotti_navigation.navigation_widget.top = none
-    kotti_navigation.navigation_widget.left = none
-    kotti_navigation.navigation_widget.right = none
-    kotti_navigation.navigation_widget.abovecontent = none
-    kotti_navigation.navigation_widget.belowcontent = none
-    kotti_navigation.navigation_widget.belowbodyend = none
+    kotti_navigation.navigation_widget.left_display_type = ver_pills_stacked
+    kotti_navigation.navigation_widget.left_label = none
+    kotti_navigation.navigation_widget.left_include_root = true
+    ...
+    ... additional params
+    ...
 
-Or you could omit them altogether and they would default to none.
+For a site with NO navigation, you could omit all such configuration, except
+for the kotti_navigation.kotti_configure line in kotti.configurators.
 
-For a typical website that has a tree navigation display in the right slot,
-you would configure for only the right location, and leave the others set to
-none, or omit them.
+For a typical website that has a tree navigation display in the left slot,
+you would configure for only the left location, and omit the others.
 
-Display Type
-------------
+Display Types
+-------------
 
 There are five "horizontal aspect" and five "vertical aspect" navigation
 display types available, and a menu dropped down from a single button:::
 
-    Display Type                 Aspect            Items Shown
-    ---------------------------  ----------        --------------------
-    hor_tabs                     horizontal        context children
-    hor_pills                    horizontal        context children
-    hor_tabs_with_dropdowns      horizontal        context children +1
-    hor_pills_with_dropdowns     horizontal        context children +1
-    breadcrumbs                  horizontal        path to context
-    ver_tabs_stacked             vertical          context children
-    ver_pills_stacked            vertical          context children
-    ver_tabs_stacked_open_all    vertical          entire hierarchy
-    ver_pills_stacked_open_all   vertical          entire hierarchy
-    ver_list                     vertical          context children
-    menu                         dropdown button   path to context +1
-
-The display type names in the table above are used to configure by location,
-for example:::
-
-    kotti_navigation.navigation_widget.top_display_type = hor_tabs
+    Display Type                 Aspect                Items Shown
+    ---------------------------  ----------            --------------------
+    hor_tabs                     horizontal (items)    context children
+    hor_pills                    horizontal (items)    context children
+    hor_tabs_with_dropdowns      horizontal (items)    context children +1
+    hor_pills_with_dropdowns     horizontal (items)    context children +1
+    breadcrumbs                  horizontal (items)    path to context
+    ver_tabs_stacked             vertical (tree-like)  context children
+    ver_pills_stacked            vertical (tree-like)  context children
+    ver_tabs_stacked_open_all    vertical (tree-like)  entire hierarchy
+    ver_pills_stacked_open_all   vertical (tree-like)  entire hierarchy
+    ver_list                     vertical (items)      context children
+    menu                         button with caret     path to context +1
+                                 firing dropdown menu
 
 Terminology
 -----------
 
 The names of Bootstrap styles are used directly for display types, because this
-is more explicit than use of the terms "tree" and "list". Although the term
-tree is straightforward usually, for Bootstrap it can be confusing.
+is more explicit than use of the terms "tree" and "list", which for Bootstrap
+can be confusing.
 
 Any of the display types having "stacked" in the name are tree-like, and have a
 vertical aspect, consisting of items shown one under the other, indented to
@@ -113,7 +122,7 @@ The ``open_all`` choices are useful if you plan to set up a popup menu via css
 or javascript, because all items in the site hierarchy are always included.
 
 ver_list is also vertical aspect, but this uses the specific nav-list CSS style
-of Bootstrap, vs. nav-tabs and nav-pills used for the "stacked" choices.
+of Bootstrap, vs. ver-tabs and ver-pills used for the "stacked" choices.
 
 All of the display types listed above as having a horizontal aspect consist of
 items shown one after another, from left to right, in a row-fluid style
@@ -121,16 +130,16 @@ display.
 
 The menu consists of a button with a caret, that fires a dropdown display
 useful on its own as a complete navigation solution. It can be used in
-combination with some of the other display types, however, as a "context" menu,
-providing a general site and indented context list, analagous to the "You are
-here" information in breadcrumbs. 
+combination with some of the other display types as a "context" menu, providing
+a general site and indented context list, analagous to the "You are here"
+information in breadcrumbs. 
 
 The breadcrumbs display type is exactly the one used in default Kotti, showing
 items in the path (in the lineage) as links in a horizontal list, delimited by
 the "/" character, and ending in an item for the current context. With this
-breadcrumbs display, however, you can control the label. The default master
-template for Kotti has a breadcrumbs display at the top of the content area.
-Override this template to remove Kotti's breadcrumbs if desired.
+breadcrumbs display, however, you can control the label. If you configure
+kotti_navigation's breadcrumbs display, you may wish to override the one in
+default Kotti, by adding a modified master.pt to the kotti-overrides directory.
 
 Configuration for Display Types
 -------------------------------
@@ -177,29 +186,20 @@ Entries for include_content_types have the full path:::
 exclude_content_types is a list of the content type names that are to be
 ignored in the navigation displays. It is the opposite of the ``include``
 setting described above. It is commonly used to exclude the Image content type
-from a normal nav display, to avoid the "clutter," with listing images, which
+from a normal nav display, to avoid the "clutter" with listing images, which
 can be numerous. 
 
 show_hidden_while_logged_in offers an admin user the choice of viewing hidden
 items (for which in_navigation is toggled OFF), for use in simpifying editing.
 
-These settings need not be included for every location in your configuration.
-You can explicitly set the following when a location is not used:::
-
-    kotti_navigation.navigation_widget.left_display_type = none
-
-Or, you can simply omit all entries for a given location. You can even turn off
-or omit all locations for a no-navigation site, where you perhaps build a
-navigation system in the html links of documents or custom content types.
-
 Kotti's Default Top Nav
 -----------------------
 
 In a default Kotti website, there is a bare-bones display of top-level content
-items in what is labeled above as the "top nav" position (the top nav bar, that
-has the brand on the left and a search input on the right). This would be
-redundant and perhaps confusing if used in combination with kotti_navigation,
-so it is overridden completely, by replacing the nav.pt template.  Find
+items in what is labeled above as the "TOP" position (the top nav bar, that has
+the brand on the left and a search input on the right). This would be redundant
+and perhaps confusing if used in combination with kotti_navigation, so it is
+overridden completely, by replacing the nav.pt template.  Find
 kotti_navigation's version in:::
 
     kotti_navigation/kotti-overrides/templates/view/nav.pt
