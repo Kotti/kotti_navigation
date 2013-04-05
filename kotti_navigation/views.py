@@ -17,22 +17,17 @@ from kotti_navigation import navigation_settings
 #
 
 def split_label_on_context(label):
-    """Splits a label string containing the word 'context', if present.
+    """Splits a label string containing the word 'context', if present,
+    regardless of spelling, e.g. 'Context', 'CONTEXT'...
     """
 
-    context_spelling = ''
+    label_lower = label.lower()
 
-    if 'context' in label:
-        context_spelling = 'context'
-    elif 'Context' in label:
-        context_spelling = 'Context'
-    elif 'CONTEXT' in label:
-        context_spelling = 'CONTEXT'
+    if 'context' in label_lower:
+        start = label_lower.index('context')
+        return (label[0:start], label[start + len('context'):])
 
-    if context_spelling:
-        return label.split(context_spelling)
-    else:
-        return ('', '')
+    return ('', '')
 
 
 def parse_label(title, label):
