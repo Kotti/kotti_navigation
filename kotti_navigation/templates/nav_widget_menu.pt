@@ -7,7 +7,7 @@
             tal:define="target '&lt;&lt; ' + context.parent.title if context.parent.parent else '&lt;&lt; Home'">
           ${target}
         </a>
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
+        <button id="menu-caret" class="btn dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
