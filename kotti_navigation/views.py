@@ -20,20 +20,21 @@ def location_from_path(path):
 
     view_name = path[path.rfind('/'):]
 
+    location = None
     if 'top' in view_name:
-        return 'top'
+        location = 'top'
     elif 'left' in view_name:
-        return 'left'
+        location = 'left'
     elif 'right' in view_name:
-        return 'right'
+        location = 'right'
     elif 'abovecontent' in view_name:
-        return 'abovecontent'
+        location = 'abovecontent'
     elif 'belowcontent' in view_name:
-        return 'belowcontent'
+        location = 'belowcontent'
     elif 'beforebodyend' in view_name:
-        return 'beforebodyend'
-    else:
-        return None
+        location = 'beforebodyend'
+
+    return location
 
 def parse_label(title, label):
 
@@ -153,12 +154,7 @@ def is_node_open(item, request):
 
 ##############################################################################
 #
-#    Views for the "tree" display type.
-#
-#      - This first section has the nav-recurse-top, -left, etc. views that
-#        are called from the main nav_widget_tree.pt template.
-#
-#      - Each of these views uses the general nav_recurse() function.
+#    Recursive view for the "tree" display type.
 #
 
 @view_config(name='nav-recurse',
@@ -189,7 +185,7 @@ def nav_recurse(context, request):
 #      - These are the main views for the tree display type, each using the
 #        general navigation_widget_tree() view function.
 #
-#      - The nav recurse views above are called from nav_widget_tree.pt,
+#      - The nav recurse view above is called from nav_widget_tree.pt,
 #        used in each of these.
 
 @view_config(name='navigation-widget-tree-top',
@@ -206,13 +202,13 @@ def nav_recurse(context, request):
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
 def navigation_widget_tree(context, request, name=''):
 
+    # Assume top location, unless name or request.path are available.
+    location = 'top'
+
     if name:
-        print 'getting location from name, tree'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
-    else:
-        location = 'top'
 
     resource_group.need()
 
@@ -220,29 +216,28 @@ def navigation_widget_tree(context, request, name=''):
 
     settings = navigation_settings()
 
+    # Set defaults:
+    display_type = 'ver_tabs_stacked'
+    include_root = False
+    show_menu = False
+    label = ''
+
     display_type_key = '{0}_display_type'.format(location)
+
     if display_type_key in settings:
         display_type = settings[display_type_key]
-    else:
-        display_type = 'ver_tabs_stacked'
 
     include_root_key = '{0}_include_root'.format(location)
     if include_root_key in settings:
         include_root = asbool(settings[include_root_key])
-    else:
-        include_root = False
 
     show_menu_key = '{0}_show_menu'.format(location)
     if show_menu_key in settings:
         show_menu = asbool(settings[show_menu_key])
-    else:
-        show_menu = False
 
     label_key = '{0}_label'.format(location)
     if label_key in settings:
         label = parse_label(context.title, settings[label_key])
-    else:
-        label = ''
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -294,13 +289,13 @@ def navigation_widget_tree(context, request, name=''):
              renderer='kotti_navigation:templates/nav_widget_items.pt')
 def navigation_widget_items(context, request, name=''):
 
+    # Assume top location, unless name or request.path are available.
+    location = 'top'
+
     if name:
-        print 'getting location from name, items'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
-    else:
-        location = 'top'
 
     resource_group.need()
 
@@ -312,6 +307,9 @@ def navigation_widget_items(context, request, name=''):
 
     label = parse_label(context.title, settings['{0}_label'.format(location)])
 
+    nav_class = 'nav nav-tabs'
+    dropdowns = False
+
     if 'hor_' in display_type:
 
         tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
@@ -322,11 +320,6 @@ def navigation_widget_items(context, request, name=''):
 
         nav_class = 'nav nav-list'
         dropdowns = True if display_type.endswith('downs') else False
-
-    else:
-
-        nav_class = 'nav nav-tabs'
-        dropdowns = False
 
     # When the nav display is set to the beforebodyend slot, the class for the
     # containing div needs to be 'container' so it fits to the middle span12
@@ -376,13 +369,13 @@ def navigation_widget_items(context, request, name=''):
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
 def navigation_widget_breadcrumbs(context, request, name=''):
 
+    # Assume top location, unless name or request.path are available.
+    location = 'top'
+
     if name:
-        print 'getting location from name, breadcrumbs'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
-    else:
-        location = 'top'
 
     resource_group.need()
 
@@ -438,13 +431,13 @@ def navigation_widget_breadcrumbs(context, request, name=''):
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
 def navigation_widget_menu(context, request, name=''):
 
+    # Assume top location, unless name or request.path are available.
+    location = 'top'
+
     if name:
-        print 'getting location from name, menu'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
-    else:
-        location = 'top'
 
     resource_group.need()
 
@@ -506,25 +499,20 @@ def navigation_widget_top(context, request, name=''):
 
     settings = navigation_settings()
 
-    if 'top_display_type' in settings:
-        display_type = settings['top_display_type']
-    else:
-        return {}
+    display_type = settings['top_display_type']
+
+    include_root = False
+    label = ''
+    show_menu = False
 
     if 'top_include_root' in settings:
         include_root = asbool(settings['top_include_root'])
-    else:
-        include_root = False
 
     if 'top_label' in settings:
         label = parse_label(context.title, settings['top_label'])
-    else:
-        label = ''
 
     if 'top_show_menu' in settings:
         show_menu = asbool(settings['top_show_menu'])
-    else:
-        show_menu = False
 
     top_properties = {}
 

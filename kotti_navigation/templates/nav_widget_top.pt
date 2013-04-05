@@ -17,7 +17,7 @@
 <div class="content">
   <div class="container">
     <div class="${use_container_class and 'container' or None}"
-         tal:condition="display_type in ['hor_tabs', 'hor_pills', 'hor_tabs_with_dropdowns', 'hor_pills_with_dropdowns']"
+         tal:condition="display_type in ['ver_list', 'hor_tabs', 'hor_pills', 'hor_tabs_with_dropdowns', 'hor_pills_with_dropdowns']"
          tal:replace="api.render_view('navigation-widget-items-top', context=context)"
          id="navigation-list">
     </div>

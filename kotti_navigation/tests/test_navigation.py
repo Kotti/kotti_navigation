@@ -323,3 +323,133 @@ class TestNavigationWidgetAllLocations(FunctionalTestBase):
             u'Items in [context] are:'
         result = navigation_widget_items(root[u'content_1'], request)
         assert result['label'] == 'Items in [Content_1] are:'
+
+class TestNavigationWidgetAsTreeInTop(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.top_display_type': 'ver_tabs_stacked',
+                    'kotti_navigation.navigation_widget.top_include_root': 'true',
+                    'kotti_navigation.navigation_widget.top_label': 'none'}
+        super(TestNavigationWidgetAsTreeInTop, self).setUp(**settings)
+
+    def test_render_widget(self):
+        root = get_root()
+        html = render_view(root, NavigationDummyRequest(path='/some-navigation-widget-top'),
+                           name='navigation-widget-tree-top')
+        assert '<ul class="nav nav-tabs nav-stacked">' in html
+
+class TestNavigationWidgetAsMenuInTop(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.top_display_type': 'menu',
+                    'kotti_navigation.navigation_widget.top_include_root': 'true',
+                    'kotti_navigation.navigation_widget.top_include_content_types': 'kotti.resources.Content',
+                    'kotti_navigation.navigation_widget.top_label': 'none'}
+        super(TestNavigationWidgetAsMenuInTop, self).setUp(**settings)
+
+    def test_render_widget(self):
+        request = NavigationDummyRequest(path='/some-navigation-widget-top')
+        root = get_root()
+        root[u'content_1'] = Content(title=u'Content_1')
+        request.context = root[u'content_1']
+        html = render_view(root[u'content_1'], request,
+                           name='navigation-widget-menu-top')
+        assert '<ul class="nav nav-list">' in html
+
+class TestNavigationWidgetAsTreeInRight(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.right_display_type': 'ver_tabs_stacked_open_all',
+                    'kotti_navigation.navigation_widget.right_include_root': 'true',
+                    'kotti_navigation.navigation_widget.right_include_content_types': 'kotti.resources.Content',
+                    'kotti_navigation.navigation_widget.right_label': 'Only Content Shows Here'}
+        super(TestNavigationWidgetAsTreeInRight, self).setUp(**settings)
+
+    def test_render_widget(self):
+        request = NavigationDummyRequest(path='/some-navigation-widget-right')
+        root = get_root()
+        root[u'content_1'] = Content(title=u'Content_1')
+        request.context = root[u'content_1']
+        html = render_view(root[u'content_1'], request,
+                           name='navigation-widget-tree-right')
+        assert '<ul class="nav nav-tabs nav-stacked">' in html
+
+class TestNavigationWidgetAsTreeInAbovecontent(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.abovecontent_display_type': 'ver_tabs_stacked_open_all',
+                    'kotti_navigation.navigation_widget.abovecontent_include_root': 'true',
+                    'kotti_navigation.navigation_widget.abovecontent_include_content_types': 'kotti.resources.Content',
+                    'kotti_navigation.navigation_widget.abovecontent_label': 'Only Content Shows Here'}
+        super(TestNavigationWidgetAsTreeInAbovecontent, self).setUp(**settings)
+
+    def test_render_widget(self):
+        request = NavigationDummyRequest(path='/some-navigation-widget-abovecontent')
+        root = get_root()
+        root[u'content_1'] = Content(title=u'Content_1')
+        request.context = root[u'content_1']
+        html = render_view(root[u'content_1'], request,
+                           name='navigation-widget-tree-abovecontent')
+        assert '<ul class="nav nav-tabs nav-stacked">' in html
+
+class TestNavigationWidgetAsTreeInBelowcontent(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.belowcontent_display_type': 'ver_tabs_stacked_open_all',
+                    'kotti_navigation.navigation_widget.belowcontent_include_root': 'true',
+                    'kotti_navigation.navigation_widget.belowcontent_include_content_types': 'kotti.resources.Content',
+                    'kotti_navigation.navigation_widget.belowcontent_label': 'Only Content Shows Here'}
+        super(TestNavigationWidgetAsTreeInBelowcontent, self).setUp(**settings)
+
+    def test_render_widget(self):
+        request = NavigationDummyRequest(path='/some-navigation-widget-belowcontent')
+        root = get_root()
+        root[u'content_1'] = Content(title=u'Content_1')
+        request.context = root[u'content_1']
+        html = render_view(root[u'content_1'], request,
+                           name='navigation-widget-tree-belowcontent')
+        assert '<ul class="nav nav-tabs nav-stacked">' in html
+
+class TestNavigationWidgetAsTreeInBeforebodyend(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.beforebodyend_display_type': 'ver_tabs_stacked_open_all',
+                    'kotti_navigation.navigation_widget.beforebodyend_include_root': 'true',
+                    'kotti_navigation.navigation_widget.beforebodyend_include_content_types': 'kotti.resources.Content',
+                    'kotti_navigation.navigation_widget.beforebodyend_label': 'Only Content Shows Here'}
+        super(TestNavigationWidgetAsTreeInBeforebodyend, self).setUp(**settings)
+
+    def test_render_widget(self):
+        request = NavigationDummyRequest(path='/some-navigation-widget-beforebodyend')
+        root = get_root()
+        root[u'content_1'] = Content(title=u'Content_1')
+        request.context = root[u'content_1']
+        html = render_view(root[u'content_1'], request,
+                           name='navigation-widget-tree-beforebodyend')
+        assert '<ul class="nav nav-tabs nav-stacked">' in html
+
+class TestNavigationWidgetAsBreadcrumbsInBeforebodyend(FunctionalTestBase):
+
+    def setUp(self, **kwargs):
+        settings = {'kotti.configurators': 'kotti_navigation.kotti_configure',
+                    'kotti_navigation.navigation_widget.beforebodyend_display_type': 'breadcrumbs',
+                    'kotti_navigation.navigation_widget.beforebodyend_include_root': 'true',
+                    'kotti_navigation.navigation_widget.beforebodyend_label': 'You are here:'}
+        super(TestNavigationWidgetAsBreadcrumbsInBeforebodyend, self).setUp(**settings)
+
+    def test_render_widget(self):
+        request = NavigationDummyRequest(path='/some-navigation-widget-beforebodyend')
+        root = get_root()
+        root[u'content_1'] = Content(title=u'Content_1')
+        root[u'content_1'][u'sub_1'] = Content(title=u'Sub_1')
+        request.context = root[u'content_1'][u'sub_1']
+        html = render_view(root[u'content_1'][u'sub_1'], request,
+                           name='navigation-widget-breadcrumbs-beforebodyend')
+        assert 'You are here:' in html
+
