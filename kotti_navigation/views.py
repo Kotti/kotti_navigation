@@ -16,39 +16,21 @@ from kotti_navigation import navigation_settings
 #           Utility Functions
 #
 
-def split_label_on_context(label):
-    """Splits a label string containing the word 'context', if present,
-    regardless of spelling, e.g. 'Context', 'CONTEXT'...
-    """
-
-    label_lower = label.lower()
-
-    if 'context' in label_lower:
-        start = label_lower.index('context')
-        return (label[0:start], label[start + len('context'):])
-
-    return ('', '')
-
-
 def parse_label(title, label):
 
-    if label:
-
-        if label == 'none':
-            label = ''
-        else:
-            label_lower = label.lower()
-
-            if label_lower == 'context':
-                label = title
-            elif 'context' in label_lower:
-                before_context, after_context = split_label_on_context(label)
-                label = before_context + title + after_context
-
+    if not label or label == 'none':
+        return ''
     else:
-        label = ''
+        label_lower = label.lower()
 
-    return label
+        if label_lower == 'context':
+            return title
+        elif 'context' in label_lower:
+            # Replace context placeholder string with title:
+            start = label_lower.index('context')
+            return label[0:start] + title + label[start + 7:]
+        else:
+            return label
 
 
 def get_children(context, request, location):

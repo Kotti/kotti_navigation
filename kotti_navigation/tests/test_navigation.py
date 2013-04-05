@@ -78,6 +78,11 @@ class TestNavigationWidgetAsHorPills(FunctionalTestBase):
         result = navigation_widget_items(root[u'content_1'], request, location='left')
         assert result['label'] == 'Items in [Content_1] are:'
 
+        se['kotti_navigation.navigation_widget.left_label'] =\
+            u'Items are:'
+        result = navigation_widget_items(root[u'content_1'], request, location='left')
+        assert result['label'] == 'Items are:'
+
 
 class TestNavigationWidgetAsTree(FunctionalTestBase):
 
