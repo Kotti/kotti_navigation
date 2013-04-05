@@ -165,7 +165,10 @@ def is_node_open(item, request):
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse(context, request):
 
-    location = location_from_path(request.path)
+    if 'navigation-widget' in request.path:
+        location = location_from_path(request.path)
+    else:
+        location = 'top'
 
     settings = navigation_settings()
 
@@ -204,6 +207,7 @@ def nav_recurse(context, request):
 def navigation_widget_tree(context, request, name=''):
 
     if name:
+        print 'getting location from name, tree'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
@@ -291,6 +295,7 @@ def navigation_widget_tree(context, request, name=''):
 def navigation_widget_items(context, request, name=''):
 
     if name:
+        print 'getting location from name, items'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
@@ -372,6 +377,7 @@ def navigation_widget_items(context, request, name=''):
 def navigation_widget_breadcrumbs(context, request, name=''):
 
     if name:
+        print 'getting location from name, breadcrumbs'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
@@ -433,6 +439,7 @@ def navigation_widget_breadcrumbs(context, request, name=''):
 def navigation_widget_menu(context, request, name=''):
 
     if name:
+        print 'getting location from name, menu'
         location = name[name.rfind('-') + 1:]
     elif 'navigation-widget' in request.path:
         location = location_from_path(request.path)
