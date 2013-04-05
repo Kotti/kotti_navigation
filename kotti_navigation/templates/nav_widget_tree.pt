@@ -2,7 +2,7 @@
      id="navigation-tree">
   <ul class="${nav_class}">
     <li tal:condition="show_menu and context.parent"
-        tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
+        tal:define="view_name 'navigation-widget-menu-{$location}'"
         tal:replace="api.render_view(view_name, context=context)" /> 
     <li tal:condition="show_menu
                        and context.parent
@@ -22,9 +22,8 @@
       </a>
     </li>
     <tal:items tal:repeat="item items">
-      <tal:replace 
-        tal:define="view_name 'nav-recurse-{0}'.format(location)"
-        tal:replace="api.render_view(view_name, context=item)" />
+    <tal:replace 
+        tal:replace="api.render_view('nav-recurse', context=item)" />
     </tal:items>
   </ul>
 </div>

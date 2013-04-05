@@ -16,6 +16,25 @@ from kotti_navigation import navigation_settings
 #           Utility Functions
 #
 
+def location_from_path(path):
+
+    view_name = path[path.rfind('/'):]
+
+    if 'top' in view_name:
+        return 'top'
+    elif 'left' in view_name:
+        return 'left'
+    elif 'right' in view_name:
+        return 'right'
+    elif 'abovecontent' in view_name:
+        return 'abovecontent'
+    elif 'belowcontent' in view_name:
+        return 'belowcontent'
+    elif 'beforebodyend' in view_name:
+        return 'beforebodyend'
+    else:
+        return None
+
 def parse_label(title, label):
 
     if not label or label == 'none':
@@ -108,7 +127,10 @@ def get_lineage(context, request, location):
 
 
 def is_node_open(item, request):
-    """ Check if the item (node in the "tree") should be opened.
+    """ Check if the item (node in the "tree") should be opened. The page
+    template code first checks if tree_is_open_all before this call, so we do
+    not have to check that here. We assume it is False, and nodes must be
+    checked individually.
     """
 
     context = request.context
@@ -139,49 +161,11 @@ def is_node_open(item, request):
 #      - Each of these views uses the general nav_recurse() function.
 #
 
-@view_config(name='nav-recurse-top',
+@view_config(name='nav-recurse',
              renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_recurse_top(context, request):
+def nav_recurse(context, request):
 
-    return nav_recurse(context, request, 'top')
-
-
-@view_config(name='nav-recurse-left',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_recurse_left(context, request):
-
-    return nav_recurse(context, request, 'left')
-
-
-@view_config(name='nav-recurse-right',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_recurse_right(context, request):
-
-    return nav_recurse(context, request, 'right')
-
-
-@view_config(name='nav-recurse-abovecontent',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_recurse_abovecontent(context, request):
-
-    return nav_recurse(context, request, 'abovecontent')
-
-
-@view_config(name='nav-recurse-belowcontent',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_recurse_belowcontent(context, request):
-
-    return nav_recurse(context, request, 'belowcontent')
-
-
-@view_config(name='nav-recurse-beforebodyend',
-             renderer='kotti_navigation:templates/nav_recurse.pt')
-def nav_recurse_beforebodyend(context, request):
-
-    return nav_recurse(context, request, 'beforebodyend')
-
-
-def nav_recurse(context, request, location):
+    location = location_from_path(request.path)
 
     settings = navigation_settings()
 
@@ -207,53 +191,24 @@ def nav_recurse(context, request, location):
 
 @view_config(name='navigation-widget-tree-top',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
-def navigation_widget_tree_top(context, request, name=''):
-
-    return navigation_widget_tree(
-            context, request, name='', location='top')
-
-
 @view_config(name='navigation-widget-tree-left',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
-def navigation_widget_tree_left(context, request, name=''):
-
-    return navigation_widget_tree(
-            context, request, name='', location='left')
-
-
 @view_config(name='navigation-widget-tree-right',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
-def navigation_widget_tree_right(context, request, name=''):
-
-    return navigation_widget_tree(
-            context, request, name='', location='right')
-
-
 @view_config(name='navigation-widget-tree-abovecontent',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
-def navigation_widget_tree_abovecontent(context, request, name=''):
-
-    return navigation_widget_tree(
-            context, request, name='', location='abovecontent')
-
-
 @view_config(name='navigation-widget-tree-belowcontent',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
-def navigation_widget_tree_belowcontent(context, request, name=''):
-
-    return navigation_widget_tree(
-            context, request, name='', location='belowcontent')
-
-
 @view_config(name='navigation-widget-tree-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
-def navigation_widget_tree_beforebodyend(context, request, name=''):
+def navigation_widget_tree(context, request, name=''):
 
-    return navigation_widget_tree(
-            context, request, name='', location='beforebodyend')
-
-
-def navigation_widget_tree(context, request, name='', location=''):
+    if name:
+        location = name[name.rfind('-') + 1:]
+    elif 'navigation-widget' in request.path:
+        location = location_from_path(request.path)
+    else:
+        location = 'top'
 
     resource_group.need()
 
@@ -323,53 +278,24 @@ def navigation_widget_tree(context, request, name='', location=''):
 
 @view_config(name='navigation-widget-items-top',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
-def navigation_widget_items_top(context, request, name=''):
-
-    return navigation_widget_items(
-            context, request, name, location='top')
-
-
 @view_config(name='navigation-widget-items-left',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
-def navigation_widget_items_left(context, request, name=''):
-
-    return navigation_widget_items(
-            context, request, name, location='left')
-
-
 @view_config(name='navigation-widget-items-right',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
-def navigation_widget_items_right(context, request, name=''):
-
-    return navigation_widget_items(
-            context, request, name, location='right')
-
-
 @view_config(name='navigation-widget-items-abovecontent',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
-def navigation_widget_items_abovecontent(context, request, name=''):
-
-    return navigation_widget_items(
-            context, request, name, location='abovecontent')
-
-
 @view_config(name='navigation-widget-items-belowcontent',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
-def navigation_widget_items_belowcontent(context, request, name=''):
-
-    return navigation_widget_items(
-            context, request, name, location='belowcontent')
-
-
 @view_config(name='navigation-widget-items-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
-def navigation_widget_items_beforebodyend(context, request, name=''):
+def navigation_widget_items(context, request, name=''):
 
-    return navigation_widget_items(
-            context, request, name, location='beforebodyend')
-
-
-def navigation_widget_items(context, request, name='', location=''):
+    if name:
+        location = name[name.rfind('-') + 1:]
+    elif 'navigation-widget' in request.path:
+        location = location_from_path(request.path)
+    else:
+        location = 'top'
 
     resource_group.need()
 
@@ -433,53 +359,24 @@ def navigation_widget_items(context, request, name='', location=''):
 
 @view_config(name='navigation-widget-breadcrumbs-top',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-def navigation_widget_breadcrumbs_top(context, request, name=''):
-
-    return navigation_widget_breadcrumbs(
-            context, request, name, location='top')
-
-
 @view_config(name='navigation-widget-breadcrumbs-left',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-def navigation_widget_breadcrumbs_left(context, request, name=''):
-
-    return navigation_widget_breadcrumbs(
-            context, request, name, location='left')
-
-
 @view_config(name='navigation-widget-breadcrumbs-right',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-def navigation_widget_breadcrumbs_right(context, request, name=''):
-
-    return navigation_widget_breadcrumbs(
-            context, request, name, location='right')
-
-
 @view_config(name='navigation-widget-breadcrumbs-abovecontent',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-def navigation_widget_breadcrumbs_abovecontent(context, request, name=''):
-
-    return navigation_widget_breadcrumbs(
-            context, request, name, location='abovecontent')
-
-
 @view_config(name='navigation-widget-breadcrumbs-belowcontent',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-def navigation_widget_breadcrumbs_belowcontent(context, request, name=''):
-
-    return navigation_widget_breadcrumbs(
-            context, request, name, location='belowcontent')
-
-
 @view_config(name='navigation-widget-breadcrumbs-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-def navigation_widget_breadcrumbs_beforebodyend(context, request, name=''):
+def navigation_widget_breadcrumbs(context, request, name=''):
 
-    return navigation_widget_breadcrumbs(
-            context, request, name, location='beforebodyend')
-
-
-def navigation_widget_breadcrumbs(context, request, name='', location=''):
+    if name:
+        location = name[name.rfind('-') + 1:]
+    elif 'navigation-widget' in request.path:
+        location = location_from_path(request.path)
+    else:
+        location = 'top'
 
     resource_group.need()
 
@@ -523,53 +420,24 @@ def navigation_widget_breadcrumbs(context, request, name='', location=''):
 
 @view_config(name='navigation-widget-menu-top',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
-def navigation_widget_menu_top(context, request, name=''):
-
-    return navigation_widget_menu(
-            context, request, name, location='top')
-
-
 @view_config(name='navigation-widget-menu-left',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
-def navigation_widget_menu_left(context, request, name=''):
-
-    return navigation_widget_menu(
-            context, request, name, location='left')
-
-
 @view_config(name='navigation-widget-menu-right',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
-def navigation_widget_menu_right(context, request, name=''):
-
-    return navigation_widget_menu(
-            context, request, name, location='right')
-
-
 @view_config(name='navigation-widget-menu-abovecontent',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
-def navigation_widget_menu_abovecontent(context, request, name=''):
-
-    return navigation_widget_menu(
-            context, request, name, location='abovecontent')
-
-
 @view_config(name='navigation-widget-menu-belowcontent',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
-def navigation_widget_menu_belowcontent(context, request, name=''):
-
-    return navigation_widget_menu(
-            context, request, name, location='belowcontent')
-
-
 @view_config(name='navigation-widget-menu-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
-def navigation_widget_menu_beforebodyend(context, request, name=''):
+def navigation_widget_menu(context, request, name=''):
 
-    return navigation_widget_menu(
-            context, request, name, location='beforebodyend')
-
-
-def navigation_widget_menu(context, request, name='', location=''):
+    if name:
+        location = name[name.rfind('-') + 1:]
+    elif 'navigation-widget' in request.path:
+        location = location_from_path(request.path)
+    else:
+        location = 'top'
 
     resource_group.need()
 
@@ -612,36 +480,17 @@ def navigation_widget_menu(context, request, name='', location=''):
 
 ##############################################################################
 #
-#    Views for the special-case top location, which must be handled with
-#    care, because Kotti's own default nav display must be overridden, and
-#    because the top location is not a simple "slot." It consists of a navbar
-#    at the very top, and a div location underneath that, as used here. The
-#    menu (represented by a single button) is appropriate for use within the
-#    navbar, but not so for the other display types, which are put in the div
+#    View for the special-case top location, which must be handled this way
+#    because Kotti's own default nav display must be overridden, and because
+#    the top location is not a simple "slot." It consists of a navbar at the
+#    very top, and a div location underneath that, as used here. The menu
+#    (represented by a single button) is appropriate for use within the navbar,
+#    but not so for the other display types, which are put in the div
 #    underneath.
 #
 #    The driver for these views is the overridden nav.pt, which you will find
 #    in /kotti-overrides/templates/view/nav.pt.
 #
-
-
-@view_config(name='navigation-top',
-             renderer='kotti_navigation:templates/nav_top.pt')
-def navigation_top(context, request, name=''):
-
-    settings = navigation_settings()
-
-    location = settings['top_location']
-
-    # When the nav display is set to the beforebodyend slot, the class for the
-    # containing div needs to be 'container' so it fits to the middle span12
-    # area for content. When nav is in any of the other slots, no class is
-    # needed, because the inherited CSS works to fit nav to the slot.
-    use_container_class = True if location == 'beforebodyend' else False
-
-    return {'location': location,
-            'use_container_class': use_container_class,
-            'show_top_nav': asbool(settings['show_top_nav'])}
 
 
 @view_config(name='navigation-widget-top',
@@ -675,12 +524,12 @@ def navigation_widget_top(context, request, name=''):
     if 'hor_' in display_type:
 
         tree_properties = navigation_widget_items(
-                context, request, name='', location='top')
+                context, request, name='navigation-widget-items-top')
 
     elif display_type == 'ver_list':
 
         tree_properties = navigation_widget_items(
-                context, request, name='', location='top')
+                context, request, name='navigation-widget-items-top')
 
     elif 'ver_' in display_type:
 
@@ -688,9 +537,8 @@ def navigation_widget_top(context, request, name=''):
         tree_is_open_all = True if display_type.endswith('open_all') else False
 
         tree_properties = navigation_widget_tree(
-                context, request, name='', location='top')
+                context, request, name='navigation-widget-tree-top')
 
-        tree_properties['location'] = 'top'
         tree_properties['nav_class'] = \
             'nav nav-{0} nav-stacked'.format(tabs_or_pills)
         tree_properties['tree_is_open_all'] = tree_is_open_all
@@ -701,13 +549,14 @@ def navigation_widget_top(context, request, name=''):
     elif display_type == 'breadcrumbs':
 
         top_properties = navigation_widget_breadcrumbs(
-                    context, request, name, location='top')
+                context, request, name='navigation-widget-breadcrumbs-top')
 
     elif display_type == 'menu':
 
         top_properties = navigation_widget_menu(
-                    context, request, name, location='top')
+                context, request, name='navigation-widget-menu-top')
 
+    top_properties['location'] = 'top'
     top_properties['display_type'] = display_type
     top_properties['include_root'] = include_root
     top_properties['label'] = label

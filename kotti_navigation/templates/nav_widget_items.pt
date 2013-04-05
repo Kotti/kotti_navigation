@@ -2,7 +2,7 @@
      id="navigation-list">
   <ul class="${nav_class}">
     <li tal:condition="show_menu and context.parent"
-        tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
+        tal:define="view_name 'navigation-widget-menu-{$location}'"
         tal:replace="api.render_view(view_name, context=context)" /> 
     <li tal:condition="show_menu
                        and context.parent

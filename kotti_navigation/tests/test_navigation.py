@@ -1,22 +1,28 @@
 from pyramid.threadlocal import get_current_registry
-from kotti.testing import (
-    FunctionalTestBase,
-    DummyRequest,
-)
-from kotti.resources import (
-        get_root,
-        Content,
-)
+
+from kotti.testing import FunctionalTestBase
+from kotti.testing import DummyRequest
+
+from kotti.resources import get_root
+from kotti.resources import Content
+
 from kotti.views.util import render_view
+
 from kotti_navigation.views import navigation_widget_items
 from kotti_navigation.views import navigation_widget_tree
+from kotti_navigation.views import is_node_open
 
 
 class NavigationDummyRequest(DummyRequest):
 
-    def __init__(self, context=None):
+    # The path param is added here, because the nav display view names contain
+    # the location, e.g., '/context/navigation-menu-left', and this is how the
+    # associated render function in python gets the location. It will work in
+    # testing if path is set to only 'top', 'left', etc.
+    def __init__(self, context=None, path='/some-navigation-widget-left'):
         super(NavigationDummyRequest, self).__init__()
         self.context = context
+        self.path = path
 
     def static_url(self, name):
         return ''  # pragma: no cover
@@ -33,14 +39,14 @@ class TestNavigationWidgetAsHorPills(FunctionalTestBase):
 
     def test_render_widget(self):
         root = get_root()
-        html = render_view(root, NavigationDummyRequest(),
+        html = render_view(root, NavigationDummyRequest(path='/some-navigation-widget-left'),
                            name='navigation-widget-items-left')
         assert ' class="nav nav-pills"' in html
 
     def test_show_dropdown_menus(self):
-        request = NavigationDummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root = get_root()
-        result = navigation_widget_items(root, request, location='left')
+        result = navigation_widget_items(root, request)
 
         c1 = root[u'content_1'] = Content(title=u'Content_1')
         c1[u'sub_1'] = Content(title=u'Sub_1')
@@ -48,7 +54,7 @@ class TestNavigationWidgetAsHorPills(FunctionalTestBase):
         c2 = root[u'content_2'] = Content(title=u'Content_2')
         c2[u'sub_2'] = Content(title=u'Sub_2')
 
-        html = render_view(c1, NavigationDummyRequest(),
+        html = render_view(c1, NavigationDummyRequest(path='/some-navigation-widget-left'),
                            name='navigation-widget-items-left')
 
         assert not u'nav-list-careted' in html
@@ -56,13 +62,13 @@ class TestNavigationWidgetAsHorPills(FunctionalTestBase):
         st = get_current_registry().settings
         st['kotti_navigation.navigation_widget.left_display_type'] = u'hor_pills_with_dropdowns'
 
-        html = render_view(c1, NavigationDummyRequest(),
+        html = render_view(c1, NavigationDummyRequest(path='/some-navigation-widget-left'),
                            name='navigation-widget-items-left')
 
         assert u'nav-list-careted' in html
 
     def test_label(self):
-        request = NavigationDummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root = get_root()
 
         root[u'content_1'] = Content(title=u'Content_1')
@@ -70,17 +76,17 @@ class TestNavigationWidgetAsHorPills(FunctionalTestBase):
         root[u'content_2'] = Content(title=u'Content_2')
         root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
 
-        result = navigation_widget_items(root, request, location='left')
+        result = navigation_widget_items(root, request)
 
         se = get_current_registry().settings
         se['kotti_navigation.navigation_widget.left_label'] =\
             u'Items in [context] are:'
-        result = navigation_widget_items(root[u'content_1'], request, location='left')
+        result = navigation_widget_items(root[u'content_1'], request)
         assert result['label'] == 'Items in [Content_1] are:'
 
         se['kotti_navigation.navigation_widget.left_label'] =\
             u'Items are:'
-        result = navigation_widget_items(root[u'content_1'], request, location='left')
+        result = navigation_widget_items(root[u'content_1'], request)
         assert result['label'] == 'Items are:'
 
 
@@ -95,32 +101,32 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
 
     def test_render_widget(self):
         root = get_root()
-        html = render_view(root, NavigationDummyRequest(),
+        html = render_view(root, NavigationDummyRequest(path='/some-navigation-widget-left'),
                            name='navigation-widget-tree-left')
         assert '<ul class="nav nav-tabs nav-stacked">' in html
 
     def test_include_root(self):
-        request = NavigationDummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root = get_root()
-        result = navigation_widget_tree(root, request, location='left')
+        result = navigation_widget_tree(root, request)
         assert result['include_root'] == True
         se = get_current_registry().settings
         se['kotti_navigation.navigation_widget.left_include_root'] = u'false'
-        result = navigation_widget_tree(root, request, location='left')
+        result = navigation_widget_tree(root, request)
         assert result['include_root'] == False
 
     def test_display_type(self):
-        request = NavigationDummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root = get_root()
-        result = navigation_widget_tree(root, request, location='left')
+        result = navigation_widget_tree(root, request)
         assert result['display_type'] == 'ver_tabs_stacked'
         se = get_current_registry().settings
         se['kotti_navigation.navigation_widget.left_display_type'] = u'hor_tabs'
-        result = navigation_widget_tree(root, request, location='left')
+        result = navigation_widget_tree(root, request)
         assert result['display_type'] == 'hor_tabs'
 
     def test_is_tree_open(self):
-        request = NavigationDummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root = get_root()
         root[u'content_1'] = Content()
         root[u'content_1'][u'sub_1'] = Content()
@@ -167,19 +173,38 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
         assert u'content_2' in html
         assert u'sub_2' in html
 
+    def test_is_node_open(self):
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
+        root = get_root()
+        root[u'content_1'] = Content()
+        root[u'content_1'][u'sub_1'] = Content()
+        root[u'content_2'] = Content()
+        root[u'content_2'][u'sub_2'] = Content()
+
+        request.context = root
+        html = render_view(root, request, name='navigation-widget-tree-left')
+        assert is_node_open(root, request)
+        assert is_node_open(root['content_1'], request) == False
+        assert is_node_open(root['content_2'], request) == False
+
+        # We do not check against open_all, because the page template checks
+        # tree_is_open_all before calling is_node_open(), which assumes that
+        # tree_is_open_all is False, and nodes must be checked individually.
+
+
     def test_show_hidden(self):
         root = get_root()
-        request = DummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root[u'content_1'] = Content()
         root[u'content_2'] = Content()
         root[u'content_2'].in_navigation = False
 
-        # with standard settings the hidden nav points are hidden
+        # with standard settings the hidden nav items are hidden
         html = render_view(root, request, name='navigation-widget-tree-left')
         assert u'content_1' in html
         assert u'content_2' not in html
 
-        # if we change the setting, the nav points still hidden
+        # if we change the setting, the nav items still hidden
         se = get_current_registry().settings
         se['kotti_navigation.navigation_widget.left_show_hidden_while_logged_in'] =\
             u'true'
@@ -187,7 +212,7 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
         assert u'content_1' in html
         assert u'content_2' not in html
 
-        # we have to be logged in to see the navpoint
+        # we have to be logged in to see the navitem
         # BUT how is this possible???
         # from kotti.views.login import login
         # request.params['submit'] = u'on'
@@ -199,16 +224,45 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
         # assert u'content_1' in html
         # assert u'content_2' in html
 
-    def test_exclude_content_types(self):
+    def test_include_content_types(self):
         root = get_root()
-        request = DummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root[u'content_1'] = Content()
+        root[u'content_2'] = Content()
+        root[u'content_2'].in_navigation = False
 
-        # with no exclude the hidden nav points is shown
+        # If we include the content type the nav item is present.
+        se = get_current_registry().settings
+        se['kotti_navigation.navigation_widget.left_include_content_types'] =\
+            u'kotti.resources.Content'
         html = render_view(root, request, name='navigation-widget-tree-left')
         assert u'content_1' in html
 
-        # if we exclude the content type the nav point disappears
+        # With an empty include_content_types, the nav item is not present.
+        se['kotti_navigation.navigation_widget.left_include_content_types'] =\
+            u''
+        html = render_view(root, request, name='navigation-widget-tree-left')
+        assert u'content_1' in html
+
+        # Again, with show_hidden True.
+        # [TODO] See comment above about the need to log in for testing this.
+        #se['kotti_navigation.navigation_widget.left_show_hidden_while_logged_in'] =\
+        #    u'true'
+        #se['kotti_navigation.navigation_widget.left_include_content_types'] =\
+        #    u'kotti.resources.Content'
+        #assert u'content_1' in html
+        #assert u'content_2' in html
+
+    def test_exclude_content_types(self):
+        root = get_root()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
+        root[u'content_1'] = Content()
+
+        # with no exclude the hidden nav items is shown
+        html = render_view(root, request, name='navigation-widget-tree-left')
+        assert u'content_1' in html
+
+        # if we exclude the content type the nav item disappears
         se = get_current_registry().settings
         se['kotti_navigation.navigation_widget.left_exclude_content_types'] =\
             u'kotti.resources.Content'
@@ -254,7 +308,7 @@ class TestNavigationWidgetAllLocations(FunctionalTestBase):
         super(TestNavigationWidgetAllLocations, self).setUp(**settings)
 
     def test_label(self):
-        request = NavigationDummyRequest()
+        request = NavigationDummyRequest(path='/some-navigation-widget-left')
         root = get_root()
 
         root[u'content_1'] = Content(title=u'Content_1')
@@ -262,10 +316,10 @@ class TestNavigationWidgetAllLocations(FunctionalTestBase):
         root[u'content_2'] = Content(title=u'Content_2')
         root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
 
-        result = navigation_widget_items(root, request, location='left')
+        result = navigation_widget_items(root, request)
 
         se = get_current_registry().settings
         se['kotti_navigation.navigation_widget.left_label'] =\
             u'Items in [context] are:'
-        result = navigation_widget_items(root[u'content_1'], request, location='left')
+        result = navigation_widget_items(root[u'content_1'], request)
         assert result['label'] == 'Items in [Content_1] are:'
