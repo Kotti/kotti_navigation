@@ -82,7 +82,7 @@ def get_children(context, request, location):
     else:
         if content_types_to_include:
             children = [c for c in context.children_with_permission(request)
-                    if c.__class in content_types_to_include
+                    if c.__class__ in content_types_to_include
                             and c.in_navigation
                             and c.__class__ not in content_types_to_exclude]
         else:
@@ -112,7 +112,7 @@ def get_lineage(context, request, location):
         if content_types_to_include:
             items = [item for item in list(lineage(context))
                  if item.__class__ not in content_types_to_exclude
-                 and item.__class in content_types_to_include]
+                 and item.__class__ in content_types_to_include]
         else:
             items = [item for item in list(lineage(context))
                  if item.__class__ not in content_types_to_exclude]
@@ -521,7 +521,7 @@ def navigation_widget_breadcrumbs(context, request, name='', location=''):
     use_container_class = True if location == 'beforebodyend' else False
 
     lineage_items = get_lineage(context, request, location)
-    if not include_root:
+    if not include_root and root in lineage_items:
         lineage_items.remove(root)
 
     lineage_items.reverse()
@@ -615,7 +615,7 @@ def navigation_widget_menu(context, request, name='', location=''):
     # The lineage function of pyramid is used to make a breadcrumbs-style
     # display for the context menu.
     lineage_items = get_lineage(context, request, location)
-    if not include_root:
+    if not include_root and root in lineage_items:
         lineage_items.remove(root)
 
     # The lineage comes back in root-last order, so reverse.
