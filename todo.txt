@@ -1,3 +1,17 @@
 Todo's
 ======
 
+   - Add CSS settings for the left margin of the menu dropdown, which has no
+     margin in some cases.
+
+   - Add CSS styling for the nav-header used for the label. Perhaps it could
+     be centered vertically.
+
+   - Should other locations be made available?
+
+   - How does the multi-location configuration compare to what is planned for
+     kotti_panels? Does the design of one impact the other?
+
+   - If angular.js were to be included with kotti_navigation, a new style of
+     navigation could be opened up. Possibilities here include the addition of
+     a responsive collapsible tree display, an accordion display, etc.
