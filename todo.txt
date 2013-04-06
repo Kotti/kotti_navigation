@@ -18,6 +18,12 @@ Todo's
    - How does the multi-location configuration compare to what is planned for
      kotti_panels? Does the design of one impact the other?
 
+   - Pull needed code from scripts of kotti_user_manual to build a screen
+     capture utility. Run a script that sets config for different widget uses
+     and combinations, calling populate() as needed to add needed content
+     before taking the screen captures. This can double as documentation and
+     showcase, as well as a way to do visual testing.
+     
    - If angular.js were to be included with kotti_navigation, a new style of
      navigation could be opened up. Possibilities here include the addition of
      a responsive collapsible tree display, an accordion display, etc.
