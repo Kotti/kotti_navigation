@@ -7,7 +7,13 @@ Todo's
    - Add CSS styling for the nav-header used for the label. Perhaps it could
      be centered vertically.
 
-   - Should other locations be made available?
+   - Should other locations be made available? Should the top location be
+     split into two: top_in_navbar (between brand and search) and
+     top_below_navbar?
+
+   - For abovecontent, belowcontent, beforebodyend, top_below_navbar (if 
+     separate location), which are full-width, have align_left, align_center,
+     align_right?
 
    - How does the multi-location configuration compare to what is planned for
      kotti_panels? Does the design of one impact the other?
