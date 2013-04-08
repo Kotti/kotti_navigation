@@ -33,8 +33,6 @@ Add some documents
   >>> ctrl('save').click()
   >>> browser.url == testing.BASE_URL + '/document-1/'
   True
-  >>> 'Successfully added item' in browser.contents
-  True
   >>> browser.open(testing.BASE_URL + '/document-1/@@add_document')
   >>> ctrl('Title').value = 'Document 1 1'
   >>> ctrl('Description').value = 'This is the second document'
