@@ -245,7 +245,7 @@ def navigation_widget_tree(context, request, name=''):
     # needed, because the inherited CSS works to fit nav to the slot.
     use_container_class = True if location == 'beforebodyend' else False
 
-    items = get_children(context, request, location)
+    items = get_children(root, request, location)
 
     tabs_or_pills = 'tabs' if 'tabs' in display_type else 'pills'
     nav_class = 'nav nav-{0} nav-stacked'.format(tabs_or_pills)

@@ -145,13 +145,13 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
                            name='navigation-widget-tree-left')
         assert u'content_1' in html
         assert u'sub_1' in html
-        assert u'content_2' not in html
+        assert u'content_2' in html
         assert u'sub_2' not in html
 
         request.context = root[u'content_2']
         html = render_view(root[u'content_2'], request,
                            name='navigation-widget-tree-left')
-        assert u'content_1' not in html
+        assert u'content_1' in html
         assert u'sub_1' not in html
         assert u'content_2' in html
         assert u'sub_2' in html
@@ -159,10 +159,10 @@ class TestNavigationWidgetAsTree(FunctionalTestBase):
         request.context = root[u'content_2'][u'sub_2']
         html = render_view(root[u'content_2'][u'sub_2'], request,
                            name='navigation-widget-tree-left')
-        assert u'content_1' not in html
+        assert u'content_1' in html
         assert u'sub_1' not in html
-        assert u'content_2' not in html
-        assert u'sub_2' not in html
+        assert u'content_2' in html
+        assert u'sub_2' in html
 
         se = get_current_registry().settings
         se['kotti_navigation.navigation_widget.left_display_type'] = u'ver_tabs_stacked_open_all'
