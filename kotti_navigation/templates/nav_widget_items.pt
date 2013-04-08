@@ -2,13 +2,11 @@
      id="navigation-list">
   <ul class="${nav_class}">
       <li tal:condition="show_menu
-                         and location != 'top'
-                         and context.parent"
+                         and location != 'top'"
         tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
         tal:replace="api.render_view(view_name, context=context)" /> 
     <li tal:condition="show_menu
                        and location != 'top'
-                       and context.parent
                        and display_type.startswith('ver_')
                        and items" class="divider"></li>
     <li tal:condition="label and context.parent and items" class="nav-header">

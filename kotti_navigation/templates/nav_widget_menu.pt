@@ -1,13 +1,16 @@
 <div class="${use_container_class and 'container' or None}"
      id="navigation-menu">
   <ul class="nav nav-list">
-    <li tal:condition="context.parent">
+    <li>
       <div class="btn-group">
-        <a class="btn" href="${api.url(context.parent)}"
-            tal:define="target '&lt;&lt; ' + context.parent.title if context.parent.parent else '&lt;&lt; Home'">
-          ${target}
+        <a class="btn"
+           tal:condition="context != root"
+           href="${api.url(context.parent)}">
+           <span tal:condition="context.parent == root">&lt;&lt; Home</span>
+           <span tal:condition="context.parent != root">&lt;&lt; ${context.parent.title}</span>
         </a>
-        <button id="menu-caret" class="btn dropdown-toggle" data-toggle="dropdown">
+        <button class="btn dropdown-toggle" data-toggle="dropdown" tal:condition="context == root">Site Menu</button>
+        <button id="menu-caret" class="btn dropdown-toggle" data-toggle="dropdown" tal:condition="context != root">
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
