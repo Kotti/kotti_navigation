@@ -4,6 +4,18 @@ Todo's
    - Add CSS settings for the left margin of the menu dropdown, which has no
      margin in some cases.
 
+     -----
+     2013/04/08 -- tried adding this to CSS but the first item "Site" is not
+     affected:
+
+     #navigation-menu .nav li + .nav-header { margin-left: 0px; }
+
+     Perhaps a structual fix in layout, with another class set, or a wrapping
+     div is needed. 
+
+     NOTE: The bootstrap CSS for nav-header li items is margin-left: -15px.
+     -----
+
    - Add CSS styling for the nav-header used for the label. Perhaps it could
      be centered vertically.
 

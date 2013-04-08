@@ -1,4 +1,4 @@
-<div class="${use_container_class and 'container' or None}"
+<div class="use_container_class and 'container' or None"
      id="navigation-menu">
   <ul class="nav nav-list">
     <li>
