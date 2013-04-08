@@ -23,9 +23,17 @@ Todo's
      split into two: top_in_navbar (between brand and search) and
      top_below_navbar?
 
+     NOTE: With the commit to the PR that makes the menu show between brand
+     and search always, whether display type is 'menu' or if the menu is used
+     with another display type via show_menu == True, perhaps it is best to
+     keep the "between brand and search" spot only used for menu? If you were
+     to put a hor_tabs display in there, and if the number of items became too
+     large to fit between brand and search, it will pop out to show the items
+     in a div below the navbar anyway.
+
    - For abovecontent, belowcontent, beforebodyend, top_below_navbar (if 
-     separate location), which are full-width, have align_left, align_center,
-     align_right?
+     separate location), which are full-width, should we have align_left,
+     align_center, align_right config params?
 
    - How does the multi-location configuration compare to what is planned for
      kotti_panels? Does the design of one impact the other?
