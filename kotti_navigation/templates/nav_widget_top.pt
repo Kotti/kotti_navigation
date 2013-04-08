@@ -6,7 +6,7 @@
       </span>
       <div tal:replace="api.render_template('kotti:templates/view/search.pt')" />
       <div class="${use_container_class and 'container' or None}"
-           tal:condition="display_type == 'menu'"
+           tal:condition="display_type == 'menu' or show_menu"
            tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
            tal:replace="api.render_view(view_name, context=context)"
            id="navigation-menu">
