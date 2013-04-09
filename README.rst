@@ -41,7 +41,7 @@ They can be used in any combination.
 Here are the location choices (in all-caps) in a layout diagram:::
 
     +------------------------------------------------------+
-    | "TOP" (This is the top toolbar; not a real slot.     |
+    | "top" (This is the top toolbar; not a real slot.     |
     |        kotti_navigation changes it to be only the    |
     |        brand at left and search at right. Some       |
     |        nav display choices are available for the     |
@@ -57,15 +57,15 @@ Here are the location choices (in all-caps) in a layout diagram:::
     ||              turn this off by overriding           ||
     ||              master.pt in kotti_overrides).        ||
     |+-------------++---------------------++--------------+|
-    || slot "LEFT" || slot "ABOVECONTENT" || slot "RIGHT" ||
+    || slot "left" || slot "abovecontent" || slot "right" ||
     ||             |+---------------------+|              ||
     ||             || Content             ||              ||
     ||             |+---------------------+|              ||
-    ||             || slot "BELOWCONTENT" ||              ||
+    ||             || slot "belowcontent" ||              ||
     |+-------------++---------------------++--------------+|
     | footer (Kotti's; not removed).                       |
     |------------------------------------------------------|
-    | slot "BEFOREBODYEND"                                 |
+    | slot "beforebodyend"                                 |
     +------------------------------------------------------+
 
 Each of these locations can be separately configured to have one or more

@@ -5,6 +5,29 @@ Changelog
 ----------------
 
 
+0.3b2 (2013-04-09)
+------------------
+
+* Warning: the changes for this release do wholesale renaming, so existing
+  deployments will require adjustment.
+* Moved to a configuration approach that allows multiple navigation displays,
+  in different locations, where the new concept of location encompasses both
+  slots and the top, which is the area of Kotti's default navbar. [geojeff]
+* Added an include_content_types param, as a counterpart to the existing
+  exclude_content_types. This way a display type can be set to only include
+  specific content types, as with an images-only display. [geojeff]
+* Devised new display type names that are more specific and descriptive, and
+  are representative of the options available with Bootstrap. [geojeff]
+* Changed the handling of the top location to remove the default Kotti nav
+  altogether, and replace it with optional specific placement of the menu
+  display type, restricted to the area between brand and search in the Kotti
+  navbar, and allowing any display type underneath the navbar. [geojeff]
+* Added a breadcrumbs display type that is the same as the default Kotti one,
+  but with a configurable label. [geojeff]
+* Added a treatment for the menu display type for root, so that it is always
+  shown (previously, the menu simply did not show for root). [geojeff]
+
+
 0.3b1 (2013-03-11)
 ------------------
 
@@ -16,10 +39,10 @@ Changelog
 ------------------
 
 * Added slots and options. [geojeff]
-  * Added possible slot positions where the navigation can be shown.
-  * Added new display type list.
-  * Added option to set a label for the navigation.
-  * See README.rst for more informations.
+* Added possible slot positions where the navigation can be shown.
+* Added new display type list.
+* Added option to set a label for the navigation.
+* See README.rst for more informations.
 
 
 0.3a1 (2012-12-04)
@@ -28,7 +51,7 @@ Changelog
 * Changes for compatibility with Kotti>=0.8. These changes
   are not backward compatibel. If you want to use kotti_navigation
   with Kotti<=0.7.x then pin kotti_navigation to 0.2.
-  * Use new children_with_permission function on context.
+* Use new children_with_permission function on context.
 * Use view_config decoration for views.
 
 
