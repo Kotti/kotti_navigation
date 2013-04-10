@@ -116,13 +116,13 @@ def get_lineage(context, request, location):
     else:
         if content_types_to_include:
             items = [item for item in list(lineage(context))
-                 if item.in_navigation
+                 if item.__class__ in content_types_to_include
+                 and item.in_navigation
                  and item.__class__ not in content_types_to_exclude]
         else:
             items = [item for item in list(lineage(context))
-                 if item.__class__ in content_types_to_include
-                     and item.in_navigation
-                     and item.__class__ not in content_types_to_exclude]
+                 if item.in_navigation
+                 and item.__class__ not in content_types_to_exclude]
 
     return items
 
