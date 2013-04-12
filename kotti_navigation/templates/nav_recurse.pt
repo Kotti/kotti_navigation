@@ -6,12 +6,13 @@
      title="${getattr(item, 'description', None)}">
     ${item.title}
   </a>
-  <tal:is_tree_open tal:condition="is_tree_open(item, request)">
+  <tal:is_tree_open tal:condition="tree_is_open_all or is_node_open(item, request)">
     <tal:children tal:condition="children">
       <tal:repeat tal:repeat="child children">
-          <ul class="nav nav-pills nav-stacked">
-            <tal:replace tal:replace="api.render_view('nav-tree', context=child)" />
-          </ul>
+        <ul class="${nav_class}">
+          <tal:replace 
+            tal:replace="api.render_view('nav-recurse', context=child)" />
+        </ul>
       </tal:repeat>
     </tal:children>
   </tal:is_tree_open>

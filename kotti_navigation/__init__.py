@@ -9,18 +9,22 @@ log = getLogger('kotti_navigation: ')
 
 _ = TranslationStringFactory('kotti_navigation')
 
+locations = ['top', 'left', 'right',
+             'abovecontent', 'belowcontent', 'beforebodyend']
 
-NAVIGATION_WIDGET_DEFAULTS = {
-    'include_root': 'true',
-    'display_type': 'tree',
-    'label': '',
-    'show_context_menu': 'false',
-    'show_dropdown_menus': 'false',
-    'slot': 'left',
-    'open_all': 'false',
-    'show_hidden_while_logged_in': 'false',
-    'exclude_content_types': '',
-    }
+property_endings_and_defaults = [('_display_type', 'none'),
+                                 ('_show_menu', 'false'),
+                                 ('_label', ''),
+                                 ('_include_root', 'true'),
+                                 ('_show_hidden_while_logged_in', 'false'),
+                                 ('_include_content_types', ''),
+                                 ('_exclude_content_types', '')]
+
+NAVIGATION_WIDGET_DEFAULTS = {}
+
+for loc in locations:
+    for ending, default in property_endings_and_defaults:
+        NAVIGATION_WIDGET_DEFAULTS['{0}{1}'.format(loc, ending)] = default
 
 
 def navigation_settings(name='', settings=None):
@@ -33,7 +37,19 @@ def navigation_settings(name='', settings=None):
 
     working_settings.update(extract_from_settings(prefix, settings=settings))
 
-    _resolve_dotted(working_settings, ['exclude_content_types'])
+    _resolve_dotted(working_settings, ['top_include_content_types'])
+    _resolve_dotted(working_settings, ['left_include_content_types'])
+    _resolve_dotted(working_settings, ['right_include_content_types'])
+    _resolve_dotted(working_settings, ['abovecontent_include_content_types'])
+    _resolve_dotted(working_settings, ['belowcontent_include_content_types'])
+    _resolve_dotted(working_settings, ['beforebodyend_include_content_types'])
+
+    _resolve_dotted(working_settings, ['top_exclude_content_types'])
+    _resolve_dotted(working_settings, ['left_exclude_content_types'])
+    _resolve_dotted(working_settings, ['right_exclude_content_types'])
+    _resolve_dotted(working_settings, ['abovecontent_exclude_content_types'])
+    _resolve_dotted(working_settings, ['belowcontent_exclude_content_types'])
+    _resolve_dotted(working_settings, ['beforebodyend_exclude_content_types'])
 
     return working_settings
 
@@ -42,57 +58,39 @@ def kotti_configure(settings):
 
     nav_settings = navigation_settings(settings=settings)
 
-    slot = nav_settings['slot']
-    if slot is None:
-        slot = 'none'
+    # Assign slots. The top location is not a slot. It is handled specially.
+    for slot in [u'left', u'right',
+                 u'abovecontent', u'belowcontent', u'beforebodyend']:
 
-    nav_widget_directive = \
-            'kotti_navigation.include_navigation_widget_{0}'.format(slot)
+        display_type = nav_settings['{0}_display_type'.format(slot)]
 
-    settings['pyramid.includes'] += ' {0}'.format(nav_widget_directive)
+        if display_type and display_type != 'none':
 
-    if 'kotti_navigation.widget.slot' in settings:
-        assign_slot('recent_news', settings['kotti_newsitem.widget.slot'])
+            if 'hor_' in display_type or display_type == 'ver_list':
+
+                view_name = 'navigation-widget-items-{0}'.format(slot)
+
+            elif 'ver_' in display_type:
+
+                view_name = 'navigation-widget-tree-{0}'.format(slot)
+
+            elif display_type == 'breadcrumbs':
+
+                view_name = 'navigation-widget-breadcrumbs-{0}'.format(slot)
+
+            elif display_type == 'menu':
+
+                view_name = 'navigation-widget-menu-{0}'.format(slot)
+
+            assign_slot(view_name, slot)
+
+    settings['pyramid.includes'] += ' kotti_navigation.include_navigation'
+
+    # We override nav.pt.
+    settings['kotti.asset_overrides'] = 'kotti_navigation:kotti-overrides/'
 
 
-def include_view(config):
+def include_navigation(config):  # pragma: no cover
 
     config.add_translation_dirs('kotti_navigation:locale')
     config.scan(__name__)
-
-
-def include_navigation_widget(config, where='left'):  # pragma: no cover
-
-    include_view(config)
-    if where != 'none':
-        assign_slot('navigation-widget', where)
-
-
-def include_navigation_widget_left(config):  # pragma: no cover
-
-    include_navigation_widget(config, 'left')
-
-
-def include_navigation_widget_right(config):  # pragma: no cover
-
-    include_navigation_widget(config, 'right')
-
-
-def include_navigation_widget_abovecontent(config):  # pragma: no cover
-
-    include_navigation_widget(config, 'abovecontent')
-
-
-def include_navigation_widget_belowcontent(config):  # pragma: no cover
-
-    include_navigation_widget(config, 'belowcontent')
-
-
-def include_navigation_widget_beforebodyend(config):  # pragma: no cover
-
-    include_navigation_widget(config, 'beforebodyend')
-
-
-def include_navigation_widget_none(config):  # pragma: no cover
-
-    include_navigation_widget(config, 'none')

@@ -1,0 +1,30 @@
+<div class="use_container_class and 'container' or None"
+     id="navigation-tree">
+  <ul class="${nav_class}">
+    <li tal:condition="show_menu
+                       and location != 'top'"
+        tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
+        tal:replace="api.render_view(view_name, context=context)" /> 
+    <li tal:condition="show_menu
+                       and location != 'top'
+                       and display_type.startswith('ver_')
+                       and items" class="divider"></li>
+    <li tal:condition="label and context.parent and items" class="nav-header">
+      ${label}
+    </li>
+    <li tal:condition="label and context.parent and items" class="divider">
+    </li>
+    <li tal:define="active root == request.context and 'active' or ''"
+        tal:condition="include_root"
+        class="${active}">
+      <a href="${api.url(root)}"
+         title="${getattr(root, 'description', None)}">
+        ${root.title}
+      </a>
+    </li>
+    <tal:items tal:repeat="item items">
+    <tal:replace 
+        tal:replace="api.render_view('nav-recurse', context=item)" />
+    </tal:items>
+  </ul>
+</div>

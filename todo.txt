@@ -1,3 +1,49 @@
 Todo's
 ======
 
+   - Add CSS settings for the left margin of the menu dropdown, which has no
+     margin in some cases.
+
+     -----
+     2013/04/08 -- tried adding this to CSS but the first item "Site" is not
+     affected:
+
+     #navigation-menu .nav li + .nav-header { margin-left: 0px; }
+
+     Perhaps a structual fix in layout, with another class set, or a wrapping
+     div is needed. 
+
+     NOTE: The bootstrap CSS for nav-header li items is margin-left: -15px.
+     -----
+
+   - Add CSS styling for the nav-header used for the label. Perhaps it could
+     be centered vertically.
+
+   - Should other locations be made available? Should the top location be
+     split into two: top_in_navbar (between brand and search) and
+     top_below_navbar?
+
+     NOTE: With the commit to the PR that makes the menu show between brand
+     and search always, whether display type is 'menu' or if the menu is used
+     with another display type via show_menu == True, perhaps it is best to
+     keep the "between brand and search" spot only used for menu? If you were
+     to put a hor_tabs display in there, and if the number of items became too
+     large to fit between brand and search, it will pop out to show the items
+     in a div below the navbar anyway.
+
+   - For abovecontent, belowcontent, beforebodyend, top_below_navbar (if 
+     separate location), which are full-width, should we have align_left,
+     align_center, align_right config params?
+
+   - How does the multi-location configuration compare to what is planned for
+     kotti_panels? Does the design of one impact the other?
+
+   - Pull needed code from scripts of kotti_user_manual to build a screen
+     capture utility. Run a script that sets config for different widget uses
+     and combinations, calling populate() as needed to add needed content
+     before taking the screen captures. This can double as documentation and
+     showcase, as well as a way to do visual testing.
+     
+   - If angular.js were to be included with kotti_navigation, a new style of
+     navigation could be opened up. Possibilities here include the addition of
+     a responsive collapsible tree display, an accordion display, etc.

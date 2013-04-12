@@ -1,0 +1,65 @@
+<div class="use_container_class and 'container' or None"
+     id="navigation-menu">
+  <ul class="nav nav-list">
+    <li>
+      <div class="btn-group">
+        <a class="btn"
+           tal:condition="context != root"
+           href="${api.url(context.parent)}">
+           <span tal:condition="context.parent == root">&lt;&lt; Home</span>
+           <span tal:condition="context.parent != root">&lt;&lt; ${context.parent.title}</span>
+        </a>
+        <button class="btn dropdown-toggle" data-toggle="dropdown" tal:condition="context == root">Site Menu</button>
+        <button id="menu-caret" class="btn dropdown-toggle" data-toggle="dropdown" tal:condition="context != root">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li tal:condition="include_root" class="nav-header">
+            Site:
+          </li>
+          <li tal:condition="include_root">
+            <a href="${api.url(root)}"
+               title="${getattr(root, 'description', None)}">
+              ${root.title}
+            </a>
+          </li>
+          <li tal:condition="top_level_items" class="nav-header">
+            Top level:
+          </li>
+          <li tal:condition="top_level_items"
+              tal:repeat="tli top_level_items">
+            <a href="${api.url(tli)}"
+               title="${getattr(tli, 'description', None)}">
+              ${tli.title}
+            </a>
+          </li>
+          <li tal:condition="lineage_items or context==root or context in top_level_items" class="nav-header">
+            You are here:
+          </li>
+          <tal:block repeat="lineage_item lineage_items">
+            <li tal:define="active lineage_item==context and 'active' or '';
+                            hidden not lineage_item.in_navigation and 'hidden' or ''"
+                class="lineage ${active} ${hidden}">
+              <a href="${api.url(lineage_item)}"
+                 class="gap${(repeat.lineage_item.index)}"
+                 title="${getattr(lineage_item, 'description', None)}">
+                ${lineage_item.title}
+              </a>
+            </li>
+          </tal:block>
+          <li tal:condition="lineage_items or context == root or context in top_level_items"
+              class="lineage"
+              tal:define="from_root 1 if context==root else 2;
+                          gap_count len(lineage_items) if lineage_items else from_root"
+              tal:repeat="child items">
+            <a href="${api.url(child)}"
+               class="gap${gap_count}"
+               title="${getattr(child, 'description', None)}">
+              ${child.title}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div>

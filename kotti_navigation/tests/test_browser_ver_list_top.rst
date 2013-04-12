@@ -7,9 +7,11 @@ Setup and Login
   >>> from kotti import testing
   >>> tools = testing.setUpFunctional(
   ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure',
-  ...        'kotti_navigation.navigation_widget.left_display_type': 'ver_tabs_stacked_open_all',
-  ...        'kotti_navigation.navigation_widget.left_include_root': 'true',
-  ...        'kotti_navigation.navigation_widget.left_show_hidden_while_logged_in': 'true',
+  ...        'kotti_navigation.navigation_widget.top_display_type': 'ver_list',
+  ...        'kotti_navigation.navigation_widget.top_show_menu': 'true',
+  ...        'kotti_navigation.navigation_widget.top_label': 'Vertical List up Top',
+  ...        'kotti_navigation.navigation_widget.top_include_root': 'true',
+  ...        'kotti_navigation.navigation_widget.top_show_hidden_while_logged_in': 'true',
   ...       })
   >>> browser = tools['Browser']()
   >>> ctrl = browser.getControl
@@ -42,29 +44,6 @@ Add some documents
 Check navigation
 ----------------
 
-  >>> browser.open(testing.BASE_URL)
-  >>> 'Document 1 1' in browser.contents
+  >>> browser.open(testing.BASE_URL + '/document-1')
+  >>> 'Vertical List up Top' in browser.contents
   True
-
-
-Test hidden nav points
-----------------------
-
-  >>> browser.open(testing.BASE_URL)
-  >>> browser.getLink('Contents').click()
-  >>> children = ctrl(name='children')
-  >>> children.value = children.options[0:1]
-  >>> ctrl(name='hide').click()
-  >>> "Document 1 is no longer visible in the navigation" in browser.contents
-  True
-  >>> browser.open(testing.BASE_URL)
-  >>> 'Document 1' in browser.contents
-  True
-  >>> 'hidden' in browser.contents
-  True
-  >>> browser.open(testing.BASE_URL + '/logout')
-  >>> browser.open(testing.BASE_URL)
-  >>> 'Document 1' in browser.contents
-  False
-  >>> 'hidden' in browser.contents
-  False
