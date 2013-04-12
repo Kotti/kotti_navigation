@@ -16,7 +16,7 @@
       <tal:with_dropdown
                tal:define="children allowed_children[repeat.item.index]"
                tal:condition="display_type.startswith('hor_')
-                              and show_item_dropdowns
+                              and display_type.endswith('dropdowns')
                               and children">
         <li tal:define="hidden not item.in_navigation and 'hidden' or ''"
             class="${hidden}">
@@ -49,7 +49,7 @@
       <tal:without_dropdown
                tal:define="children allowed_children[repeat.item.index]"
                tal:condition="(children and display_type.startswith('ver_'))
-                              or (children and not show_item_dropdowns)
+                              or (children and not display_type.endswith('dropdowns'))
                               or not children">
         <li tal:define="active item == context and 'active' or '';
                         hidden not item.in_navigation and 'hidden' or ''"
