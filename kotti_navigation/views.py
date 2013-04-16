@@ -14,14 +14,11 @@ from kotti_navigation.util import get_lineage
 from kotti_navigation.util import is_node_open
 
 
-##############################################################################
-#
-#    Recursive view for the "tree" display type.
-#
 @view_config(name='nav-recurse',
              renderer='kotti_navigation:templates/nav_recurse.pt')
 def nav_recurse(context, request):
-
+    """Recursive view for the "tree" display type.
+    """
     if 'navigation-widget' in request.path:
         location = location_from_path(request.path)
     else:
@@ -41,14 +38,6 @@ def nav_recurse(context, request):
             }
 
 
-#    Views for display type "tree", continued:
-#
-#      - These are the main views for the tree display type, each using the
-#        general navigation_widget_tree() view function.
-#
-#      - The nav recurse view above is called from nav_widget_tree.pt,
-#        used in each of these.
-
 @view_config(name='navigation-widget-tree-top',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
 @view_config(name='navigation-widget-tree-left',
@@ -62,7 +51,12 @@ def nav_recurse(context, request):
 @view_config(name='navigation-widget-tree-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_tree.pt')
 def navigation_widget_tree(context, request, name=''):
-
+    """Views for display type "tree", continued:
+      - These are the main views for the tree display type, each using the
+        general navigation_widget_tree() view function.
+      - The nav recurse view above is called from nav_widget_tree.pt,
+        used in each of these.
+    """
     # Assume top location, unless name or request.path are available.
     location = 'top'
 
@@ -124,17 +118,6 @@ def navigation_widget_tree(context, request, name=''):
             'items': items,
             'label': label}
 
-##############################################################################
-#
-#    Views for the "items" display type, a term used to avoid confusion
-#    that comes with calling this a "list" -- there are horizontal lists and
-#    there are vertical aspect lists. We distinguish here that the following
-#    views are not recursive and tree-like. They offer a limited list of
-#    items for the current context.
-#
-#      - They each use the general navigation_widget_items() view function.
-#
-
 
 @view_config(name='navigation-widget-items-top',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
@@ -149,6 +132,13 @@ def navigation_widget_tree(context, request, name=''):
 @view_config(name='navigation-widget-items-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_items.pt')
 def navigation_widget_items(context, request, name=''):
+    """Views for the "items" display type, a term used to avoid confusion
+       that comes with calling this a "list" -- there are horizontal lists and
+       there are vertical aspect lists. We distinguish here that the following
+       views are not recursive and tree-like. They offer a limited list of
+       items for the current context.
+       - They each use the general navigation_widget_items() view function.
+    """
 
     # Assume top location, unless name or request.path are available.
     location = 'top'
@@ -159,13 +149,9 @@ def navigation_widget_items(context, request, name=''):
         location = location_from_path(request.path)
 
     resource_group.need()
-
     settings = navigation_settings()
-
     display_type = settings['{0}_display_type'.format(location)]
-
     show_menu = asbool(settings['{0}_show_menu'.format(location)])
-
     label = parse_label(context.title, settings['{0}_label'.format(location)])
 
     nav_class = 'nav nav-tabs'
@@ -206,15 +192,6 @@ def navigation_widget_items(context, request, name=''):
             'show_item_dropdowns': dropdowns,
         }
 
-##############################################################################
-#
-#    Views for the "breadcrumbs" display type, which is essentially the
-#    same as Kotti's default breadcrumbs display, except that here you have
-#    control of the associated label.
-#
-#      - They each use the general navigation_widget_breadcrumbs() function.
-#
-
 
 @view_config(name='navigation-widget-breadcrumbs-top',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
@@ -229,7 +206,11 @@ def navigation_widget_items(context, request, name=''):
 @view_config(name='navigation-widget-breadcrumbs-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
 def navigation_widget_breadcrumbs(context, request, name=''):
-
+    """Views for the "breadcrumbs" display type, which is essentially the
+       same as Kotti's default breadcrumbs display, except that here you have
+       control of the associated label.
+         - They each use the general navigation_widget_breadcrumbs() function.
+    """
     # Assume top location, unless name or request.path are available.
     location = 'top'
 
@@ -265,18 +246,6 @@ def navigation_widget_breadcrumbs(context, request, name=''):
             'label': label,
             'lineage_items': lineage_items}
 
-##############################################################################
-#
-#    Views for the "menu" display type, which consists of a single button
-#    with a dropdown for presenting a full site context menu.
-#
-#      - They each use the general navigation_widget_menu() view function.
-#
-#      - The menu can be used standalone as the only nav display in a given
-#        location, or it can be combined with a label and/or another display
-#        type, e.g. a horizontal items nav display.
-#
-
 
 @view_config(name='navigation-widget-menu-top',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
@@ -291,7 +260,13 @@ def navigation_widget_breadcrumbs(context, request, name=''):
 @view_config(name='navigation-widget-menu-beforebodyend',
              renderer='kotti_navigation:templates/nav_widget_menu.pt')
 def navigation_widget_menu(context, request, name=''):
-
+    """Views for the "menu" display type, which consists of a single button
+       with a dropdown for presenting a full site context menu.
+       - They each use the general navigation_widget_menu() view function.
+       - The menu can be used standalone as the only nav display in a given
+         location, or it can be combined with a label and/or another display
+         type, e.g. a horizontal items nav display.
+    """
     # Assume top location, unless name or request.path are available.
     location = 'top'
 
@@ -339,25 +314,20 @@ def navigation_widget_menu(context, request, name=''):
             'top_level_items': top_level_items,
             'lineage_items': lineage_items}
 
-##############################################################################
-#
-#    View for the special-case top location, which must be handled this way
-#    because Kotti's own default nav display must be overridden, and because
-#    the top location is not a simple "slot." It consists of a navbar at the
-#    very top, and a div location underneath that, as used here. The menu
-#    (represented by a single button) is appropriate for use within the navbar,
-#    but not so for the other display types, which are put in the div
-#    underneath.
-#
-#    The driver for these views is the overridden nav.pt, which you will find
-#    in /kotti-overrides/templates/view/nav.pt.
-#
-
 
 @view_config(name='navigation-widget-top',
              renderer='kotti_navigation:templates/nav_widget_top.pt')
 def navigation_widget_top(context, request, name=''):
-
+    """View for the special-case top location, which must be handled this way
+       because Kotti's own default nav display must be overridden, and because
+       the top location is not a simple "slot." It consists of a navbar at the
+       very top, and a div location underneath that, as used here. The menu
+       (represented by a single button) is appropriate for use within the
+       navbar, but not so for the other display types, which are put in the div
+       underneath.
+       The driver for these views is the overridden nav.pt, which you will find
+       in /kotti-overrides/templates/view/nav.pt.
+    """
     settings = navigation_settings()
 
     display_type = settings['top_display_type']

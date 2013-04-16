@@ -9,6 +9,8 @@ from kotti_navigation import navigation_settings
 
 
 def location_from_path(path):
+    """Returns the slot name depending on the name of the view.
+    """
 
     view_name = path[path.rfind('/'):]
 
@@ -47,6 +49,9 @@ def parse_label(title, label):
 
 
 def get_children(context, request, location):
+    """Returns the children of a given context depending on the
+       global settings and the optional location.
+    """
 
     # [TODO] Move these function calls out to caller.
 
@@ -121,10 +126,10 @@ def get_lineage(context, request, location):
 
 
 def is_node_open(item, request):
-    """ Check if the item (node in the "tree") should be opened. The page
-    template code first checks if tree_is_open_all before this call, so we do
-    not have to check that here. We assume it is False, and nodes must be
-    checked individually.
+    """Check if the item (node in the "tree") should be opened. The page
+       template code first checks if tree_is_open_all before this call,
+       so we do not have to check that here. We assume it is False, and
+       nodes must be checked individually.
     """
 
     context = request.context
