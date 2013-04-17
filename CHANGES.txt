@@ -1,12 +1,8 @@
 Changelog
 =========
 
-0.3 (Unreleased)
+0.3 (2013-04-17)
 ----------------
-
-
-0.3b2 (2013-04-09)
-------------------
 
 * Warning: the changes for this release do wholesale renaming, so existing
   deployments will require adjustment.
