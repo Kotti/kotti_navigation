@@ -4,6 +4,7 @@ Changelog
 0.4a2 (Unreleased)
 ------------------
 
+* Clarified descriptions and improved wording in the readme. [geojeff]
 
 
 0.4a1 (2013-04-18)
