@@ -15,7 +15,7 @@ long_description = (
 
 
 setup(name='kotti_navigation',
-      version='0.3b1',
+      version='0.3',
       description="""Add a configurable navigation to your Kotti site""",
       long_description=long_description,
       classifiers=[
