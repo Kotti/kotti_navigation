@@ -1,13 +1,8 @@
 Changelog
 =========
 
-0.4 (Unreleased)
-----------------
-
-
-
-0.3 (2013-04-17)
-----------------
+0.4a1 (2013-04-18)
+------------------
 
 * Warning: the changes for this release do wholesale renaming, so existing
   deployments will require adjustment.
@@ -27,6 +22,12 @@ Changelog
   but with a configurable label. [geojeff]
 * Added a treatment for the menu display type for root, so that it is always
   shown (previously, the menu simply did not show for root). [geojeff]
+
+
+0.3 (2013-04-17)
+----------------
+
+- No changes.
 
 
 0.3b1 (2013-03-11)
