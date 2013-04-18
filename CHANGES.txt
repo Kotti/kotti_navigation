@@ -1,7 +1,12 @@
 Changelog
 =========
 
-0.4a2 (Unreleased)
+0.4b1 (Unreleased)
+------------------
+
+
+
+0.4a2 (2013-04-18)
 ------------------
 
 * Clarified descriptions and improved wording in the readme. [geojeff]
