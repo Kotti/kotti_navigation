@@ -85,3 +85,6 @@
 .lineage a.gap8 {
     padding-left: 10em;
 }
+ul.dropdown-menu li.nav-header {
+    padding-left: 0px;
+}

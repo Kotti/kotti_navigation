@@ -38,7 +38,7 @@ Six locations are available::
 
 They can be used in various combinations.
 
-Here are the location choices (in all-caps) in a layout diagram::
+Here are the location choices in a layout diagram::
 
     +------------------------------------------------------+
     | "top" (This is the top toolbar; not a real slot.     |
