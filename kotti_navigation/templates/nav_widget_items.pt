@@ -1,4 +1,4 @@
-<div class="use_container_class and 'container' or None"
+<div class="${use_container_class and 'container' or None}"
      id="navigation-list">
   <ul class="${nav_class}">
       <li tal:condition="show_menu
