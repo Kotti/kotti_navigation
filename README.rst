@@ -38,7 +38,7 @@ Six locations are available::
 
 They can be used in various combinations.
 
-Here are the location choices (in all-caps) in a layout diagram::
+Here are the location choices in a layout diagram::
 
     +------------------------------------------------------+
     | "top" (This is the top toolbar; not a real slot.     |
@@ -209,13 +209,13 @@ Entries for include_content_types need the full path::
         kotti_myaddon.resources.MyContentType
 
 exclude_content_types is a list of the names of content types that are to be
-ignored in the navigation display. It is the opposite of the ``include``
-setting described above. It is commonly used to exclude the Image content type
-from a normal nav display, to avoid the "clutter" with listing images, which
-can be numerous. The same could be true for other content items, such as for a
-site that allows the Event content type of kotti_calendar to be stored in
-various places in the site, and where events are wished to be shown only on
-calendar or event list displays.
+ignored in the navigation display. It is the opposite of the
+``include_content_types`` setting described above. It is commonly used to
+exclude the Image content type from a normal nav display, to avoid the
+"clutter" with listing images, which can be numerous. The same could be true
+for other content items, such as for a site that allows the Event content type
+of kotti_calendar to be stored in various places in the site, and where events
+are wished to be shown only on calendar or event list displays.
 
 show_hidden_while_logged_in offers the choice of viewing hidden items (for
 which in_navigation is toggled OFF) when logged in, to aid editing.
@@ -228,8 +228,9 @@ in what is called "top" location in kotti_navigation. The Bootstrap styling of
 this default Kotti nav consists of a navbar with the brand on the left and a
 search input on the right, and with top-level site items shown as nav-tab items
 in-between.  The default navigation would be redundant and perhaps confusing if
-used in combination with kotti_navigation, so it is overridden completely, by
-replacing the nav.pt template.  Find kotti_navigation's version in::
+used in combination with kotti_navigation, so it is overridden by replacing the
+nav.pt template.  The navbar still contains brand and search, but includes
+functionality for kotti_navigation. Find kotti_navigation's version in::
 
     kotti_navigation/kotti-overrides/templates/view/nav.pt
 
@@ -242,10 +243,10 @@ Configuring a Label
 The label is optional, but can provide clarification in some nav display cases.
 It is positioned within the display in different ways, depending on display
 type. In a tree-type display (one of the "stacked" display choices), it is at
-the top of the display. In a "vertical aspect" list, it is put underneath the
-context menu button if it is enabled (with show_menu = True), or it is the
-first item. In a "horizontal aspect" list display, it comes after the context
-menu button, if enabled, or is the first item.
+the top of the display. In a ver_list display, it is put underneath the context
+menu button if it is enabled (with show_menu = True), or it is the first item.
+In a "horizontal aspect" list display, it comes after the context menu button,
+if enabled, or is the first item.
 
 For the following discussion about the optional label, the context is assumed
 to be a document titled Animals, and there are two children titled Dogs and

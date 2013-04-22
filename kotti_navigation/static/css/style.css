@@ -85,3 +85,24 @@
 .lineage a.gap8 {
     padding-left: 10em;
 }
+
+/* padding-left for nav-header items in menu */
+/* First, specific slots that have classes,  */
+/* then the more general selector to cover   */
+/* the top and beforebodyend locations.      */
+div.left-column ul.dropdown-menu li.nav-header {
+    padding-left: 0px;
+}
+div.right-column ul.dropdown-menu li.nav-header {
+    padding-left: 0px;
+}
+div.above-content ul.dropdown-menu li.nav-header {
+    padding-left: 30px;
+}
+div.below-content ul.dropdown-menu li.nav-header {
+    padding-left: 30px;
+}
+/* A more general selector */
+ul.dropdown-menu li.nav-header {
+    padding-left: 30px;
+}
