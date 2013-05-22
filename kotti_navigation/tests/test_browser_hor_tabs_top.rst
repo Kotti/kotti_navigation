@@ -5,13 +5,9 @@ Setup and Login
 ---------------
 
   >>> from kotti import testing
+  >>> from kotti_navigation.tests import set_nav_setting
   >>> tools = testing.setUpFunctional(
-  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure',
-  ...        'kotti_navigation.navigation_widget.top_display_type': 'hor_tabs',
-  ...        'kotti_navigation.navigation_widget.top_show_menu': 'true',
-  ...        'kotti_navigation.navigation_widget.top_label': 'Horizontal Tabs up Top',
-  ...        'kotti_navigation.navigation_widget.top_include_root': 'true',
-  ...        'kotti_navigation.navigation_widget.top_show_hidden_while_logged_in': 'true',
+  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure'
   ...       })
   >>> browser = tools['Browser']()
   >>> ctrl = browser.getControl
@@ -28,7 +24,6 @@ Setup and Login
 
 Add some documents
 ------------------
-
   >>> browser.open(testing.BASE_URL + '/@@add_document')
   >>> ctrl('Title').value = 'Document 1'
   >>> ctrl('Description').value = 'This is the first document'
@@ -41,9 +36,27 @@ Add some documents
   >>> ctrl('save').click()
 
 
-Check navigation
-----------------
+Set settings and check navigation
+---------------------------------
 
   >>> browser.open(testing.BASE_URL + '/document-1')
-  >>> 'Horizontal Tabs up Top' in browser.contents
+  >>> 'id="navigation-list"' in browser.contents
+  False
+  >>> '<ul class="nav nav-pills">' in browser.contents
+  False
+
+
+  >>> set_nav_setting('top', 'display_type', 'horizontal')
+  >>> browser.open(testing.BASE_URL + '/document-1')
+  >>> # 'Horizontal Tabs up Top' in browser.contents  True
+  >>> 'id="navigation-list"' in browser.contents
+  True
+  >>> '<ul class="nav nav-pills">' in browser.contents
+  True
+
+  >>> set_nav_setting('top', 'options', ['tabs'])
+  >>> browser.open(testing.BASE_URL + '/document-1')
+  >>> '<ul class="nav nav-pills">' in browser.contents
+  False
+  >>> '<ul class="nav nav-tabs">' in browser.contents
   True

@@ -8,8 +8,8 @@ from kotti.resources import Content
 
 from kotti.views.util import render_view
 
-from kotti_navigation.views import navigation_widget_items
-from kotti_navigation.views import navigation_widget_tree
+# from kotti_navigation.views import navigation_widget_items
+# from kotti_navigation.views import navigation_widget_tree
 from kotti_navigation.views import is_node_open
 
 

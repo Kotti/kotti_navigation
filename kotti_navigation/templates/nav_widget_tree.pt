@@ -4,11 +4,8 @@
     <li tal:condition="show_menu
                        and location != 'top'"
         tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
-        tal:replace="api.render_view(view_name, context=context)" /> 
-    <li tal:condition="show_menu
-                       and location != 'top'
-                       and display_type.startswith('ver_')
-                       and items" class="divider"></li>
+        tal:replace="api.render_view(view_name, context=context)" />
+    <li tal:condition="show_divider" class="divider"></li>
     <li tal:condition="label and context.parent and items" class="nav-header">
       ${label}
     </li>
@@ -23,7 +20,7 @@
       </a>
     </li>
     <tal:items tal:repeat="item items">
-    <tal:replace 
+    <tal:replace
         tal:replace="api.render_view('nav-recurse', context=item)" />
     </tal:items>
   </ul>
