@@ -7,7 +7,7 @@ from kotti.views.slots import assign_slot
 
 from kotti_settings.util import add_settings
 from kotti_settings.util import get_setting
-from kotti_grid import _
+from kotti_navigation import _
 
 
 display_types = ((u'', _(u'Not enabled')),
