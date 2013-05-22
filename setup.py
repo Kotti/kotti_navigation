@@ -37,7 +37,8 @@ setup(name='kotti_navigation',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'Kotti>=0.8a1',
+          'Kotti>=0.9a2',
+          'kotti_settings>=0.1b4'
       ],
       tests_require=[],
       entry_points={
