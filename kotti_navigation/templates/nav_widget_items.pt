@@ -4,7 +4,7 @@
       <li tal:condition="show_menu
                          and location != 'top'"
         tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
-        tal:replace="api.render_view(view_name, context=context)" /> 
+        tal:replace="api.render_view(view_name, context=context)" />
     <li tal:condition="show_menu
                        and location != 'top'
                        and display_type.startswith('ver_')
@@ -15,9 +15,7 @@
     <tal:block repeat="item items">
       <tal:with_dropdown
                tal:define="children allowed_children[repeat.item.index]"
-               tal:condition="display_type.startswith('hor_')
-                              and display_type.endswith('dropdowns')
-                              and children">
+               tal:condition="careted and children">
         <li tal:define="hidden not item.in_navigation and 'hidden' or ''"
             class="${hidden}">
           <a href="${api.url(item)}"

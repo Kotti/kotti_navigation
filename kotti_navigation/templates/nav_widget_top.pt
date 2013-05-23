@@ -7,8 +7,7 @@
       <div tal:replace="api.render_template('kotti:templates/view/search.pt')" />
         <div class="${use_container_class and 'container' or None}"
            tal:condition="display_type == 'menu' or show_menu"
-           tal:define="view_name 'navigation-widget-menu-{0}'.format(location)"
-           tal:replace="api.render_view(view_name, context=context)"
+           tal:replace="api.render_view('navigation-widget-menu', context=context)"
            id="navigation-menu">
       </div>
     </div>
@@ -17,12 +16,12 @@
 <div class="content">
   <div class="container">
     <div class="row">
-      <div tal:condition="display_type in ['ver_list', 'hor_tabs', 'hor_pills', 'hor_tabs_with_dropdowns', 'hor_pills_with_dropdowns']"
-           tal:replace="api.render_view('navigation-widget-items-top', context=context)"
+      <div tal:condition="render_type == 'items'"
+           tal:replace="api.render_view('navigation-widget-items', context=context)"
            id="navigation-list">
       </div>
-      <div tal:condition="display_type in ['ver_tabs_stacked', 'ver_pills_stacked', 'ver_tabs_stacked_open_all', 'ver_pills_stacked_open_all']"
-           tal:replace="api.render_view('navigation-widget-tree-top', context=context)"
+      <div tal:condition="render_type == 'tree'"
+           tal:replace="api.render_view('navigation-widget-tree', context=context)"
            id="navigation-tree">
       </div>
       <ul class="breadcrumb"
@@ -34,12 +33,12 @@
         <tal:repeat tal:repeat="item breadcrumbs">
           <li tal:define="first repeat.item.start; last repeat.item.end"
               class="${last and 'active' or None}">
-      
+
             <a tal:omit-tag="last"
                href="${api.url(item)}">
               <span tal:condition="not first">${item.title}</span>
             </a>
-      
+
             <span class="divider" tal:condition="not (first or last)">/</span>
           </li>
         </tal:repeat>

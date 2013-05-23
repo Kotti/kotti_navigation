@@ -7,8 +7,7 @@ Setup and Login
   >>> from kotti import testing
   >>> from kotti_navigation.tests import set_nav_setting
   >>> tools = testing.setUpFunctional(
-  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure'
-  ...       })
+  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure'})
   >>> browser = tools['Browser']()
   >>> ctrl = browser.getControl
 
@@ -47,8 +46,10 @@ Set settings and check navigation
 
 
   >>> set_nav_setting('top', 'display_type', 'horizontal')
+  >>> set_nav_setting('top', 'label', 'Horizontal Tabs up Top')
   >>> browser.open(testing.BASE_URL + '/document-1')
-  >>> # 'Horizontal Tabs up Top' in browser.contents  True
+  >>> 'Horizontal Tabs up Top' in browser.contents
+  True
   >>> 'id="navigation-list"' in browser.contents
   True
   >>> '<ul class="nav nav-pills">' in browser.contents

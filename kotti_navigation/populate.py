@@ -13,6 +13,8 @@ from kotti_navigation import _
 display_types = ((u'', _(u'Not enabled')),
                  (u'vertical', _(u'Vertical')),
                  (u'horizontal', _(u'Horizontal')),
+                 (u'menu', _(u'Menu')),
+                 (u'breadcrumbs', _(u'Breadcrumbs')),
                  # ('ver_list', _(u'Vertical list')),
                  # ('ver_tabs', _(u'Vertical tabs')),
                  # ('ver_pills', _(u'Vertical pills')),
@@ -20,34 +22,18 @@ display_types = ((u'', _(u'Not enabled')),
                  # ('hor_pills', _(u'Horizontal pills')),
                 )
 
-options = ((u'list', _(u'List')),
-           (u'pills', _(u'Pills')),
-           (u'tabs', _(u'Tabs')),
-           (u'stacked', _(u'Stacked')),
-           (u'open_all', _(u'Open all')),
-           (u'dropdowns', _(u'With Dropdowns')),
-           (u'show_menu', _(u'Show Menu')),
-           (u'include_root', _(u'Include root')),
-           (u'show_hidden_while_logged_in', _(u'Show hidden while logged in')),
-           )
-
-
     #X hor_tabs                     horizontal (items)    context children
     #X hor_pills                    horizontal (items)    context children
-    # hor_tabs_with_dropdowns      horizontal (items)    context children +1
-    # hor_pills_with_dropdowns     horizontal (items)    context children +1
-    # breadcrumbs                  horizontal (items)    path to context
+    #X hor_tabs_with_dropdowns      horizontal (items)    context children +1
+    #X hor_pills_with_dropdowns     horizontal (items)    context children +1
+    #X breadcrumbs                  horizontal (items)    path to context
     #C ver_tabs_stacked             vertical (tree-like)  context children
     #C ver_pills_stacked            vertical (tree-like)  context children
-    # ver_tabs_stacked_open_all    vertical (tree-like)  entire hierarchy
-    # ver_pills_stacked_open_all   vertical (tree-like)  entire hierarchy
+    #C ver_tabs_stacked_open_all    vertical (tree-like)  entire hierarchy
+    #C ver_pills_stacked_open_all   vertical (tree-like)  entire hierarchy
     #X ver_list                     vertical (items)      context children
-    # menu                         button with caret     path to context +1
+    #X menu                         button with caret     path to context +1
     #                              firing dropdown menu
-
-
-# class SlotEnable(colander.SchemaNode):
-#     default = True
 
 
 class DisplayType(colander.SchemaNode):
@@ -59,6 +45,18 @@ class DisplayType(colander.SchemaNode):
 class Label(colander.SchemaNode):
     default = u''
     missing = u''
+
+
+options = ((u'list', _(u'List')),
+           (u'pills', _(u'Pills')),
+           (u'tabs', _(u'Tabs')),
+           (u'stacked', _(u'Stacked')),
+           (u'open_all', _(u'Open all')),
+           (u'dropdowns', _(u'With Dropdowns')),
+           (u'show_menu', _(u'Show Menu')),
+           (u'include_root', _(u'Include root')),
+           (u'show_hidden_while_logged_in', _(u'Show hidden while logged in')),
+           )
 
 
 class Options(colander.SchemaNode):
@@ -84,15 +82,6 @@ class ContentTypes(colander.SchemaNode):
 class ShowHiddenWhileLoggedIn(colander.SchemaNode):
     default = False
     missing = False
-
-
-# kotti_navigation.navigation_widget.top_display_type = ver_list
-# kotti_navigation.navigation_widget.top_show_menu = true
-# kotti_navigation.navigation_widget.top_label = context:
-# kotti_navigation.navigation_widget.top_include_root = true
-# kotti_navigation.navigation_widget.top_show_hidden_while_logged_in = true
-# kotti_navigation.navigation_widget.top_exclude_content_types =
-#     kotti.resources.Image
 
 
 class NavigationSchema(colander.MappingSchema):
@@ -164,13 +153,8 @@ NavigationSettings = {
 
 
 def populate():
-    from kotti.resources import get_root
-    root = get_root()
-    #del root.annotations['kotti_settings']
     add_settings(NavigationSettings)
-    if get_setting(u'left_display_type', None) is not None:
+    if get_setting(u'left_display_type'):
         assign_slot('navigation-widget', 'left')
-    if get_setting(u'right_display_type', None) is not None:
+    if get_setting(u'right_display_type'):
         assign_slot('navigation-widget', 'right')
-    #if get_setting(u'right_enable', False):
-    #    assign_slot('navigation-widget', 'right')

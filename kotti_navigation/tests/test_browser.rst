@@ -5,11 +5,9 @@ Setup and Login
 ---------------
 
   >>> from kotti import testing
+  >>> from kotti_navigation.tests import set_nav_setting
   >>> tools = testing.setUpFunctional(
-  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure',
-  ...        'kotti_navigation.navigation_widget.left_display_type': 'ver_tabs_stacked_open_all',
-  ...        'kotti_navigation.navigation_widget.left_include_root': 'true',
-  ...        'kotti_navigation.navigation_widget.left_show_hidden_while_logged_in': 'true',
+  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure'
   ...       })
   >>> browser = tools['Browser']()
   >>> ctrl = browser.getControl
@@ -42,6 +40,8 @@ Add some documents
 Check navigation
 ----------------
 
+  >>> set_nav_setting('top', 'display_type', 'vertical')
+  >>> set_nav_setting('top', 'options', ['include_root', 'show_hidden_while_logged_in', 'stacked', 'open_all'])
   >>> browser.open(testing.BASE_URL)
   >>> 'Document 1 1' in browser.contents
   True

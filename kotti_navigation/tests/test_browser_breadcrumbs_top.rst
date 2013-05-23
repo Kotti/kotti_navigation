@@ -5,13 +5,9 @@ Setup and Login
 ---------------
 
   >>> from kotti import testing
+  >>> from kotti_navigation.tests import set_nav_setting
   >>> tools = testing.setUpFunctional(
-  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure',
-  ...        'kotti_navigation.navigation_widget.top_display_type': 'breadcrumbs',
-  ...        'kotti_navigation.navigation_widget.top_label': 'Here are your breadcrumbs',
-  ...        'kotti_navigation.navigation_widget.top_include_root': 'false',
-  ...        'kotti_navigation.navigation_widget.top_show_hidden_while_logged_in': 'true',
-  ...       })
+  ...     **{'kotti.configurators': 'kotti_navigation.kotti_configure'})
   >>> browser = tools['Browser']()
   >>> ctrl = browser.getControl
 
@@ -43,6 +39,9 @@ Add some documents
 Check navigation
 ----------------
 
+  >>> set_nav_setting('top', 'display_type', 'breadcrumbs')
+  >>> set_nav_setting('top', 'label', 'Here are your breadcrumbs')
+  >>> set_nav_setting('top', 'options', ['show_hidden_while_logged_in'])
   >>> browser.open(testing.BASE_URL + '/document-1/document-1-1')
   >>> 'Here are your breadcrumbs' in browser.contents
   True

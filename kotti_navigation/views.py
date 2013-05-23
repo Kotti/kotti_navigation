@@ -1,8 +1,6 @@
 from pyramid.exceptions import PredicateMismatch
 from pyramid.view import view_config
 
-from paste.deploy.converters import asbool
-
 from fanstatic import kotti_navigation as resource_group
 
 from kotti.resources import get_root
@@ -10,7 +8,6 @@ from kotti.views.util import render_view
 
 from kotti_settings.util import get_setting
 
-# from kotti_navigation import navigation_settings
 from kotti_navigation.util import parse_label
 from kotti_navigation.util import get_children
 from kotti_navigation.util import get_lineage
@@ -43,10 +40,7 @@ class Navigation(object):
                 view_name = 'navigation-widget-breadcrumbs'
             elif display_type == 'menu':
                 view_name = 'navigation-widget-menu'
-            return render_view(self.context,
-                               self.request,
-                               name=view_name)
-            # assign_slot(view_name, slot)
+            return render_view(self.context, self.request, name=view_name)
         raise PredicateMismatch()
 
     @view_config(name='nav-recurse',
@@ -72,7 +66,7 @@ class Navigation(object):
 
     @view_config(name='navigation-widget-tree',
                  renderer='kotti_navigation:templates/nav_widget_tree.pt')
-    def navigation_widget_tree(self, name=''):
+    def navigation_widget_tree(self):
         """Views for display type "tree", continued:
           - These are the main views for the tree display type, each using the
             general navigation_widget_tree() view function.
@@ -104,7 +98,7 @@ class Navigation(object):
         tree_is_open_all = 'open_all' in options
         nav_class = 'nav nav-{0}'.format(tabs_or_pills)
         if 'stacked' in options:
-            nav_class += ' {0}-stacked'.format(tabs_or_pills)
+            nav_class += ' nav-stacked'
 
         show_divider = show_menu and self.location != 'top' and\
                             display_type == 'vertical' and items
@@ -124,7 +118,7 @@ class Navigation(object):
 
     @view_config(name='navigation-widget-items',
                  renderer='kotti_navigation:templates/nav_widget_items.pt')
-    def navigation_widget_items(self, name=''):
+    def navigation_widget_items(self):
         """Views for the "items" display type, a term used to avoid confusion
            that comes with calling this a "list" -- there are horizontal lists
            and there are vertical aspect lists. We distinguish here that the
@@ -168,6 +162,9 @@ class Navigation(object):
         label = parse_label(self.context.title,
                             get_setting(self.location + '_label'))
 
+        careted = (display_type == 'horizontal') and\
+                    ('dropdowns' in options)
+
         return {'location': self.location,
                 'items': items,
                 'display_type': display_type,
@@ -177,11 +174,12 @@ class Navigation(object):
                 'allowed_children': allowed_children,
                 'label': label,
                 'show_item_dropdowns': dropdowns,
+                'careted': careted,
             }
 
     @view_config(name='navigation-widget-breadcrumbs',
              renderer='kotti_navigation:templates/nav_widget_breadcrumbs.pt')
-    def navigation_widget_breadcrumbs(self, name=''):
+    def navigation_widget_breadcrumbs(self):
         """Views for the "breadcrumbs" display type, which is essentially the
            same as Kotti's default breadcrumbs display, except that here you
            have control of the associated label.
@@ -215,7 +213,7 @@ class Navigation(object):
 
     @view_config(name='navigation-widget-menu',
                  renderer='kotti_navigation:templates/nav_widget_menu.pt')
-    def navigation_widget_menu(self, name=''):
+    def navigation_widget_menu(self):
         """Views for the "menu" display type, which consists of a single button
            with a dropdown for presenting a full site context menu.
            - They each use the general navigation_widget_menu() view function.
@@ -262,7 +260,7 @@ class Navigation(object):
 
     @view_config(name='navigation-widget-top',
                  renderer='kotti_navigation:templates/nav_widget_top.pt')
-    def navigation_widget_top(self, name=''):
+    def navigation_widget_top(self):
         """View for the special-case top location, which must be handled this
            way because Kotti's own default nav display must be overridden, and
            because the top location is not a simple "slot." It consists of a
@@ -283,19 +281,16 @@ class Navigation(object):
         top_properties = {}
 
         if display_type == 'horizontal':
-            tree_properties = self.navigation_widget_items(
-                                name='navigation-widget-items')
+            tree_properties = self.navigation_widget_items()
 
         elif display_type == 'vertical' and 'list' in options:
-            tree_properties = self.navigation_widget_items(
-                                name='navigation-widget-items')
+            tree_properties = self.navigation_widget_items()
 
         elif display_type == 'vertical':
             tabs_or_pills = 'tabs' if 'tabs' in options else 'pills'
             tree_is_open_all = 'open_all' in options
 
-            tree_properties = self.navigation_widget_tree(
-                                name='navigation-widget-tree')
+            tree_properties = self.navigation_widget_tree()
 
             tree_properties['nav_class'] = \
                 'nav nav-{0} nav-stacked'.format(tabs_or_pills)
@@ -305,17 +300,22 @@ class Navigation(object):
             top_properties = tree_properties
 
         elif display_type == 'breadcrumbs':
-            top_properties = self.navigation_widget_breadcrumbs(
-                                name='navigation-widget-breadcrumbs')
+            top_properties = self.navigation_widget_breadcrumbs()
 
         elif display_type == 'menu':
-            top_properties = self.navigation_widget_menu(
-                                name='navigation-widget-menu')
+            top_properties = self.navigation_widget_menu()
 
         top_properties['location'] = 'top'
         top_properties['display_type'] = display_type
         top_properties['include_root'] = include_root
         top_properties['label'] = label
         top_properties['show_menu'] = show_menu
+
+        top_properties['render_type'] = 'menu'
+        if (display_type == 'vertical' and 'list' in options)\
+            or (display_type == 'horizontal'):
+            top_properties['render_type'] = 'items'
+        elif display_type == 'horizontal':
+            top_properties['render_type'] = 'tree'
 
         return top_properties

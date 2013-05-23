@@ -23,65 +23,39 @@ def parse_label(title, label):
             return label
 
 
-def get_children(context, request, location):
-    """Returns the children of a given context depending on the
-       global settings and the optional location.
-    """
-    user = get_user(request)
+def the_user(request):
+    return get_user(request)
+
+
+def _check_children(request, location, children):
+    user = the_user(request)
     options = get_setting(location + '_options', [])
     show_hidden = 'show_hidden_while_logged_in' in options
     content_types_to_include = get_setting(location + '_include')
     content_types_to_exclude = get_setting(location + '_exclude')
 
-    if show_hidden and user:
-        if content_types_to_include:
-            children = [c for c in context.children_with_permission(request)
-                    if unicode(c.__class__) not in content_types_to_exclude
-                    and unicode(c.__class__) in content_types_to_include]
-        else:
-            children = [c for c in context.children_with_permission(request)
-                    if unicode(c.__class__) not in content_types_to_exclude]
-    else:
-        if content_types_to_include:
-            children = [c for c in context.children_with_permission(request)
-                    if unicode(c.__class__) in content_types_to_include
-                            and c.in_navigation
-                            and unicode(c.__class__) not in content_types_to_exclude]
-        else:
-            children = [c for c in context.children_with_permission(request)
-                    if c.in_navigation
-                    and unicode(c.__class__) not in content_types_to_exclude]
+    if not (show_hidden and user):
+        children = [c for c in children if c.in_navigation]
+    if content_types_to_include:
+        children = [c for c in children
+                    if str(c.__class__) in content_types_to_include]
+    if content_types_to_exclude:
+        children = [c for c in children
+                    if str(c.__class__) not in content_types_to_exclude]
     return children
 
 
+def get_children(context, request, location):
+    """Returns the children of a given context depending on the
+       global settings and the optional location.
+    """
+    children = context.children_with_permission(request)
+    return _check_children(request, location, children)
+
+
 def get_lineage(context, request, location):
-    # TODO: refactore the filtering of the items to an extra function
-    user = get_user(request)
-    options = get_setting(location + '_options')
-    show_hidden = 'show_hidden_while_logged_in' in options
-    content_types_to_include = get_setting(location + '_include')
-    content_types_to_exclude = get_setting(location + '_exclude')
-
-    if show_hidden and user:
-        if content_types_to_include:
-            items = [item for item in list(lineage(context))
-                 if unicode(item.__class__) not in content_types_to_exclude
-                 and unicode(item.__class__) in content_types_to_include]
-        else:
-            items = [item for item in list(lineage(context))
-                 if unicode(item.__class__) not in content_types_to_exclude]
-    else:
-        if content_types_to_include:
-            items = [item for item in list(lineage(context))
-                 if unicode(item.__class__) in content_types_to_include
-                 and item.in_navigation
-                 and unicode(item.__class__) not in content_types_to_exclude]
-        else:
-            items = [item for item in list(lineage(context))
-                 if item.in_navigation
-                 and unicode(item.__class__) not in content_types_to_exclude]
-
-    return items
+    items = list(lineage(context))
+    return _check_children(request, location, items)
 
 
 def is_node_open(item, request):
@@ -103,3 +77,13 @@ def is_node_open(item, request):
             break
         context = context.__parent__
     return is_open
+
+
+from pyramid.events import subscriber
+from kotti_settings.events import SettingsAfterSave
+
+
+@subscriber(SettingsAfterSave)
+def set_assigned_slot(event):
+    """Reset the widget to the enabled slots."""
+    #assign_slot('grid-widget', slot)
