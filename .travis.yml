@@ -7,6 +7,8 @@ env:
   - KOTTI_TEST_DB_STRING=mysql+oursql://root@localhost:3306/kotti_testing
   - KOTTI_TEST_DB_STRING=sqlite://
 install:
+  - pip install https://github.com/Kotti/Kotti/archive/master.zip
+  - pip install https://github.com/j23d/kotti_settings/archive/master.zip
   - python setup.py dev
   - pip install psycopg2 oursql
 before_script:
