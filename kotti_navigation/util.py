@@ -1,8 +1,10 @@
+from pyramid.events import subscriber
 from pyramid.location import lineage
 
 from kotti.resources import get_root
 from kotti.security import get_user
 
+from kotti_settings.events import SettingsAfterSave
 from kotti_settings.util import get_setting
 
 
@@ -79,11 +81,7 @@ def is_node_open(item, request):
     return is_open
 
 
-from pyramid.events import subscriber
-from kotti_settings.events import SettingsAfterSave
-
-
 @subscriber(SettingsAfterSave)
 def set_assigned_slot(event):
     """Reset the widget to the enabled slots."""
-    #assign_slot('grid-widget', slot)
+    #assign_slot('navigation-widget', slot)

@@ -15,25 +15,19 @@ display_types = ((u'', _(u'Not enabled')),
                  (u'horizontal', _(u'Horizontal')),
                  (u'menu', _(u'Menu')),
                  (u'breadcrumbs', _(u'Breadcrumbs')),
-                 # ('ver_list', _(u'Vertical list')),
-                 # ('ver_tabs', _(u'Vertical tabs')),
-                 # ('ver_pills', _(u'Vertical pills')),
-                 # ('hor_tabs', _(u'Horizontal tabs')),
-                 # ('hor_pills', _(u'Horizontal pills')),
                 )
-
-    #X hor_tabs                     horizontal (items)    context children
-    #X hor_pills                    horizontal (items)    context children
-    #X hor_tabs_with_dropdowns      horizontal (items)    context children +1
-    #X hor_pills_with_dropdowns     horizontal (items)    context children +1
-    #X breadcrumbs                  horizontal (items)    path to context
-    #C ver_tabs_stacked             vertical (tree-like)  context children
-    #C ver_pills_stacked            vertical (tree-like)  context children
-    #C ver_tabs_stacked_open_all    vertical (tree-like)  entire hierarchy
-    #C ver_pills_stacked_open_all   vertical (tree-like)  entire hierarchy
-    #X ver_list                     vertical (items)      context children
-    #X menu                         button with caret     path to context +1
-    #                              firing dropdown menu
+#X hor_tabs                     horizontal (items)    context children
+#X hor_pills                    horizontal (items)    context children
+#X hor_tabs_with_dropdowns      horizontal (items)    context children +1
+#X hor_pills_with_dropdowns     horizontal (items)    context children +1
+#X breadcrumbs                  horizontal (items)    path to context
+#C ver_tabs_stacked             vertical (tree-like)  context children
+#C ver_pills_stacked            vertical (tree-like)  context children
+#C ver_tabs_stacked_open_all    vertical (tree-like)  entire hierarchy
+#C ver_pills_stacked_open_all   vertical (tree-like)  entire hierarchy
+#X ver_list                     vertical (items)      context children
+#X menu                         button with caret     path to context +1
+#                              firing dropdown menu
 
 
 class DisplayType(colander.SchemaNode):
@@ -84,7 +78,7 @@ class ShowHiddenWhileLoggedIn(colander.SchemaNode):
     missing = False
 
 
-class NavigationSchema(colander.MappingSchema):
+class NavigationSchemaTop(colander.MappingSchema):
     top_display_type = DisplayType(colander.String(),
                              name=u'top_display_type',
                              title=_(u'Top display type'))
@@ -104,6 +98,8 @@ class NavigationSchema(colander.MappingSchema):
                              name=u'top_label',
                              title=_(u'Top label'))
 
+
+class NavigationSchemaLeft(colander.MappingSchema):
     left_display_type = DisplayType(colander.String(),
                              name=u'left_display_type',
                              title=_(u'Left display type'))
@@ -123,6 +119,8 @@ class NavigationSchema(colander.MappingSchema):
                              name=u'left_label',
                              title=_(u'Left label'))
 
+
+class NavigationSchemaRight(colander.MappingSchema):
     right_display_type = DisplayType(colander.String(),
                              name=u'right_display_type',
                              title=_(u'Right display type'))
@@ -143,17 +141,35 @@ class NavigationSchema(colander.MappingSchema):
                             title=_(u'Right include Content Types'))
 
 
-NavigationSettings = {
-    'name': 'navigation_settings',
-    'title': _(u'Navigation Settings'),
-    'description': _(u"Settings for kotti_navigation"),
-    'success_message': _(u"Successfully saved kotti_navigation settings."),
-    'schema_factory': NavigationSchema,
+NavigationSettingsTop = {
+    'name': 'navigation_settings_top',
+    'title': _(u'Navigation Settings Top'),
+    'description': _(u"Settings for navigation widget on the top"),
+    'success_message': _(u"Successfully saved navigation widget settings."),
+    'schema_factory': NavigationSchemaTop,
+}
+
+NavigationSettingsLeft = {
+    'name': 'navigation_settings_left',
+    'title': _(u'Navigation Settings Left'),
+    'description': _(u"Settings for navigation widget in the left slot"),
+    'success_message': _(u"Successfully saved navigation widget settings."),
+    'schema_factory': NavigationSchemaLeft,
+}
+
+NavigationSettingsRight = {
+    'name': 'navigation_settings_right',
+    'title': _(u'Navigation Settings Right'),
+    'description': _(u"Settings for navigation widget on the right"),
+    'success_message': _(u"Successfully saved navigation widget settings."),
+    'schema_factory': NavigationSchemaRight,
 }
 
 
 def populate():
-    add_settings(NavigationSettings)
+    add_settings(NavigationSettingsTop)
+    add_settings(NavigationSettingsLeft)
+    add_settings(NavigationSettingsRight)
     if get_setting(u'left_display_type'):
         assign_slot('navigation-widget', 'left')
     if get_setting(u'right_display_type'):

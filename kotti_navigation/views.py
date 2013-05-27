@@ -20,7 +20,7 @@ class Navigation(object):
         self.context = context
         self.request = request
         self.location = 'top'
-        self.slot = getattr(self.request, 'slot', None)
+        self.slot = getattr(self.request, 'kotti_slot', None)
         if self.slot is not None:
             self.location = self.slot
 
