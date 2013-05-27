@@ -30,3 +30,9 @@ def kn_populate(db_session):
 @fixture
 def kn_setup():
     setup_app()
+
+
+@fixture
+def kn_request(dummy_request):
+    setattr(dummy_request, 'kotti_slot', 'left')
+    return dummy_request
