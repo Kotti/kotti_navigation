@@ -39,7 +39,7 @@ Add some documents
 Check navigation
 ----------------
 
-  >>> set_nav_setting('top', 'display_type', 'vertical')
+  >>> set_nav_setting('top', 'display_type', 'tree')
   >>> set_nav_setting('top', 'options', ['list', 'show_menu', 'show_hidden_while_logged_in', 'include_root'])
   >>> set_nav_setting('top', 'label', 'Vertical List up Top')
   >>> browser.open(testing.BASE_URL + '/document-1')

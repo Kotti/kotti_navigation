@@ -5,14 +5,15 @@ from deform_bootstrap.widget import ChosenMultipleWidget
 from kotti import get_settings
 from kotti.views.slots import assign_slot
 
+from kotti_settings.config import ShowInContextSchemaNode
 from kotti_settings.util import add_settings
 from kotti_settings.util import get_setting
 from kotti_navigation import _
 
 
 display_types = ((u'', _(u'Not enabled')),
-                 (u'vertical', _(u'Vertical')),
-                 (u'horizontal', _(u'Horizontal')),
+                 (u'tree', _(u'Tree')),
+                 (u'items', _(u'Items')),
                  (u'menu', _(u'Menu')),
                  (u'breadcrumbs', _(u'Breadcrumbs')),
                 )
@@ -97,6 +98,8 @@ class NavigationSchemaTop(colander.MappingSchema):
     top_label = Label(colander.String(),
                              name=u'top_label',
                              title=_(u'Top label'))
+    show_in_context = ShowInContextSchemaNode(colander.String(),
+                             name=u'top_show_in_context')
 
 
 class NavigationSchemaLeft(colander.MappingSchema):
@@ -118,6 +121,8 @@ class NavigationSchemaLeft(colander.MappingSchema):
     left_label = Label(colander.String(),
                              name=u'left_label',
                              title=_(u'Left label'))
+    show_in_context = ShowInContextSchemaNode(colander.String(),
+                             name=u'left_show_in_context')
 
 
 class NavigationSchemaRight(colander.MappingSchema):
@@ -139,6 +144,8 @@ class NavigationSchemaRight(colander.MappingSchema):
     right_include = ContentTypes(colander.Set(),
                             name=u'right_include',
                             title=_(u'Right include Content Types'))
+    show_in_context = ShowInContextSchemaNode(colander.String(),
+                             name=u'right_show_in_context')
 
 
 NavigationSettingsTop = {
@@ -167,10 +174,12 @@ NavigationSettingsRight = {
 
 
 def populate():
-    add_settings(NavigationSettingsTop)
     add_settings(NavigationSettingsLeft)
     add_settings(NavigationSettingsRight)
+    add_settings(NavigationSettingsTop)
     if get_setting(u'left_display_type'):
         assign_slot('navigation-widget', 'left')
     if get_setting(u'right_display_type'):
         assign_slot('navigation-widget', 'right')
+    # if get_setting(u'top_display_type'):
+    #     assign_slot('navigation-widget', 'top')

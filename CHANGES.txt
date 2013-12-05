@@ -1,9 +1,14 @@
 Changelog
 =========
 
-0.4b1 (Unreleased)
+0.5a1 (Unreleased)
 ------------------
 
+* Use kotti_settings for configuration of the navigation widget.
+
+  The previously used configuration in the ini file is not supported
+  anymore. The configuration is now done via the settings interface
+  where you can adjust the navigation widget to your needs at run time.
 
 
 0.4a2 (2013-04-18)
