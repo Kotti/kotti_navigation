@@ -37,9 +37,8 @@ setup(name='kotti_navigation',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'Kotti>=0.9a2',
-          'kotti_settings>=0.1b4',
-          'deform_bootstrap>=0.2.6',
+          'Kotti>=1.0.0_alpha.3',
+          'kotti_settings>=0.2',
       ],
       entry_points={
           'fanstatic.libraries': [
