@@ -6,7 +6,7 @@ _ = TranslationStringFactory('kotti_navigation')
 
 
 def kotti_configure(settings):
-    settings['pyramid.includes'] += ' kotti_navigation.include_navigation'
+    settings['pyramid.includes'] += ' kotti_navigation.include_navigation deform_bootstrap js.deform'
     settings['kotti.populators'] += ' kotti_navigation.populate.populate'
     # We override nav.pt.
     settings['kotti.asset_overrides'] = 'kotti_navigation:kotti-overrides/'
