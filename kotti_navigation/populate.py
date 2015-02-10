@@ -1,6 +1,5 @@
 import colander
 import deform
-from deform_bootstrap.widget import ChosenMultipleWidget
 
 from kotti import get_settings
 from kotti.views.slots import assign_slot
@@ -54,7 +53,8 @@ options = ((u'list', _(u'List')),
 
 
 class Options(colander.SchemaNode):
-    widget = ChosenMultipleWidget(values=options)
+    widget = deform.widget.SelectWidget(values=options,
+                                        multiple=True)
     default = []
     missing = []
 
@@ -63,7 +63,8 @@ class Options(colander.SchemaNode):
 def deferred_content_types_widget(node, kw):
     types = get_settings()['kotti.available_types']
     values = [(type_, type_.type_info.name) for type_ in types]
-    widget = ChosenMultipleWidget(values=values)
+    widget = deform.widget.SelectWidget(values=values,
+                                        multiple=True)
     return widget
 
 
@@ -81,64 +82,64 @@ class ShowHiddenWhileLoggedIn(colander.SchemaNode):
 class NavigationSchemaTop(colander.MappingSchema):
     top_display_type = DisplayType(colander.String(),
                              name=u'top_display_type',
-                             title=_(u'Top display type'))
+                             title=_(u'Display type'))
     top_options = Options(colander.Set(),
                             name=u'top_options',
-                            title=_(u'Top options'),
+                            title=_(u'Options'),
                             description=_(u'Enable dropdowns feature '
                                           u'only makes sense for horizontal '
                                           u'display type.'))
     top_exclude = ContentTypes(colander.Set(),
                             name=u'top_exclude',
-                            title=_(u'Top exclude Content Types'))
+                            title=_(u'Exclude Content Types'))
     top_include = ContentTypes(colander.Set(),
                             name=u'top_include',
-                            title=_(u'Top include Content Types'))
+                            title=_(u'Include Content Types'))
     top_label = Label(colander.String(),
                              name=u'top_label',
-                             title=_(u'Top label'))
+                             title=_(u'Label'))
 
 
 class NavigationSchemaLeft(colander.MappingSchema):
     left_display_type = DisplayType(colander.String(),
                              name=u'left_display_type',
-                             title=_(u'Left display type'))
+                             title=_(u'Display type'))
     left_options = Options(colander.Set(),
                             name=u'left_options',
-                            title=_(u'Left options'),
+                            title=_(u'Options'),
                             description=_(u'Enable dropdowns feature '
                                           u'only makes sense for horizontal '
                                           u'display type.'))
     left_exclude = ContentTypes(colander.Set(),
                             name=u'left_exclude',
-                            title=_(u'Left exclude Content Types'))
+                            title=_(u'Exclude Content Types'))
     left_include = ContentTypes(colander.Set(),
                             name=u'left_include',
-                            title=_(u'Left include Content Types'))
+                            title=_(u'Include Content Types'))
     left_label = Label(colander.String(),
                              name=u'left_label',
-                             title=_(u'Left label'))
+                             title=_(u'Label'))
 
 
 class NavigationSchemaRight(colander.MappingSchema):
     right_display_type = DisplayType(colander.String(),
                              name=u'right_display_type',
-                             title=_(u'Right display type'))
+                             title=_(u'Display type'))
     right_options = Options(colander.Set(),
                             name=u'right_options',
-                            title=_(u'Right options'),
+                            title=_(u'Options'),
                             description=_(u'Enable dropdowns feature '
                                           u'only makes sense for horizontal '
                                           u'display type.'))
     right_label = Label(colander.String(),
                              name=u'right_label',
-                             title=_(u'Right label'))
+                             title=_(u'Label'))
     right_exclude = ContentTypes(colander.Set(),
                             name=u'right_exclude',
-                            title=_(u'Right exclude Content Types'))
+                            title=_(u'Exclude Content Types'))
     right_include = ContentTypes(colander.Set(),
                             name=u'right_include',
-                            title=_(u'Right include Content Types'))
+                            title=_(u'Include Content Types'))
 
 
 NavigationSettingsTop = {
