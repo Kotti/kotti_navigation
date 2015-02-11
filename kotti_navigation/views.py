@@ -289,11 +289,4 @@ class Navigation(object):
         top_properties['label'] = label
         top_properties['show_menu'] = show_menu
 
-        top_properties['render_type'] = 'menu'
-        if (display_type == 'tree' and 'list' in options)\
-            or (display_type == 'items'):
-            top_properties['render_type'] = 'items'
-        elif display_type == 'items':
-            top_properties['render_type'] = 'tree'
-
         return top_properties

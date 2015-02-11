@@ -1,48 +1,78 @@
-<div class="navbar navbar-inverse navbar-static-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <span class="brand">
-        <a href="${request.application_url}/">${api.site_title}</a>
-      </span>
+<nav xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     class="navbar navbar-static-top navbar-inverse"
+     role="navigation"
+     id="navbar-view">
+  <div class="container-fluid">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-view-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="${request.application_url}/">
+        ${api.site_title}
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse"
+      id="navbar-view-collapse"
+      tal:condition="not: display_type">
+      <ul class="nav navbar-nav">
+        <li tal:define="items [i for i in api.list_children(api.navigation_root) if i.in_navigation]"
+            tal:repeat="item items"
+            class="${api.inside(context, item) and 'active' or None}">
+          <a href="${api.url(item)}" title="${item.description}">${item.title}</a>
+        </li>
+      </ul>
       <div tal:replace="api.render_template('kotti:templates/view/search.pt')" />
-        <div class="${use_container_class and 'container' or None}"
+    </div>
+
+    <!-- If the top navigation is enabled, here we choose what is going to be rendered. -->
+    <tal:nav tal:condition="display_type">
+      <div class="${use_container_class and 'container' or None}"
            tal:condition="display_type == 'menu' or show_menu"
            tal:replace="api.render_view('navigation-widget-menu', context=context)"
            id="navigation-menu">
       </div>
-    </div>
-  </div>
-</div>
-<div class="content">
-  <div class="container">
-    <div class="row">
-      <div tal:condition="render_type == 'items'"
-           tal:replace="api.render_view('navigation-widget-items', context=context)"
-           id="navigation-list">
-      </div>
-      <div tal:condition="render_type == 'tree'"
-           tal:replace="api.render_view('navigation-widget-tree', context=context)"
-           id="navigation-tree">
-      </div>
-      <ul class="breadcrumb"
-          xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-          i18n:domain="kotti_navigation"
-          tal:define="breadcrumbs [i for i in api.breadcrumbs]"
-          tal:condition="display_type == 'breadcrumbs' and len(breadcrumbs) > 1">
-        <span tal:omit-tag="" i18n:translate="">${label}</span>
-        <tal:repeat tal:repeat="item breadcrumbs">
-          <li tal:define="first repeat.item.start; last repeat.item.end"
-              class="${last and 'active' or None}">
 
-            <a tal:omit-tag="last"
-               href="${api.url(item)}">
-              <span tal:condition="not first">${item.title}</span>
-            </a>
+      <div class="content">
+        <div class="container">
+          <div class="row">
+            <div tal:condition="display_type == 'items'"
+                 tal:replace="api.render_view('navigation-widget-items', context=context)"
+                 id="navigation-list">
+            </div>
+            <div tal:condition="display_type == 'tree'"
+                 tal:replace="api.render_view('navigation-widget-tree', context=context)"
+                 id="navigation-tree">
+            </div>
+            <ul class="breadcrumb"
+                xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+                i18n:domain="kotti_navigation"
+                tal:define="breadcrumbs [i for i in api.breadcrumbs]"
+                tal:condition="display_type == 'breadcrumbs' and len(breadcrumbs) > 1">
+              <span tal:omit-tag="" i18n:translate="">${label}</span>
+              <tal:repeat tal:repeat="item breadcrumbs">
+                <li tal:define="first repeat.item.start; last repeat.item.end"
+                    class="${last and 'active' or None}">
 
-            <span class="divider" tal:condition="not (first or last)">/</span>
-          </li>
-        </tal:repeat>
-      </ul>
-    </div>
+                  <a tal:omit-tag="last"
+                     href="${api.url(item)}">
+                    <span tal:condition="not first">${item.title}</span>
+                  </a>
+
+                  <span class="divider" tal:condition="not (first or last)">/</span>
+                </li>
+              </tal:repeat>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </tal:nav>
   </div>
-</div>
+</nav>
