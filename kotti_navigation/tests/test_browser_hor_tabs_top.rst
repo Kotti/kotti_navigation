@@ -14,8 +14,8 @@ Setup and Login
   >>> browser.open(testing.BASE_URL + '/@@login')
   >>> 'Log in' in browser.contents
   True
-  >>> ctrl('Username or email').value = 'admin'
-  >>> ctrl('Password').value = 'secret'
+  >>> ctrl('Username or email', index=0).value = 'admin'
+  >>> ctrl('Password', index=0).value = 'secret'
   >>> ctrl(name='submit').click()
   >>> 'Welcome, Administrator' in browser.contents
   True
