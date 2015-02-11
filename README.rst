@@ -12,11 +12,15 @@ Setting up Navigation
 =====================
 
 To activate kotti_navigation add the following entry, as with any add-on, to
-kotti.configurators of your .ini config file::
+kotti.configurators of your .ini config file. ``kotti_navigation`` depends on
+kotti_settings_, so you have to add also an entry for this add-on::
+
+.. code-block:: ini
 
     kotti.configurators =
         ...
         kotti_navigation.kotti_configure
+        kotti_contentpreview.kotti_configure
 
 The default configuration will add no navigation display, and it will remove
 the default Kotti navbar in the top position, so you MUST configure for at
@@ -24,69 +28,55 @@ least one location, unless you are using kotti_navigation, ironically, to
 purposefully turn off Kotti's default top navigation (Kotti's default
 breadcrumbs would be the only navigation available).
 
-Location
---------
 
-Six locations are available::
+How to use it?
+==============
+
+You have different settings to adjust ``kotti_navigation`` to your needs.
+
+There are three locations are available::
 
     top (within and beneath the default nav toolbar)
     left (slot)
     right (slot)
-    abovecontent (slot)
-    belowcontent (slot)
-    belowbodyend (slot)
 
-They can be used in various combinations.
+For every location you have an own tab in the settings. There you can choose
+if the navigation is enabled for the location and how it will be displayed.
+The following options are available::
 
-Here are the location choices in a layout diagram::
+Display Types
+-------------
 
-    +------------------------------------------------------+
-    | "top" (This is the top toolbar; not a real slot.     |
-    |        kotti_navigation changes it to be only the    |
-    |        brand at left and search at right. The menu   |
-    |        nav display choice is available for the       |
-    |        space between branch and search. Other nav    |
-    |        displays are put in a separate div below      |
-    |        the top toolbar.)                             | 
-    |------------------------------------------------------|
-    | editor_bar                                           |
-    |+----------------------------------------------------+|
-    || breadcrumbs (This is Kotti's default breadcrumbs.  ||
-    ||              Depending on how you configure        ||
-    ||              kotti_navigation, you may want to     ||
-    ||              turn this off by overriding           ||
-    ||              master.pt in kotti_overrides).        ||
-    |+-------------++---------------------++--------------+|
-    || slot "left" || slot "abovecontent" || slot "right" ||
-    ||             |+---------------------+|              ||
-    ||             || Content             ||              ||
-    ||             |+---------------------+|              ||
-    ||             || slot "belowcontent" ||              ||
-    |+-------------++---------------------++--------------+|
-    | footer                                               |
-    |------------------------------------------------------|
-    | slot "beforebodyend"                                 |
-    +------------------------------------------------------+
-
-Each of these locations can be separately configured, allowing a site to have
-only one navigation display, the typical case, or to have several nav displays
-for specialized applications. The display type and other options for a given
-location are configured with lines like these::
-
-    kotti_navigation.navigation_widget.left_display_type = ver_pills_stacked
-    kotti_navigation.navigation_widget.left_label = none
-    kotti_navigation.navigation_widget.left_include_root = true
-    ...
-    ... additional params
-    ...
-
-For a site with NO navigation, you could omit all such configuration, except
-for the kotti_navigation.kotti_configure line in kotti.configurators. See the
-nonav.ini example.
+* Not enabled
+* Tree
+  *  will be rendered as tree
+* Items
+  * will be rendered as items
+* Menu
+  * will be rendered as dropdown menu
+* Breadcrumbs
+  * will render the breadcrumbs
 
 For a typical website that has a tree navigation display in the left slot, you
 would configure for only the left location, and omit configuration for any
 other location.
+
+Options
+-------
+
+The options are a multi selection box, so you can enable how much you want, but
+it will not always make sense to mix some of the options together.
+
+* List
+* Pills
+* Tabs
+* Stacked
+* Open all
+* With Dropdowns
+* Show Menu
+* Include Root
+* Show hidden while logged in
+
 
 Display Types
 -------------
@@ -204,7 +194,7 @@ Kotti general content property ``in_navigation``, a boolean associated with the
 "Show/Hide" toggle available for individual content items in the Contents menu.
 Entries for include_content_types need the full path::
 
-    kotti_navigation.navigation_widget.include_content_types = 
+    kotti_navigation.navigation_widget.include_content_types =
         kotti.resources.Image
         kotti_myaddon.resources.MyContentType
 
@@ -298,7 +288,7 @@ might work fine.
 For the "Animals" context, if label is not set, there will be two nav items::
 
     <Dogs> <Cats>
-    
+
 (< > notation used here to denote nav li items).
 
 Using a label, punctuated with a colon, we might have::
@@ -352,3 +342,4 @@ would result in::
 etc.
 
 .. _Find out more about Kotti: http://pypi.python.org/pypi/Kotti
+.. _kotti_settings: http://pypi.python.org/pypi/kotti_settings
