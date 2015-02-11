@@ -45,3 +45,9 @@ Check navigation
   >>> browser.open(testing.BASE_URL + '/document-1')
   >>> 'Vertical List up Top' in browser.contents
   True
+
+
+TearDown
+--------
+
+  >>> testing.tearDown()

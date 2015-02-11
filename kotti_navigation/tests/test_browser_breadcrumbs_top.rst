@@ -45,3 +45,9 @@ Check navigation
   >>> browser.open(testing.BASE_URL + '/document-1/document-1-1')
   >>> 'Here are your breadcrumbs' in browser.contents
   True
+
+
+TearDown
+--------
+
+  >>> testing.tearDown()

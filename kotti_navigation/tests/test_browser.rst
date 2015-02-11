@@ -69,3 +69,9 @@ Test hidden nav points
   False
   >>> 'hidden' in browser.contents
   False
+
+
+TearDown
+--------
+
+  >>> testing.tearDown()

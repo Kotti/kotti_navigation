@@ -62,3 +62,9 @@ Set settings and check navigation
   False
   >>> '<ul class="nav nav-tabs">' in browser.contents
   True
+
+
+TearDown
+--------
+
+  >>> testing.tearDown()
