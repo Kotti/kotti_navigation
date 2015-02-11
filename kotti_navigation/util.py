@@ -31,7 +31,7 @@ def the_user(request):
 
 def _check_children(request, location, children):
     user = the_user(request)
-    options = get_setting(location + '_options', [])
+    options = get_setting(location + '_options', default=[])
     show_hidden = 'show_hidden_while_logged_in' in options
     content_types_to_include = get_setting(location + '_include')
     content_types_to_exclude = get_setting(location + '_exclude')
@@ -79,6 +79,22 @@ def is_node_open(item, request):
             break
         context = context.__parent__
     return is_open
+
+
+def get_nav_class(options):
+    """Build up a nav class for the navigation items based on the given
+       options.
+    """
+    nav_class = 'nav'
+    if 'list' in options:
+        nav_class += ' nav-list'
+    elif 'pills' in options:
+        nav_class += ' nav-pills'
+    elif 'tabs' in options:
+        nav_class += ' nav-tabs'
+    if 'stacked' in options:
+        nav_class += ' nav-stacked'
+    return nav_class
 
 
 @subscriber(SettingsAfterSave)

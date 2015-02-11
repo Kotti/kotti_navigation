@@ -13,9 +13,9 @@
       ${label}
     </li>
     <tal:block repeat="item items">
-      <tal:with_dropdown
+      <tal:with_dropdowns
                tal:define="children allowed_children[repeat.item.index]"
-               tal:condition="careted and children">
+               tal:condition="children and dropdowns">
         <li tal:define="hidden not item.in_navigation and 'hidden' or ''"
             class="${hidden}">
           <a href="${api.url(item)}"
@@ -23,32 +23,30 @@
              class="nav-list-careted">
             ${item.title}
           </a>
+          <span class="dropdown ${hidden}"
+              tal:define="hidden not item.in_navigation and 'hidden' or ''">
+            <a href="${api.url(item)}"
+               class="dropdown-toggle nav-list-caret"
+               data-toggle="dropdown"
+               title="${getattr(item, 'description', None)}">
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <tal:repeat tal:repeat="child children">
+                <li>
+                  <a href="${api.url(child)}"
+                     title="${getattr(child, 'description', None)}">
+                    ${child.title}
+                  </a>
+                </li>
+              </tal:repeat>
+            </ul>
+          </span>
         </li>
-        <li class="dropdown ${hidden}"
-            tal:define="hidden not item.in_navigation and 'hidden' or ''">
-          <a href="${api.url(item)}"
-             class="dropdown-toggle nav-list-caret"
-             data-toggle="dropdown"
-             title="${getattr(item, 'description', None)}">
-            <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu">
-            <tal:repeat tal:repeat="child children">
-              <li>
-                <a href="${api.url(child)}"
-                   title="${getattr(child, 'description', None)}">
-                  ${child.title}
-                </a>
-              </li>
-            </tal:repeat>
-          </ul>
-        </li>
-      </tal:with_dropdown>
-      <tal:without_dropdown
+      </tal:with_dropdowns>
+      <tal:without_dropdowns
                tal:define="children allowed_children[repeat.item.index]"
-               tal:condition="(children and display_type.startswith('ver_'))
-                              or (children and not display_type.endswith('dropdowns'))
-                              or not children">
+               tal:condition="not children or not dropdowns">
         <li tal:define="active item == context and 'active' or '';
                         hidden not item.in_navigation and 'hidden' or ''"
             class="${active} ${hidden}">
@@ -57,7 +55,7 @@
             ${item.title}
           </a>
         </li>
-      </tal:without_dropdown>
+      </tal:without_dropdowns>
     </tal:block>
   </ul>
 </div>

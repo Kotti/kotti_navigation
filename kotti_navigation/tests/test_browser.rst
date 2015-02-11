@@ -25,7 +25,6 @@ Setup and Login
 
 Add some documents
 ------------------
-
   >>> browser.open(testing.BASE_URL + '/@@add_document')
   >>> ctrl('Title').value = 'Document 1'
   >>> ctrl('Description').value = 'This is the first document'
@@ -41,7 +40,8 @@ Add some documents
 Check navigation
 ----------------
 
-  >>> set_nav_setting('left', 'display_type', 'vertical')
+  >>> set_nav_setting('left', 'show_in_context', 'everywhere')
+  >>> set_nav_setting('left', 'display_type', 'tree')
   >>> set_nav_setting('left', 'options', ['include_root', 'show_hidden_while_logged_in', 'stacked', 'open_all'])
   >>> browser.open(testing.BASE_URL)
   >>> 'Document 1 1' in browser.contents

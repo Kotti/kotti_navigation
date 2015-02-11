@@ -42,13 +42,13 @@ class TestNavigationWidget:
                                     kn_request, events):
         from types import FunctionType
         root = get_root()
-        set_nav_setting('left', 'display_type', 'vertical')
-        set_nav_setting('left', 'options', [])
+        set_nav_setting('left', 'display_type', 'tree')
+        set_nav_setting('left', 'options', ['pills'])
         set_nav_setting('left', 'label', u'')
         navigation = Navigation(root, kn_request)
         values = navigation.navigation_widget_tree()
 
-        assert values['display_type'] is 'vertical'
+        assert values['display_type'] is 'tree'
         assert values['tree_is_open_all'] is False
         assert values['use_container_class'] is False
         assert values['nav_class'] == 'nav nav-pills'
@@ -73,7 +73,7 @@ class TestNavigationWidgetViews(NavigationFunctionalTestBase):
 
     def test_render_widget(self):
         root = get_root()
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs'])
         html = render_view(root, self.request, name='navigation-widget-items')
         assert ' class="nav nav-tabs"' in html
@@ -87,13 +87,13 @@ class TestNavigationWidgetViews(NavigationFunctionalTestBase):
         c2 = root[u'content_2'] = Content(title=u'Content_2')
         c2[u'sub_2'] = Content(title=u'Sub_2')
 
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', [])
         html = render_view(c1, self.request, name='navigation-widget-items')
 
         assert not u'nav-list-careted' in html
 
-        set_nav_setting('left', 'display_type', 'horizontal')
+        set_nav_setting('left', 'display_type', 'items')
         set_nav_setting('left', 'options', ['pills', 'dropdowns'])
         html = render_view(c1, self.request, name='navigation-widget-items')
 
@@ -107,7 +107,7 @@ class TestNavigationWidgetViews(NavigationFunctionalTestBase):
         root[u'content_2'] = Content(title=u'Content_2')
         root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
 
-        set_nav_setting('left', 'display_type', 'horizontal')
+        set_nav_setting('left', 'display_type', 'items')
         set_nav_setting('left', 'options', [])
         set_nav_setting('left', 'label', 'Items in [context] are:')
         navigation = Navigation(root[u'content_1'], self.request)
@@ -123,7 +123,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
 
     def test_render_widget(self):
         root = get_root()
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
         html = render_view(root, self.request, name='navigation-widget-tree')
         assert '<ul class="nav nav-tabs nav-stacked">' in html
@@ -131,7 +131,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
     def test_include_root(self):
         root = get_root()
 
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
         navigation = Navigation(root, self.request)
         result = navigation.navigation_widget_tree()
@@ -144,21 +144,21 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
     def test_display_type(self):
         root = get_root()
 
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
         navigation = Navigation(root, self.request)
         result = navigation.navigation_widget_tree()
 
-        assert result['display_type'] == 'vertical'
+        assert result['display_type'] == 'tree'
         assert result['nav_class'] == 'nav nav-tabs nav-stacked'
 
-        set_nav_setting('left', 'display_type', 'horizontal')
+        set_nav_setting('left', 'display_type', 'items')
         result = navigation.navigation_widget_tree()
-        assert result['display_type'] == 'horizontal'
+        assert result['display_type'] == 'items'
 
     def test_is_tree_open(self):
         root = get_root()
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
 
         root[u'content_1'] = Content()
@@ -224,7 +224,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
 
     def test_show_hidden(self):
         root = get_root()
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
 
         root[u'content_1'] = Content()
@@ -247,7 +247,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
 
     def test_include_content_types(self):
         root = get_root()
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
 
         root[u'content_1'] = Content()
@@ -277,7 +277,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
 
     def test_exclude_content_types(self):
         root = get_root()
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
 
         root[u'content_1'] = Content()
@@ -302,7 +302,7 @@ class TestNavigationWidgetAllLocations(NavigationFunctionalTestBase):
         root[u'content_2'] = Content(title=u'Content_2')
         root[u'content_2'][u'sub_2'] = Content(title=u'Sub_2')
 
-        set_nav_setting('left', 'display_type', 'vertical')
+        set_nav_setting('left', 'display_type', 'tree')
         set_nav_setting('left', 'options', [])
         set_nav_setting('left', 'label', 'Items in [context] are:')
         navigation = Navigation(root[u'content_1'], self.request)
@@ -340,7 +340,7 @@ class TestNavigationWidgetAsTreeInRight(NavigationFunctionalTestBase):
         root = get_root()
         root[u'content_1'] = Content(title=u'Content_1')
         self.request.context = root[u'content_1']
-        set_nav_setting('right', 'display_type', 'vertical')
+        set_nav_setting('right', 'display_type', 'tree')
         set_nav_setting('right', 'options', ['tabs', 'stacked', 'include_root',
                                              'open_all'])
         html = render_view(root[u'content_1'], self.request,
@@ -355,7 +355,7 @@ class TestNavigationWidgetAsTreeInAbovecontent(NavigationFunctionalTestBase):
         root = get_root()
         root[u'content_1'] = Content(title=u'Content_1')
         self.request.context = root[u'content_1']
-        set_nav_setting('abovecontent', 'display_type', 'vertical')
+        set_nav_setting('abovecontent', 'display_type', 'tree')
         set_nav_setting('abovecontent', 'options',
                         ['tabs', 'stacked', 'include_root', 'open_all'])
         html = render_view(root[u'content_1'], self.request,
@@ -370,7 +370,7 @@ class TestNavigationWidgetAsTreeInBelowcontent(NavigationFunctionalTestBase):
         root = get_root()
         root[u'content_1'] = Content(title=u'Content_1')
         self.request.context = root[u'content_1']
-        set_nav_setting('belowcontent', 'display_type', 'vertical')
+        set_nav_setting('belowcontent', 'display_type', 'tree')
         set_nav_setting('belowcontent', 'options',
                         ['tabs', 'stacked', 'include_root', 'open_all'])
         html = render_view(root[u'content_1'], self.request,
@@ -385,7 +385,7 @@ class TestNavigationWidgetAsTreeInBeforebodyend(NavigationFunctionalTestBase):
         root = get_root()
         root[u'content_1'] = Content(title=u'Content_1')
         self.request.context = root[u'content_1']
-        set_nav_setting('beforebodyend', 'display_type', 'vertical')
+        set_nav_setting('beforebodyend', 'display_type', 'tree')
         set_nav_setting('beforebodyend', 'options',
                         ['tabs', 'stacked', 'include_root', 'open_all'])
         html = render_view(root[u'content_1'], self.request,
@@ -402,6 +402,7 @@ class TestBreadcrumbsInBeforebodyend(NavigationFunctionalTestBase):
         root[u'content_1'][u'sub_1'] = Content(title=u'Sub_1')
         self.request.context = root[u'content_1'][u'sub_1']
         set_nav_setting('beforebodyend', 'display_type', 'breadcrumbs')
+        set_nav_setting('beforebodyend', 'show_in_context', 'everywhere')
         set_nav_setting('beforebodyend', 'options', ['include_root'])
         set_nav_setting('beforebodyend', 'label', 'You are here:')
         html = render_view(root[u'content_1'][u'sub_1'], self.request,

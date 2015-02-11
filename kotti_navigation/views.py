@@ -7,10 +7,12 @@ from kotti.resources import get_root
 from kotti.views.util import render_view
 
 from kotti_settings.util import get_setting
+from kotti_settings.util import show_in_context
 
 from kotti_navigation.util import parse_label
 from kotti_navigation.util import get_children
 from kotti_navigation.util import get_lineage
+from kotti_navigation.util import get_nav_class
 from kotti_navigation.util import is_node_open
 
 
@@ -27,28 +29,25 @@ class Navigation(object):
     @view_config(name='navigation-widget',
                  renderer='string')
     def navigation_widget(self):
+        show_here = get_setting(self.location + '_show_in_context')
+        show = show_in_context(show_here, self.context)
+
+        if not show:
+            raise PredicateMismatch()
+
         display_type = get_setting(self.location + '_display_type')
-        options = get_setting(self.location + '_options', [])
-        view_name = 'navigation-widget-items'
-        if display_type and display_type != 'none':
-            if display_type == 'horizontal' or\
-                (display_type == 'vertical' and 'list' in options):
-                view_name = 'navigation-widget-items'
-            elif display_type == 'vertical':
-                view_name = 'navigation-widget-tree'
-            elif display_type == 'breadcrumbs':
-                view_name = 'navigation-widget-breadcrumbs'
-            elif display_type == 'menu':
-                view_name = 'navigation-widget-menu'
-            return render_view(self.context, self.request, name=view_name)
-        raise PredicateMismatch()
+        if not display_type:
+            raise PredicateMismatch()
+
+        view_name = 'navigation-widget-' + display_type
+        return render_view(self.context, self.request, name=view_name)
 
     @view_config(name='nav-recurse',
                  renderer='kotti_navigation:templates/nav_recurse.pt')
     def nav_recurse(self):
         """Recursive view for the "tree" display type.
         """
-        options = get_setting(self.location + '_options')
+        options = get_setting(self.location + '_options', default=[])
         tabs_or_pills = 'tabs' if 'tabs' in options else 'pills'
         tree_is_open_all = 'open_all' in options
 
@@ -93,22 +92,15 @@ class Navigation(object):
         use_container_class = self.location == 'beforebodyend'
 
         items = get_children(root, self.request, self.location)
-
-        tabs_or_pills = 'tabs' if 'tabs' in options else 'pills'
         tree_is_open_all = 'open_all' in options
-        nav_class = 'nav nav-{0}'.format(tabs_or_pills)
-        if 'stacked' in options:
-            nav_class += ' nav-stacked'
-
-        show_divider = show_menu and self.location != 'top' and\
-                            display_type == 'vertical' and items
+        nav_class = get_nav_class(options)
 
         return {'location': self.location,
                 'root': root,
                 'display_type': display_type,
                 'include_root': include_root,
                 'show_menu': show_menu,
-                'show_divider': show_divider,
+                'show_divider': show_menu and self.location != 'top' and items,
                 'nav_class': nav_class,
                 'tree_is_open_all': tree_is_open_all,
                 'is_node_open': is_node_open,
@@ -129,21 +121,8 @@ class Navigation(object):
         resource_group.need()
 
         display_type = get_setting(self.location + '_display_type')
-        options = get_setting(self.location + '_options')
-
-        nav_class = 'nav nav-tabs'
-        dropdowns = False
-
-        if display_type == 'horizontal':
-
-            tabs_or_pills = 'tabs' if 'tabs' in options else 'pills'
-            nav_class = 'nav nav-{0}'.format(tabs_or_pills)
-            dropdowns = 'dropdowns' in options
-
-        elif display_type == 'vertical' and 'list' in options:
-
-            nav_class = 'nav nav-list'
-            dropdowns = 'dropdowns' in options
+        options = get_setting(self.location + '_options', default=[])
+        nav_class = get_nav_class(options)
 
         # When the nav display is set to the beforebodyend slot, the class
         # for the containing div needs to be 'container' so it fits to the
@@ -162,7 +141,7 @@ class Navigation(object):
         label = parse_label(self.context.title,
                             get_setting(self.location + '_label'))
 
-        careted = (display_type == 'horizontal') and\
+        careted = (display_type == 'items') and\
                     ('dropdowns' in options)
 
         return {'location': self.location,
@@ -173,8 +152,7 @@ class Navigation(object):
                 'show_menu': 'show_menu' in options,
                 'allowed_children': allowed_children,
                 'label': label,
-                'show_item_dropdowns': dropdowns,
-                'careted': careted,
+                'dropdowns': 'dropdowns' in options,
             }
 
     @view_config(name='navigation-widget-breadcrumbs',
@@ -188,7 +166,7 @@ class Navigation(object):
         """
         resource_group.need()
         root = get_root()
-        options = get_setting(self.location + '_options')
+        options = get_setting(self.location + '_options', default=[])
         include_root = 'include_root' in options
         label = parse_label(self.context.title,
                             get_setting(self.location + '_label'))
@@ -223,7 +201,7 @@ class Navigation(object):
         """
         resource_group.need()
         root = get_root()
-        options = get_setting(self.location + '_options')
+        options = get_setting(self.location + '_options', default=[])
         include_root = 'include_root' in options
 
         # When the nav display is set to the beforebodyend slot, the class
@@ -273,20 +251,20 @@ class Navigation(object):
         """
         display_type = get_setting(self.location + '_display_type')
 
-        options = get_setting(self.location + '_options')
+        options = get_setting(self.location + '_options', default=[])
         include_root = 'include_root' in options
         label = get_setting(self.location + '_label')
         show_menu = 'show_menu' in options
 
         top_properties = {}
 
-        if display_type == 'horizontal':
+        if display_type == 'items':
             tree_properties = self.navigation_widget_items()
 
-        elif display_type == 'vertical' and 'list' in options:
+        elif display_type == 'tree' and 'list' in options:
             tree_properties = self.navigation_widget_items()
 
-        elif display_type == 'vertical':
+        elif display_type == 'tree':
             tabs_or_pills = 'tabs' if 'tabs' in options else 'pills'
             tree_is_open_all = 'open_all' in options
 
@@ -312,10 +290,10 @@ class Navigation(object):
         top_properties['show_menu'] = show_menu
 
         top_properties['render_type'] = 'menu'
-        if (display_type == 'vertical' and 'list' in options)\
-            or (display_type == 'horizontal'):
+        if (display_type == 'tree' and 'list' in options)\
+            or (display_type == 'items'):
             top_properties['render_type'] = 'items'
-        elif display_type == 'horizontal':
+        elif display_type == 'items':
             top_properties['render_type'] = 'tree'
 
         return top_properties
