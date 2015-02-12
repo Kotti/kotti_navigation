@@ -5,6 +5,7 @@ Kotti.db
 include/
 lib/
 local/
+share/
 
 # Packages
 *.egg
