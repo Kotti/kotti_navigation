@@ -3,6 +3,9 @@ from pyramid.location import lineage
 
 from kotti.resources import get_root
 from kotti.security import get_user
+from kotti.views.slots import assign_slot
+from kotti.views.slots import objectevent_listeners
+from kotti.views.slots import slot_events
 
 from kotti_settings.events import SettingsAfterSave
 from kotti_settings.util import get_setting
@@ -100,4 +103,28 @@ def get_nav_class(options):
 @subscriber(SettingsAfterSave)
 def set_assigned_slot(event):
     """Reset the widget to the enabled slots."""
-    #assign_slot('navigation-widget', slot)
+    if get_setting(u'left_display_type'):
+        if not widget_in_slot('navigation-widget', 'left'):
+            assign_slot('navigation-widget', 'left')
+    if get_setting(u'right_display_type'):
+        if not widget_in_slot('navigation-widget', 'right'):
+            assign_slot('navigation-widget', 'right')
+
+
+def widget_in_slot(widget, slot=None):
+    """Check the given slot if a widget is already set.
+    """
+    for slot_event in slot_events:
+        if slot is not None:
+            if slot != slot_event.name:
+                continue
+        try:
+            listener = objectevent_listeners[(slot_event, None)]
+        except TypeError:  # pragma: no cover
+            listener = None
+        if listener is not None:
+            for func in listener:
+                for closure in func.func_closure:
+                    if closure.cell_contents == widget:
+                        return True
+    return False
