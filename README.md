@@ -1,6 +1,12 @@
 # kotti_navigation
 
-This is an extension to the [Kotti CMS][1] that renders navigation displays in a choice of available locations for a Kotti website (top nav, left slot, right slot).
+[![PyPI](https://img.shields.io/pypi/v/kotti_navigation.svg?style=flat-square)](https://pypi.python.org/pypi/kotti_navigation/)
+[![Downloads in the last month](https://img.shields.io/pypi/dm/kotti_navigation.svg?style=flat-square)](https://pypi.python.org/pypi/kotti_navigation/)
+[![License](https://img.shields.io/pypi/l/kotti_navigation.svg?style=flat-square)](http://www.repoze.org/LICENSE.txt)
+[![Build Status](https://travis-ci.org/Kotti/kotti_navigation.svg?branch=master)](https://travis-ci.org/Kotti/kotti_navigation)
+
+
+This is an extension to [Kotti][1] that renders navigation displays in a choice of available locations for a Kotti website (top nav, left slot, right slot).
 
 
 ## Set up kotti_navigation
@@ -86,5 +92,5 @@ It is positioned within the display in different ways, depending on display type
 
 The current context will be indicated by the highlighting of the context menu item in the indented display. This is normally adequate. However, for extra clarity, or for some special reason, you may want to include the current context in the label, in a phrase such as "Current item: context", where the word ``context`` would be replaced by the actual context.title. To do this, include the actual word ``context`` in the label text, so `<context>` would become ${'<' + context.title '>'} in the template code.
 
-[1]:  http://pypi.python.org/pypi/Kotti
+[1]: http://pypi.python.org/pypi/Kotti
 [2]: http://pypi.python.org/pypi/kotti_settings
