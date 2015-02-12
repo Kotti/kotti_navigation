@@ -7,7 +7,7 @@ def read(*rnames):
 
 
 long_description = (
-    read('README.rst')
+    read('README.md')
     + '\n' +
     read('CONTRIBUTORS.txt')
     + '\n' +
@@ -19,14 +19,14 @@ setup(name='kotti_navigation',
       description="""Add a configurable navigation to your Kotti site""",
       long_description=long_description,
       classifiers=[
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Framework :: Pylons',
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
-        'License :: Repoze Public License',
+          'Programming Language :: Python',
+          'Programming Language :: Python :: 2.6',
+          'Programming Language :: Python :: 2.7',
+          'Framework :: Pylons',
+          'Topic :: Internet :: WWW/HTTP',
+          'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+          'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
+          'License :: Repoze Public License',
       ],
       keywords='kotti addon navigation',
       author='Marco Scheidhuber',
@@ -48,8 +48,8 @@ setup(name='kotti_navigation',
       },
       extras_require={},
       message_extractors={'kotti_navigation': [
-            ('**.py', 'lingua_python', None),
-            ('**.zcml', 'lingua_xml', None),
-            ('**.pt', 'lingua_xml', None),
-            ]},
+          ('**.py', 'lingua_python', None),
+          ('**.zcml', 'lingua_xml', None),
+          ('**.pt', 'lingua_xml', None),
+      ]},
       )
