@@ -16,18 +16,6 @@ display_types = ((u'', _(u'Not enabled')),
                  (u'menu', _(u'Menu')),
                  (u'breadcrumbs', _(u'Breadcrumbs')),
                 )
-#X hor_tabs                     horizontal (items)    context children
-#X hor_pills                    horizontal (items)    context children
-#X hor_tabs_with_dropdowns      horizontal (items)    context children +1
-#X hor_pills_with_dropdowns     horizontal (items)    context children +1
-#X breadcrumbs                  horizontal (items)    path to context
-#C ver_tabs_stacked             vertical (tree-like)  context children
-#C ver_pills_stacked            vertical (tree-like)  context children
-#C ver_tabs_stacked_open_all    vertical (tree-like)  entire hierarchy
-#C ver_pills_stacked_open_all   vertical (tree-like)  entire hierarchy
-#X ver_list                     vertical (items)      context children
-#X menu                         button with caret     path to context +1
-#                              firing dropdown menu
 
 
 class DisplayType(colander.SchemaNode):
