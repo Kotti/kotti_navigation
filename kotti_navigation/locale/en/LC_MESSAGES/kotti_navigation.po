@@ -1,0 +1,133 @@
+#
+# SOME DESCRIPTIVE TITLE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE 1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-02-13 00:37+0100\n"
+"PO-Revision-Date: 2015-02-13 00:39+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#: ./kotti_navigation/populate.py:142
+msgid "Navigation Settings Top"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:143
+msgid "Settings for navigation widget on the top"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:144 ./kotti_navigation/populate.py:152
+#: ./kotti_navigation/populate.py:160
+msgid "Successfully saved navigation widget settings."
+msgstr ""
+
+#: ./kotti_navigation/populate.py:150
+msgid "Navigation Settings Left"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:151
+msgid "Settings for navigation widget in the left slot"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:158
+msgid "Navigation Settings Right"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:159
+msgid "Settings for navigation widget on the right"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:13
+msgid "Not enabled"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:14
+msgid "Tree"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:15
+msgid "Items"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:16
+msgid "Menu"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:17
+msgid "Breadcrumbs"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:32
+msgid "List"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:33
+msgid "Pills"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:34
+msgid "Tabs"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:35
+msgid "Stacked"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:36
+msgid "Open all"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:37
+msgid "With Dropdowns"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:38
+msgid "Show Menu"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:39
+msgid "Include root"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:40
+msgid "Show hidden while logged in"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:74 ./kotti_navigation/populate.py:97
+#: ./kotti_navigation/populate.py:120
+msgid "Display type"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:77 ./kotti_navigation/populate.py:100
+#: ./kotti_navigation/populate.py:123
+msgid "Options"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:78 ./kotti_navigation/populate.py:101
+#: ./kotti_navigation/populate.py:124
+msgid "Enable dropdowns feature only makes sense for horizontal display type."
+msgstr ""
+
+#: ./kotti_navigation/populate.py:83 ./kotti_navigation/populate.py:106
+#: ./kotti_navigation/populate.py:132
+msgid "Exclude Content Types"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:86 ./kotti_navigation/populate.py:109
+#: ./kotti_navigation/populate.py:135
+msgid "Include Content Types"
+msgstr ""
+
+#: ./kotti_navigation/populate.py:89 ./kotti_navigation/populate.py:112
+#: ./kotti_navigation/populate.py:129
+msgid "Label"
+msgstr ""
+
