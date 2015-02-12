@@ -1,9 +1,6 @@
 # kotti_navigation
 
-[![PyPI](https://img.shields.io/pypi/v/kotti_navigation.svg?style=flat-square)](https://pypi.python.org/pypi/kotti_navigation/)
-[![Downloads in the last month](https://img.shields.io/pypi/dm/kotti_navigation.svg?style=flat-square)](https://pypi.python.org/pypi/kotti_navigation/)
-[![License](https://img.shields.io/pypi/l/kotti_navigation.svg?style=flat-square)](http://www.repoze.org/LICENSE.txt)
-[![Build Status](https://travis-ci.org/Kotti/kotti_navigation.svg?branch=master)](https://travis-ci.org/Kotti/kotti_navigation)
+[![PyPI](https://img.shields.io/pypi/v/kotti_navigation.svg?style=flat-square)](https://pypi.python.org/pypi/kotti_navigation/) [![Downloads in the last month](https://img.shields.io/pypi/dm/kotti_navigation.svg?style=flat-square)](https://pypi.python.org/pypi/kotti_navigation/) [![License](https://img.shields.io/pypi/l/kotti_navigation.svg?style=flat-square)](http://www.repoze.org/LICENSE.txt) [![Build Status](https://travis-ci.org/Kotti/kotti_navigation.svg?branch=master)](https://travis-ci.org/Kotti/kotti_navigation)
 
 
 This is an extension to [Kotti][1] that renders navigation displays in a choice of available locations for a Kotti website (top nav, left slot, right slot).
