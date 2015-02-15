@@ -33,7 +33,11 @@ def navigation_settings(name='', settings=None):
 
     working_settings.update(extract_from_settings(prefix, settings=settings))
 
-    _resolve_dotted(working_settings, ['exclude_content_types'])
+    # Compatibility with Kotti > 1.x where the resolved settings returned
+    # instead of changed in place.
+    resolved_settings = _resolve_dotted(working_settings, ['exclude_content_types'])
+    if resolved_settings is not None:
+        working_settings = resolved_settings
 
     return working_settings
 
