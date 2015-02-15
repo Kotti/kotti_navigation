@@ -19,7 +19,7 @@ Setup and Login
   >>> browser.open(testing.BASE_URL + '/@@login')
   >>> 'Log in' in browser.contents
   True
-  >>> ctrl('Username or email').value = 'admin'
+  >>> ctrl('Username or email', index=0).value = 'admin'
   >>> ctrl('Password').value = 'secret'
   >>> ctrl(name='submit').click()
   >>> 'Welcome, Administrator' in browser.contents
@@ -35,7 +35,7 @@ Add some documents
   >>> ctrl('save').click()
   >>> browser.url == testing.BASE_URL + '/document-1/'
   True
-  >>> 'Successfully added item' in browser.contents
+  >>> 'Item was added.' in browser.contents
   True
   >>> browser.open(testing.BASE_URL + '/document-1/@@add_document')
   >>> ctrl('Title').value = 'Document 1 1'
