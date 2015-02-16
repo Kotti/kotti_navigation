@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 * Fixed the get the resolved settings for compatibility with Kotti >= 1.x.
+* Remove translation configuration because we have nothing to translate.
 
 
 0.3 (2013-04-17)

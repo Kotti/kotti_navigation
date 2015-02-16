@@ -1,13 +1,9 @@
-from pyramid.i18n import TranslationStringFactory
-
 from kotti import _resolve_dotted
 from kotti.views.slots import assign_slot
 from kotti.util import extract_from_settings
 
 from logging import getLogger
 log = getLogger('kotti_navigation: ')
-
-_ = TranslationStringFactory('kotti_navigation')
 
 
 NAVIGATION_WIDGET_DEFAULTS = {
@@ -61,7 +57,6 @@ def kotti_configure(settings):
 
 def include_view(config):
 
-    config.add_translation_dirs('kotti_navigation:locale')
     config.scan(__name__)
 
 
