@@ -14,4 +14,4 @@ def kotti_configure(settings):
 
 def include_navigation(config):  # pragma: no cover
     config.add_translation_dirs('kotti_navigation:locale')
-    config.scan(__name__)
+    config.scan(__name__, ignore='.tests')
