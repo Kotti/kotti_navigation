@@ -109,6 +109,15 @@ def set_assigned_slot(event):
     if get_setting(u'right_display_type'):
         if not widget_in_slot('navigation-widget', 'right'):
             assign_slot('navigation-widget', 'right')
+    if get_setting(u'abovecontent_display_type'):
+        if not widget_in_slot('navigation-widget', 'abovecontent'):
+            assign_slot('navigation-widget', 'abovecontent')
+    if get_setting(u'belowcontent_display_type'):
+        if not widget_in_slot('navigation-widget', 'belowcontent'):
+            assign_slot('navigation-widget', 'belowcontent')
+    if get_setting(u'beforebodyend_display_type'):
+        if not widget_in_slot('navigation-widget', 'beforebodyend'):
+            assign_slot('navigation-widget', 'beforebodyend')
 
 
 def widget_in_slot(widget, slot=None):

@@ -137,6 +137,75 @@ class NavigationSchemaRight(colander.MappingSchema):
                              name=u'right_show_in_context')
 
 
+class NavigationSchemaAboveContent(colander.MappingSchema):
+    abovecontent_display_type = DisplayType(colander.String(),
+                             name=u'abovecontent_display_type',
+                             title=_(u'Display type'))
+    abovecontent_options = Options(colander.Set(),
+                            name=u'abovecontent_options',
+                            title=_(u'Options'),
+                            description=_(u'Enable dropdowns feature '
+                                          u'only makes sense for horizontal '
+                                          u'display type.'))
+    abovecontent_label = Label(colander.String(),
+                             name=u'abovecontent_label',
+                             title=_(u'Label'))
+    abovecontent_exclude = ContentTypes(colander.Set(),
+                            name=u'abovecontent_exclude',
+                            title=_(u'Exclude Content Types'))
+    abovecontent_include = ContentTypes(colander.Set(),
+                            name=u'abovecontent_include',
+                            title=_(u'Include Content Types'))
+    abovecontent_in_context = ShowInContextSchemaNode(colander.String(),
+                             name=u'abovecontent_show_in_context')
+
+
+class NavigationSchemaBelowContent(colander.MappingSchema):
+    belowcontent_display_type = DisplayType(colander.String(),
+                             name=u'bc_display_type',
+                             title=_(u'Display type'))
+    belowcontent_options = Options(colander.Set(),
+                            name=u'bc_options',
+                            title=_(u'Options'),
+                            description=_(u'Enable dropdowns feature '
+                                          u'only makes sense for horizontal '
+                                          u'display type.'))
+    belowcontent_label = Label(colander.String(),
+                             name=u'belowcontent_label',
+                             title=_(u'Label'))
+    belowcontent_exclude = ContentTypes(colander.Set(),
+                            name=u'belowcontent_exclude',
+                            title=_(u'Exclude Content Types'))
+    belowcontent_include = ContentTypes(colander.Set(),
+                            name=u'belowcontent_include',
+                            title=_(u'Include Content Types'))
+    belowcontent_in_context = ShowInContextSchemaNode(colander.String(),
+                             name=u'belowcontent_show_in_context')
+
+
+class NavigationSchemaBeforeBodyEnd(colander.MappingSchema):
+    beforebodyend_display_type = DisplayType(colander.String(),
+                             name=u'beforebodyend_display_type',
+                             title=_(u'Display type'))
+    beforebodyend_options = Options(colander.Set(),
+                            name=u'beforebodyend_options',
+                            title=_(u'Options'),
+                            description=_(u'Enable dropdowns feature '
+                                          u'only makes sense for horizontal '
+                                          u'display type.'))
+    beforebodyend_label = Label(colander.String(),
+                             name=u'beforebodyend_label',
+                             title=_(u'Label'))
+    beforebodyend_exclude = ContentTypes(colander.Set(),
+                            name=u'beforebodyend_exclude',
+                            title=_(u'Exclude Content Types'))
+    beforebodyend_include = ContentTypes(colander.Set(),
+                            name=u'beforebodyend_include',
+                            title=_(u'Include Content Types'))
+    beforebodyend_in_context = ShowInContextSchemaNode(colander.String(),
+                             name=u'beforebodyend_show_in_context')
+
+
 NavigationSettingsTop = {
     'name': 'navigation_settings_top',
     'title': _(u'Navigation Settings Top'),
@@ -162,13 +231,48 @@ NavigationSettingsRight = {
 }
 
 
+NavigationSettingsAboveContent = {
+    'name': 'navigation_settings_above_content',
+    'title': _(u'Navigation Settings Above Content'),
+    'description': _(u"Settings for navigation widget above the content"),
+    'success_message': _(u"Successfully saved navigation widget settings."),
+    'schema_factory': NavigationSchemaAboveContent,
+}
+
+
+NavigationSettingsBelowContent = {
+    'name': 'navigation_settings_below_content',
+    'title': _(u'Navigation Settings Below Content'),
+    'description': _(u"Settings for navigation widget below the content"),
+    'success_message': _(u"Successfully saved navigation widget settings."),
+    'schema_factory': NavigationSchemaBelowContent,
+}
+
+
+NavigationSettingsBeforeBodyEnd = {
+    'name': 'navigation_settings_before_body_end',
+    'title': _(u'Navigation Settings Before Body End'),
+    'description': _(u"Settings for navigation widget before body end"),
+    'success_message': _(u"Successfully saved navigation widget settings."),
+    'schema_factory': NavigationSchemaBeforeBodyEnd,
+}
+
+
 def populate():
     add_settings(NavigationSettingsLeft)
     add_settings(NavigationSettingsRight)
     add_settings(NavigationSettingsTop)
+    add_settings(NavigationSettingsAboveContent)
+    add_settings(NavigationSettingsBelowContent)
+    add_settings(NavigationSettingsBeforeBodyEnd)
+
     if get_setting(u'left_display_type'):
         assign_slot('navigation-widget', 'left')
     if get_setting(u'right_display_type'):
         assign_slot('navigation-widget', 'right')
-    # if get_setting(u'top_display_type'):
-    #     assign_slot('navigation-widget', 'top')
+    if get_setting(u'abovecontent_display_type'):
+        assign_slot('navigation-widget', 'abovecontent')
+    if get_setting(u'belowcontent_display_type'):
+        assign_slot('navigation-widget', 'belowcontent')
+    if get_setting(u'beforebodyend_display_type'):
+        assign_slot('navigation-widget', 'beforebodyend')
