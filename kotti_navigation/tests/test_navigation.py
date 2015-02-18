@@ -91,7 +91,7 @@ class TestNavigationWidgetViews(NavigationFunctionalTestBase):
         set_nav_setting('left', 'options', [])
         html = render_view(c1, self.request, name='navigation-widget-items')
 
-        assert not u'nav-list-careted' in html
+        assert u'nav-list-careted' not in html
 
         set_nav_setting('left', 'display_type', 'items')
         set_nav_setting('left', 'options', ['pills', 'dropdowns'])
