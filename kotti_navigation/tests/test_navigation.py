@@ -91,7 +91,7 @@ class TestNavigationWidgetViews(NavigationFunctionalTestBase):
         set_nav_setting('left', 'options', [])
         html = render_view(c1, self.request, name='navigation-widget-items')
 
-        assert not u'nav-list-careted' in html
+        assert u'nav-list-careted' not in html
 
         set_nav_setting('left', 'display_type', 'items')
         set_nav_setting('left', 'options', ['pills', 'dropdowns'])
@@ -255,7 +255,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
         root[u'content_2'].in_navigation = False
 
         # If we include the content type the nav item is present.
-        set_nav_setting('left', 'include', [str(Content)])
+        set_nav_setting('left', 'include', [Content.type_info.name])
         html = render_view(root, self.request, name='navigation-widget-tree')
         assert u'content_1' in html
         assert u'content_2' not in html
@@ -287,7 +287,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
         assert u'content_1' in html
 
         # if we exclude the content type the nav item disappears
-        set_nav_setting('left', 'exclude', [str(Content)])
+        set_nav_setting('left', 'exclude', [Content.type_info.name])
         html = render_view(root, self.request, name='navigation-widget-tree')
         assert u'content_1' not in html
 
