@@ -43,10 +43,10 @@ def _check_children(request, location, children):
         children = [c for c in children if c.in_navigation]
     if content_types_to_include:
         children = [c for c in children
-                    if str(c.__class__) in content_types_to_include]
+                    if c.type_info.name in content_types_to_include]
     if content_types_to_exclude:
         children = [c for c in children
-                    if str(c.__class__) not in content_types_to_exclude]
+                    if c.type_info.name not in content_types_to_exclude]
     return children
 
 
