@@ -19,7 +19,7 @@ kotti.configurators =
 
 ## How to use it?
 
-You have different settings to adjust ``kotti_navigation`` to your needs. You get the settings page on http://yourkottidomain.tdl/@@settings and you find it a link to `Settings` in the dropdown of menupoint `Administrator` of the editor bar. In the default no special navigation is activated and the default navigation bar from Kotti will be used.
+You have different settings to adjust ``kotti_navigation`` to your needs. You can view the settings page at http://yourkottidomain.tld/@@settings and you can find a link to `Settings` in the `Administrator` dropdown of the editor bar. By default, no special navigation is activated and the default navigation bar from Kotti will be used.
 
 
 ![settings](https://raw.github.com/Kotti/kotti_navigation/master/docs/images/settings.png "Navigation Settings")
