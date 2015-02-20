@@ -21,14 +21,40 @@ kotti.configurators =
 
 You have different settings to adjust ``kotti_navigation`` to your needs. You can view the settings page at http://yourkottidomain.tld/@@settings and you can find a link to `Settings` in the `Administrator` dropdown of the editor bar. By default, no special navigation is activated and the default navigation bar from Kotti will be used.
 
-
 ![settings](https://raw.github.com/Kotti/kotti_navigation/master/docs/images/settings.png "Navigation Settings")
 
-There are three locations are available::
+### Slots
+
+The navigation widget can be displayed in all slot of ``Kotti``, see the [API documentation](http://kotti.readthedocs.org/en/latest/api/kotti.views/kotti.views.slots.html) of Kotti for more information about slots.
+
+There are six slots or locations are available to include the navigation widget::
 
 * top (within and beneath the default nav toolbar)
 * left (slot)
 * right (slot)
+* abovecontent (slot)
+* belowcontent (slot)
+* beforebodyend (slot)
+
+Here are the slot choices in a layout diagram::
+
++------------------------------------------------------+
+| nav (the nav in the Kotti toolbar -- configurable)   |
+|------------------------------------------------------|
+| editor_bar                                           |
+|+----------------------------------------------------+|
+|| breadcrumbs                                        ||
+|+-------------++---------------------++--------------+|
+|| SLOT "left" || SLOT "abovecontent" || SLOT "right" ||
+||             |+---------------------+|              ||
+||             || Content             ||              ||
+||             |+---------------------+|              ||
+||             || SLOT "belowcontent" ||              ||
+|+-------------++---------------------++--------------+|
+| footer                                               |
+|------------------------------------------------------|
+| SLOT "beforebodyend"                                 |
++------------------------------------------------------+
 
 For every location you have an own tab in the settings. There you can choose if the navigation is enabled for the location and how it will be displayed.
 The following options are available.
