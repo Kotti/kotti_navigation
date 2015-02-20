@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.1 (Unreleased)
+0.3.1 (2015-02-20)
 ------------------
 
 * Fixed the get the resolved settings for compatibility with Kotti >= 1.x.
