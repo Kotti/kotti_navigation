@@ -5,3 +5,5 @@ Thanks to the following people for support, code, patches etc:
 
   - Andreas Kaiser (disko)
   - Jeffrey Gill Pittman (geojeff)
+  - Marc Abramowitz (msabramo)
+  - Ghiță Bizău (GhitaB)
