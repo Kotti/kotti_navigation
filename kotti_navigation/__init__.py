@@ -57,7 +57,7 @@ def kotti_configure(settings):
 
 def include_view(config):
 
-    config.scan(__name__)
+    config.scan(__name__, ignore='.tests')
 
 
 def include_navigation_widget(config, where='left'):  # pragma: no cover
