@@ -36,25 +36,25 @@ There are six slots or locations are available to include the navigation widget:
 * belowcontent (slot)
 * beforebodyend (slot)
 
-Here are the slot choices in a layout diagram::
+Here are the slot choices in a layout diagram:
 
-+------------------------------------------------------+
-| nav (the nav in the Kotti toolbar -- configurable)   |
-|------------------------------------------------------|
-| editor_bar                                           |
-|+----------------------------------------------------+|
-|| breadcrumbs                                        ||
-|+-------------++---------------------++--------------+|
-|| SLOT "left" || SLOT "abovecontent" || SLOT "right" ||
-||             |+---------------------+|              ||
-||             || Content             ||              ||
-||             |+---------------------+|              ||
-||             || SLOT "belowcontent" ||              ||
-|+-------------++---------------------++--------------+|
-| footer                                               |
-|------------------------------------------------------|
-| SLOT "beforebodyend"                                 |
-+------------------------------------------------------+
+    +------------------------------------------------------+
+    | nav (the nav in the Kotti toolbar -- configurable)   |
+    |------------------------------------------------------|
+    | editor_bar                                           |
+    |+----------------------------------------------------+|
+    || breadcrumbs                                        ||
+    |+-------------++---------------------++--------------+|
+    || SLOT "left" || SLOT "abovecontent" || SLOT "right" ||
+    ||             |+---------------------+|              ||
+    ||             || Content             ||              ||
+    ||             |+---------------------+|              ||
+    ||             || SLOT "belowcontent" ||              ||
+    |+-------------++---------------------++--------------+|
+    | footer                                               |
+    |------------------------------------------------------|
+    | SLOT "beforebodyend"                                 |
+    +------------------------------------------------------+
 
 For every location you have an own tab in the settings. There you can choose if the navigation is enabled for the location and how it will be displayed.
 The following options are available.
