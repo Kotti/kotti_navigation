@@ -84,17 +84,12 @@ def is_node_open(item, request):
     return is_open
 
 
-def get_nav_class(options):
-    """Build up a nav class for the navigation items based on the given
-       options.
+def get_nav_class(location):
+    """Build up a nav class for the navigation items.
     """
-    nav_class = 'nav'
-    if 'list' in options:
-        nav_class += ' nav-list'
-    elif 'pills' in options:
-        nav_class += ' nav-pills'
-    elif 'tabs' in options:
-        nav_class += ' nav-tabs'
+    display_manner = get_setting(location + '_display_manner', default='pills')
+    options = get_setting(location + '_options', default=[])
+    nav_class = 'nav nav-{0}'.format(display_manner)
     if 'stacked' in options:
         nav_class += ' nav-stacked'
     return nav_class

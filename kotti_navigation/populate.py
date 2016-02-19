@@ -19,9 +19,9 @@ display_types = ((u'', _(u'Not enabled')),
 
 
 class DisplayType(colander.SchemaNode):
+    widget = deform.widget.SelectWidget(values=display_types)
     default = u''
     missing = u''
-    widget = deform.widget.SelectWidget(values=display_types)
 
 
 class Label(colander.SchemaNode):
@@ -29,10 +29,17 @@ class Label(colander.SchemaNode):
     missing = u''
 
 
-options = ((u'list', _(u'List')),
-           (u'pills', _(u'Pills')),
-           (u'tabs', _(u'Tabs')),
-           (u'stacked', _(u'Stacked')),
+display_manner = ((u'pills', _(u'Pills')),
+                  (u'tabs', _(u'Tabs')))
+
+
+class DisplayManner(colander.SchemaNode):
+    widget = deform.widget.SelectWidget(values=display_manner)
+    default = u'pills'
+    missing = u'pills'
+
+
+options = ((u'stacked', _(u'Stacked')),
            (u'open_all', _(u'Open all')),
            (u'dropdowns', _(u'With Dropdowns')),
            (u'show_menu', _(u'Show Menu')),
@@ -72,6 +79,10 @@ class NavigationSchemaTop(colander.MappingSchema):
     top_display_type = DisplayType(colander.String(),
                              name=u'top_display_type',
                              title=_(u'Display type'))
+    top_display_manner = DisplayManner(colander.String(),
+                            name=u'top_display_manner',
+                            title=_(u'Display manner'),
+                            description=_(u'Choose how the navigation will be displayed.'))
     top_options = Options(colander.Set(),
                             name=u'top_options',
                             title=_(u'Options'),
@@ -95,6 +106,10 @@ class NavigationSchemaLeft(colander.MappingSchema):
     left_display_type = DisplayType(colander.String(),
                              name=u'left_display_type',
                              title=_(u'Display type'))
+    left_display_manner = DisplayManner(colander.String(),
+                            name=u'left_display_manner',
+                            title=_(u'Display manner'),
+                            description=_(u'Choose how the navigation will be displayed.'))
     left_options = Options(colander.Set(),
                             name=u'left_options',
                             title=_(u'Options'),
@@ -118,6 +133,10 @@ class NavigationSchemaRight(colander.MappingSchema):
     right_display_type = DisplayType(colander.String(),
                              name=u'right_display_type',
                              title=_(u'Display type'))
+    right_display_manner = DisplayManner(colander.String(),
+                            name=u'right_display_manner',
+                            title=_(u'Display manner'),
+                            description=_(u'Choose how the navigation will be displayed.'))
     right_options = Options(colander.Set(),
                             name=u'right_options',
                             title=_(u'Options'),
@@ -141,6 +160,10 @@ class NavigationSchemaAboveContent(colander.MappingSchema):
     abovecontent_display_type = DisplayType(colander.String(),
                              name=u'abovecontent_display_type',
                              title=_(u'Display type'))
+    abovecontent_display_manner = DisplayManner(colander.String(),
+                            name=u'abovecontent_display_manner',
+                            title=_(u'Display manner'),
+                            description=_(u'Choose how the navigation will be displayed.'))
     abovecontent_options = Options(colander.Set(),
                             name=u'abovecontent_options',
                             title=_(u'Options'),
@@ -164,6 +187,10 @@ class NavigationSchemaBelowContent(colander.MappingSchema):
     belowcontent_display_type = DisplayType(colander.String(),
                              name=u'bc_display_type',
                              title=_(u'Display type'))
+    belowcontent_display_manner = DisplayManner(colander.String(),
+                            name=u'belowcontent_display_manner',
+                            title=_(u'Display manner'),
+                            description=_(u'Choose how the navigation will be displayed.'))
     belowcontent_options = Options(colander.Set(),
                             name=u'bc_options',
                             title=_(u'Options'),
@@ -187,6 +214,10 @@ class NavigationSchemaBeforeBodyEnd(colander.MappingSchema):
     beforebodyend_display_type = DisplayType(colander.String(),
                              name=u'beforebodyend_display_type',
                              title=_(u'Display type'))
+    beforebodyend_display_manner = DisplayManner(colander.String(),
+                            name=u'beforebodyend_display_manner',
+                            title=_(u'Display manner'),
+                            description=_(u'Choose how the navigation will be displayed.'))
     beforebodyend_options = Options(colander.Set(),
                             name=u'beforebodyend_options',
                             title=_(u'Options'),
@@ -267,12 +298,12 @@ def populate():
     add_settings(NavigationSettingsBeforeBodyEnd)
 
     if get_setting(u'left_display_type'):
-        assign_slot('navigation-widget', 'left')
+        assign_slot(u'navigation-widget', 'left')
     if get_setting(u'right_display_type'):
-        assign_slot('navigation-widget', 'right')
+        assign_slot(u'navigation-widget', 'right')
     if get_setting(u'abovecontent_display_type'):
-        assign_slot('navigation-widget', 'abovecontent')
+        assign_slot(u'navigation-widget', 'abovecontent')
     if get_setting(u'belowcontent_display_type'):
-        assign_slot('navigation-widget', 'belowcontent')
+        assign_slot(u'navigation-widget', 'belowcontent')
     if get_setting(u'beforebodyend_display_type'):
-        assign_slot('navigation-widget', 'beforebodyend')
+        assign_slot(u'navigation-widget', 'beforebodyend')

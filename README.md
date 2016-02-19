@@ -63,19 +63,22 @@ The following options are available.
 
 With the display type you choose how your navigation will be rendered.
 
-- Not enabled
-  > As expected the widget will not be shown in the slot.
-- Tree
-  > The full tree is used for the navigation.
-- Items
-  > Only the the children of the current context are included.
-- Menu
-  > The navigation will be rendered as a dropdown menu.
-- Breadcrumbs
-  > Here the real breadcrumbs will be rendered, useful when you need it
-    in another slot than usual.
+1. Not enabled
+  - As expected the widget will not be shown in the slot.
+2. Tree
+  - The full tree is used for the navigation.
+3. Items
+  - Only the the children of the current context are included.
+4. Menu
+  - The navigation will be rendered as a dropdown menu.
+5. Breadcrumbs
+  - Here the real breadcrumbs will be rendered, useful when you need it in another slot than usual.
 
 For a typical website that has a tree navigation display in the left slot, you would configure for only the left location, and omit configuration for any other. But you are encouraged to play around with the possibilities.
+
+### Display Manner
+
+With the display manner you can choose how the menu items will be displayed. The options `Pills` and `Tabs` are possible. The setting only affects the display types `Items` and `Tree`.
 
 ### Options
 
@@ -84,20 +87,26 @@ The options are a multi selection box, so you can enable how much you want, howe
 - List
 - Pills
 - Tabs
-  > These define the bootstrap classes that are used to render the navigation. It is recommended to only use one of them.
+  - These define the bootstrap classes that are used to render the navigation. It is recommended to only use one of them.
 - Stacked
-  > This makes your navigation stackable. Refer to the [bootstrap documentation](http://getbootstrap.com/components/#nav) for more information.
+  - This makes your navigation stackable. Refer to the [bootstrap documentation](http://getbootstrap.com/components/#nav) for more information.
 - Open all
-  > This will be open all of your menu points no matter where your context is. This is useful if you plan to set up a menu via css or javascript, because all items in the site hierarchy are always included.
+  - This will be open all of your menu points no matter where your context is. This is useful if you plan to set up a menu via css or javascript, because all items in the site hierarchy are always included.
 - With Dropdowns
-  > tbd
+  - Add a dropdown to tree or items display type. *experimental*
 - Show Menu
-  > tbd
+  - Add a dropdown to tree or items display type. *experimental*
 - Include Root
-  > Indicate if the root object will be included on the top of the navigation and so an item showing the title of the root of the site is inserted as the first item for the display choices.
+  - Indicate if the root object will be included on the top of the navigation and so an item showing the title of the root of the site is inserted as the first item for the display choices.
 - Show hidden while logged in
-  > With this option enabled items that are not included in the navigation for the user of the website are shown to the editor or admin.
+  - With this option enabled items that are not included in the navigation for the user of the website are shown to the editor or admin.
 
+### Label
+
+The label is optional, but can provide clarification in some nav display cases.
+It is positioned within the display in different ways, depending on display type. In a tree-type display (one of the "stacked" display choices), it is at the top of the display. The label is optional, but can provide clarification in some nav display cases. It is positioned within the display in different ways, depending on display type.
+
+The current context will be indicated by the highlighting of the context menu item in the indented display. This is normally adequate. However, for extra clarity, or for some special reason, you may want to include the current context in the label, in a phrase such as "Current item: context", where the word ``context`` would be replaced by the actual context.title. To do this, include the actual word ``context`` in the label text, so `<context>` would become ${'<' + context.title '>'} in the template code.
 
 ### Include Content Types
 
@@ -107,13 +116,6 @@ Here you find a list of the content type names that are to be allowed in a given
 
 This is a list of the names of content types that are to be ignored in the navigation display. It is the opposite of the ``Include Content Types`` setting described above. It is commonly used to exclude the Image content type from a normal nav display, to avoid the "clutter" with listing images, which can be numerous. The same could be true for other content items, such as for a site that allows the Event content type
 of kotti_calendar to be stored in various places in the site, and where events are wished to be shown only on calendar or event list displays.
-
-### Label
-
-The label is optional, but can provide clarification in some nav display cases.
-It is positioned within the display in different ways, depending on display type. In a tree-type display (one of the "stacked" display choices), it is at the top of the display. The label is optional, but can provide clarification in some nav display cases. It is positioned within the display in different ways, depending on display type.
-
-The current context will be indicated by the highlighting of the context menu item in the indented display. This is normally adequate. However, for extra clarity, or for some special reason, you may want to include the current context in the label, in a phrase such as "Current item: context", where the word ``context`` would be replaced by the actual context.title. To do this, include the actual word ``context`` in the label text, so `<context>` would become ${'<' + context.title '>'} in the template code.
 
 [1]: http://pypi.python.org/pypi/Kotti
 [2]: http://pypi.python.org/pypi/kotti_settings

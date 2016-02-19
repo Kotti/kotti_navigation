@@ -74,7 +74,7 @@ class TestNavigationWidgetViews(NavigationFunctionalTestBase):
     def test_render_widget(self):
         root = get_root()
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs'])
+        set_nav_setting('left', 'display_manner', 'tabs')
         html = render_view(root, self.request, name='navigation-widget-items')
         assert ' class="nav nav-tabs"' in html
 
@@ -124,7 +124,8 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
     def test_render_widget(self):
         root = get_root()
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('left', 'display_manner', 'tabs')
+        set_nav_setting('left', 'options', ['stacked', 'include_root'])
         html = render_view(root, self.request, name='navigation-widget-tree')
         assert '<ul class="nav nav-tabs nav-stacked">' in html
 
@@ -132,7 +133,8 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
         root = get_root()
 
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('left', 'display_manner', 'tabs')
+        set_nav_setting('left', 'options', ['stacked', 'include_root'])
         navigation = Navigation(root, self.request)
         result = navigation.navigation_widget_tree()
         assert result['include_root'] == True
@@ -145,7 +147,8 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
         root = get_root()
 
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('left', 'display_manner', 'tabs')
+        set_nav_setting('left', 'options', ['stacked', 'include_root'])
         navigation = Navigation(root, self.request)
         result = navigation.navigation_widget_tree()
 
@@ -159,7 +162,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
     def test_is_tree_open(self):
         root = get_root()
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('left', 'options', ['stacked', 'include_root'])
 
         root[u'content_1'] = Content()
         root[u'content_1'][u'sub_1'] = Content()
@@ -197,7 +200,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
         assert u'content_2' in html
         assert u'sub_2' in html
 
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'open_all'])
+        set_nav_setting('left', 'options', ['stacked', 'open_all'])
         self.request.context = root
         html = render_view(root, self.request, name='navigation-widget-tree')
         assert u'content_1' in html
@@ -225,7 +228,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
     def test_show_hidden(self):
         root = get_root()
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('left', 'options', ['stacked', 'include_root'])
 
         root[u'content_1'] = Content()
         root[u'content_2'] = Content()
@@ -248,7 +251,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
     def test_include_content_types(self):
         root = get_root()
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('left', 'options', ['stacked', 'include_root'])
 
         root[u'content_1'] = Content()
         root[u'content_2'] = Content()
@@ -267,7 +270,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
         assert u'content_2' not in html
 
         # Again, with show_hidden True.
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root',
+        set_nav_setting('left', 'options', ['stacked', 'include_root',
                                             'show_hidden_while_logged_in'])
         with patch('kotti_navigation.util.the_user', return_value='admin'):
             html = render_view(root, self.request,
@@ -278,7 +281,7 @@ class TestNavigationWidgetTreeView(NavigationFunctionalTestBase):
     def test_exclude_content_types(self):
         root = get_root()
         set_nav_setting('left', 'display_type', 'tree')
-        set_nav_setting('left', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('left', 'options', ['stacked', 'include_root'])
 
         root[u'content_1'] = Content()
 
@@ -315,10 +318,10 @@ class TestNavigationWidgetAsTreeInTop(NavigationFunctionalTestBase):
     def test_render_widget(self):
         root = get_root()
         self.request = NavigationDummyRequest(slot='top')
-        set_nav_setting('top', 'options', ['tabs', 'stacked', 'include_root'])
+        set_nav_setting('top', 'options', ['stacked', 'include_root'])
         html = render_view(root, self.request,
                            name='navigation-widget-tree')
-        assert '<ul class="nav nav-tabs nav-stacked">' in html
+        assert '<ul class="nav nav-pills nav-stacked">' in html
 
 
 class TestNavigationWidgetAsMenuInTop(NavigationFunctionalTestBase):
@@ -341,11 +344,12 @@ class TestNavigationWidgetAsTreeInRight(NavigationFunctionalTestBase):
         root[u'content_1'] = Content(title=u'Content_1')
         self.request.context = root[u'content_1']
         set_nav_setting('right', 'display_type', 'tree')
-        set_nav_setting('right', 'options', ['tabs', 'stacked', 'include_root',
+        set_nav_setting('right', 'display_manner', 'pills')
+        set_nav_setting('right', 'options', ['stacked', 'include_root',
                                              'open_all'])
         html = render_view(root[u'content_1'], self.request,
                            name='navigation-widget-tree')
-        assert '<ul class="nav nav-tabs nav-stacked">' in html
+        assert '<ul class="nav nav-pills nav-stacked">' in html
 
 
 class TestNavigationWidgetAsTreeInAbovecontent(NavigationFunctionalTestBase):
@@ -357,10 +361,10 @@ class TestNavigationWidgetAsTreeInAbovecontent(NavigationFunctionalTestBase):
         self.request.context = root[u'content_1']
         set_nav_setting('abovecontent', 'display_type', 'tree')
         set_nav_setting('abovecontent', 'options',
-                        ['tabs', 'stacked', 'include_root', 'open_all'])
+                        ['stacked', 'include_root', 'open_all'])
         html = render_view(root[u'content_1'], self.request,
                            name='navigation-widget-tree')
-        assert '<ul class="nav nav-tabs nav-stacked">' in html
+        assert '<ul class="nav nav-pills nav-stacked">' in html
 
 
 class TestNavigationWidgetAsTreeInBelowcontent(NavigationFunctionalTestBase):
@@ -371,6 +375,7 @@ class TestNavigationWidgetAsTreeInBelowcontent(NavigationFunctionalTestBase):
         root[u'content_1'] = Content(title=u'Content_1')
         self.request.context = root[u'content_1']
         set_nav_setting('belowcontent', 'display_type', 'tree')
+        set_nav_setting('belowcontent', 'display_manner', 'tabs')
         set_nav_setting('belowcontent', 'options',
                         ['tabs', 'stacked', 'include_root', 'open_all'])
         html = render_view(root[u'content_1'], self.request,
@@ -387,10 +392,10 @@ class TestNavigationWidgetAsTreeInBeforebodyend(NavigationFunctionalTestBase):
         self.request.context = root[u'content_1']
         set_nav_setting('beforebodyend', 'display_type', 'tree')
         set_nav_setting('beforebodyend', 'options',
-                        ['tabs', 'stacked', 'include_root', 'open_all'])
+                        ['stacked', 'include_root', 'open_all'])
         html = render_view(root[u'content_1'], self.request,
                            name='navigation-widget-tree')
-        assert '<ul class="nav nav-tabs nav-stacked">' in html
+        assert '<ul class="nav nav-pills nav-stacked">' in html
 
 
 class TestBreadcrumbsInBeforebodyend(NavigationFunctionalTestBase):

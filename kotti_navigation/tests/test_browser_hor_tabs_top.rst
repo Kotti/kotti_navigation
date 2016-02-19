@@ -46,8 +46,8 @@ Set settings and check navigation
 
 
   >>> set_nav_setting('top', 'display_type', 'items')
+  >>> set_nav_setting('top', 'display_manner', 'pills')
   >>> set_nav_setting('top', 'label', 'Horizontal Tabs up Top')
-  >>> set_nav_setting('top', 'options', ['pills'])
   >>> browser.open(testing.BASE_URL + '/document-1')
   >>> 'Horizontal Tabs up Top' in browser.contents
   True
@@ -56,7 +56,7 @@ Set settings and check navigation
   >>> '<ul class="nav nav-pills">' in browser.contents
   True
 
-  >>> set_nav_setting('top', 'options', ['tabs'])
+  >>> set_nav_setting('top', 'display_manner', 'tabs')
   >>> browser.open(testing.BASE_URL + '/document-1')
   >>> '<ul class="nav nav-pills">' in browser.contents
   False

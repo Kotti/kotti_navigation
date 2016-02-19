@@ -40,6 +40,7 @@ class Navigation(object):
             raise PredicateMismatch()
 
         view_name = 'navigation-widget-' + display_type
+
         return render_view(self.context, self.request, name=view_name)
 
     @view_config(name='nav-recurse',
@@ -47,13 +48,10 @@ class Navigation(object):
     def nav_recurse(self):
         """Recursive view for the "tree" display type.
         """
+        display_manner = get_setting(self.location + '_display_manner', default='pills')
         options = get_setting(self.location + '_options', default=[])
-        tabs_or_pills = 'tabs' if 'tabs' in options else 'pills'
         tree_is_open_all = 'open_all' in options
-
-        nav_class = 'nav nav-{0}'.format(tabs_or_pills)
-        if 'stacked' in options:
-            nav_class += ' {0}-stacked'.format(tabs_or_pills)
+        nav_class = get_nav_class(self.location)
 
         return {'tree_is_open_all': tree_is_open_all,
                 'is_node_open': is_node_open,
@@ -93,7 +91,7 @@ class Navigation(object):
 
         items = get_children(root, self.request, self.location)
         tree_is_open_all = 'open_all' in options
-        nav_class = get_nav_class(options)
+        nav_class = get_nav_class(self.location)
 
         return {'location': self.location,
                 'root': root,
@@ -106,7 +104,9 @@ class Navigation(object):
                 'is_node_open': is_node_open,
                 'use_container_class': use_container_class,
                 'items': items,
-                'label': label}
+                'label': label,
+                'dropdowns': 'dropdowns' in options,
+                'hidden': ''}
 
     @view_config(name='navigation-widget-items',
                  renderer='kotti_navigation:templates/nav_widget_items.pt')
@@ -122,7 +122,7 @@ class Navigation(object):
 
         display_type = get_setting(self.location + '_display_type')
         options = get_setting(self.location + '_options', default=[])
-        nav_class = get_nav_class(options)
+        nav_class = get_nav_class(self.location)
 
         # When the nav display is set to the beforebodyend slot, the class
         # for the containing div needs to be 'container' so it fits to the
@@ -265,13 +265,13 @@ class Navigation(object):
             tree_properties = self.navigation_widget_items()
 
         elif display_type == 'tree':
-            tabs_or_pills = 'tabs' if 'tabs' in options else 'pills'
+            display_manner = get_setting(self.location + '_display_manner')
             tree_is_open_all = 'open_all' in options
 
             tree_properties = self.navigation_widget_tree()
 
             tree_properties['nav_class'] = \
-                'nav nav-{0} nav-stacked'.format(tabs_or_pills)
+                'nav nav-{0} nav-stacked'.format(display_manner)
             tree_properties['tree_is_open_all'] = tree_is_open_all
             tree_properties['is_node_open'] = is_node_open
 
