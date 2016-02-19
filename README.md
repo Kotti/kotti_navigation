@@ -12,9 +12,9 @@ To activate kotti_navigation add the following entry, as with any add-on, to kot
 
 ```ini
 kotti.configurators =
-    ...
+    kotti_settings.kotti_configure
     kotti_navigation.kotti_configure
-    kotti_contentpreview.kotti_configure
+    ...
 ```
 
 ## How to use it?
@@ -114,8 +114,7 @@ Here you find a list of the content type names that are to be allowed in a given
 
 ### Exclude Content Types
 
-This is a list of the names of content types that are to be ignored in the navigation display. It is the opposite of the ``Include Content Types`` setting described above. It is commonly used to exclude the Image content type from a normal nav display, to avoid the "clutter" with listing images, which can be numerous. The same could be true for other content items, such as for a site that allows the Event content type
-of kotti_calendar to be stored in various places in the site, and where events are wished to be shown only on calendar or event list displays.
+This is a list of the names of content types that are to be ignored in the navigation display. It is the opposite of the ``Include Content Types`` setting described above. It is commonly used to exclude the Image content type from a normal nav display, to avoid the "clutter" with listing images, which can be numerous. The same could be true for other content items, such as for a site that allows the Event content type of kotti_calendar to be stored in various places in the site, and where events are wished to be shown only on calendar or event list displays.
 
 [1]: http://pypi.python.org/pypi/Kotti
 [2]: http://pypi.python.org/pypi/kotti_settings
