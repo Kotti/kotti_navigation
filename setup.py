@@ -37,7 +37,7 @@ setup(name='kotti_navigation',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'Kotti>=1.0.0_alpha.3',
+          'Kotti>=1.0',
           'kotti_settings>=0.2',
           'deform_bootstrap',
       ],
