@@ -95,7 +95,7 @@ The options are a multi selection box, so you can enable how much you want, howe
 - With Dropdowns
   - Add a dropdown to tree or items display type. *experimental*
 - Show Menu
-  - Add a dropdown to tree or items display type. *experimental*
+  - Add a menu item listing. *experimental*
 - Include Root
   - Indicate if the root object will be included on the top of the navigation and so an item showing the title of the root of the site is inserted as the first item for the display choices.
 - Show hidden while logged in
