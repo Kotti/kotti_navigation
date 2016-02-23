@@ -7,7 +7,7 @@ This is an extension to [Kotti][1] that renders navigation displays in a choice 
 
 ## Hint
 
-Starting with version ``0.5`` ``kotti_navigation`` uses [kotti_settings][2] for configuration of the navigation widget. The previously used configuration in the ini file is not supported anymore. The configuration is now done via the settings interface where you can adjust the navigation widget to your needs at run time. If your site depends on the old configuration make sure you pin ``kotti_navigation`` to version ``0.3.1`` and the relevant [documentation][3].
+Starting with version ``0.5`` ``kotti_navigation`` uses [kotti_settings][2] for configuration of the navigation widget. The previously used configuration in the ini file is not supported anymore. The configuration is now done via the settings interface where you can adjust the navigation widget to your needs at run time. If your site depends on the old configuration make sure you pin ``kotti_navigation`` to version ``0.3.1`` and read the relevant [documentation][3].
 
 ## Set up kotti_navigation
 
