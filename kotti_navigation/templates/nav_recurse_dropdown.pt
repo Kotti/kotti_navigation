@@ -1,0 +1,19 @@
+<li tal:define="item context;
+                active api.inside(request.context, item) and ' active' or '';
+                hidden not item.in_navigation and ' hidden' or ''"
+    class="dropdown-submenu${active}${hidden}">
+  <a href="${api.url(item)}"
+     title="${getattr(item, 'description', None)}"
+     data-toggle="dropdown" class="dropdown-toggle">
+    ${item.title}
+    <b tal:condition="children" class="caret"></b>
+  </a>
+  <tal:children tal:condition="children">
+    <tal:repeat tal:repeat="child children">
+      <ul class="dropdown-menu ${nav_class}">
+        <tal:replace
+          tal:replace="api.render_view('nav-recurse-dropdown', context=child)" />
+      </ul>
+    </tal:repeat>
+  </tal:children>
+</li>

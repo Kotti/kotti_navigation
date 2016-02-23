@@ -1,0 +1,27 @@
+#editor-bar {
+    z-index: 1002;
+}
+#navbar-view {
+    z-index: 1003;
+}
+.dropdown-menu {
+  padding: 0;
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; // remove the gap so it doesn't close
+}
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+    margin-top: 0;
+    margin-left: 0;
+}
+.dropdown-submenu > .dropdown-menu > .dropdown-submenu > .dropdown-menu {
+    left: 100%;
+    top: 0;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}

@@ -2,6 +2,7 @@ from pyramid.exceptions import PredicateMismatch
 from pyramid.view import view_config
 
 from fanstatic import kotti_navigation as resource_group
+from fanstatic import kotti_navigation_dropdown as dropdown_resource_group
 
 from kotti.resources import get_root
 from kotti.views.util import render_view
@@ -61,6 +62,24 @@ class Navigation(object):
                                          self.location),
                 }
 
+    @view_config(name='nav-recurse-dropdown',
+                 renderer='kotti_navigation:templates/nav_recurse_dropdown.pt')
+    def nav_recurse(self):
+        """Recursive view for the "tree" display type.
+        """
+        display_manner = get_setting(self.location + '_display_manner', default='pills')
+        options = get_setting(self.location + '_options', default=[])
+        tree_is_open_all = 'open_all' in options
+        nav_class = get_nav_class(self.location)
+
+        return {'tree_is_open_all': tree_is_open_all,
+                'is_node_open': is_node_open,
+                'nav_class': nav_class,
+                'children': get_children(self.context,
+                                         self.request,
+                                         self.location),
+                }
+
     @view_config(name='navigation-widget-tree',
                  renderer='kotti_navigation:templates/nav_widget_tree.pt')
     def navigation_widget_tree(self):
@@ -75,6 +94,8 @@ class Navigation(object):
 
         display_type = get_setting(self.location + '_display_type')
         options = get_setting(self.location + '_options')
+        if 'dropdowns' in options:
+            dropdown_resource_group.need()
 
         include_root = 'include_root' in options
         show_menu = 'show_menu' in options
