@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.5a1 (Unreleased)
-------------------
+0.5 (2016-02-26)
+----------------
 
 * Use kotti_settings for configuration of the navigation widget.
 
