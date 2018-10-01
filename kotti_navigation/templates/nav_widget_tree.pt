@@ -29,7 +29,7 @@
             tal:replace="api.render_view('nav-recurse-dropdown', context=item)" />
       </tal:dropdown>
 
-      <tal:no_dropdown>
+      <tal:no_dropdown tal:condition="not: item.children and dropdowns">
         <tal:replace
             tal:replace="api.render_view('nav-recurse', context=item)" />
       </tal:no_dropdown>
